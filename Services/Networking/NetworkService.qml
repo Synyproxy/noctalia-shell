@@ -485,7 +485,8 @@ Singleton {
       case "unknown":
         return "ethernet-question";
       case "full":
-        return "ethernet";
+        return "network"
+        //return "ethernet";
       default:
         return "ethernet-off";
       }

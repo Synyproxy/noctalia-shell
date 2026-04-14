@@ -83,7 +83,25 @@ Item {
     oppositeDirection: BarService.getPillDirection(root)
     customIconColor: Color.resolveColorKeyOptional(root.iconColorKey)
     customTextColor: Color.resolveColorKeyOptional(root.textColorKey)
-    icon: NetworkService.getIcon()
+    //icon: NetworkService.getIcon()
+    icon: NetworkService.getIcon().startsWith("file://") ? "" : NetworkService.getIcon()
+    // 2. Add the custom image overlay
+    // Image {
+    //     // Only show this if the service returns our file path
+    //     visible: NetworkService.getIcon().startsWith("file://")
+    //     source: visible ? NetworkService.getIcon() : ""
+    //     
+    //     // Adjust these to match your bar's icon size (usually 16-20px)
+    //     width: 18 
+    //     height: 18
+    //     
+    //     // Center it where the icon usually sits
+    //     anchors.verticalCenter: parent.verticalCenter
+    //     anchors.left: parent.left
+    //     anchors.leftMargin: -12 // Adjust based on your Pill's padding
+    //     
+    //     fillMode: Image.PreserveAspectFit
+    // }
     text: NetworkService.getStatusText(false)
     autoHide: false
     forceOpen: !isBarVertical && root.displayMode === "alwaysShow"
