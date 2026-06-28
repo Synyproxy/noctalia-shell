@@ -53,6 +53,13 @@ PanelWindow {
     }
     // Panel open on THIS screen: use panel's preferred focus mode
     if (root.isPanelOpen) {
+      // Release keyboard focus immediately when the panel starts closing so the
+      // compositor can restore focus to the previously focused application window.
+      // Without this, focus isn't returned until after the close animation ends.
+      if (root.isPanelClosing) {
+        Logger.i("MainScreen", screen?.name, "keyboardFocus → None (panel closing)");
+        return WlrKeyboardFocus.None;
+      }
       // Hyprland's Exclusive captures ALL input globally (including pointer),
       // preventing click-to-close from working on other monitors.
       // Workaround: briefly use Exclusive when panel opens (for text input focus),
@@ -76,8 +83,34 @@ PanelWindow {
   // Desktop dimming when panels are open
   property real dimmerOpacity: Settings.data.general.dimmerOpacity ?? 0.8
   property bool isPanelOpen: (PanelService.openedPanel !== null) && (PanelService.openedPanel.screen === screen)
-  property bool isPanelClosing: (PanelService.openedPanel !== null) && PanelService.openedPanel.isClosing
+  // isPanelClosing is driven by a signal rather than a var.property binding to avoid
+  // QML's unreliable sub-property tracking through var-typed references.
+  property bool isPanelClosing: false
   property bool isAnyPanelOpen: PanelService.openedPanel !== null
+
+  Connections {
+    target: PanelService
+    function onPanelStartedClosing(panel) {
+      if (panel.screen === root.screen) {
+        root.isPanelClosing = true;
+        // flushWaylandState() forces an immediate wl_surface.commit so that the
+        // keyboard_interactivity=none change reaches Hyprland without waiting for
+        // the next animation frame. Must use Window.window (QsWindowAttached), not
+        // root directly (PanelWindow/ProxyWindowBase doesn't expose this method).
+        Window.window?.flushWaylandState();
+        // Additionally tell Hyprland to explicitly re-route keyboard to the active
+        // window. Even after keyboard_interactivity=none is committed, Hyprland may
+        // not update routing until the next input event; focuswindow forces it now.
+        if (CompositorService.isHyprland) {
+          CompositorService.refocusActive();
+        }
+        Logger.i("MainScreen", screen?.name, "isPanelClosing: released keyboard interactivity");
+      }
+    }
+    function onDidClose() {
+      root.isPanelClosing = false;
+    }
+  }
 
   color: {
     if (dimmerOpacity > 0 && isPanelOpen && !isPanelClosing) {

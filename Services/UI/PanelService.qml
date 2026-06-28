@@ -30,6 +30,7 @@ Singleton {
 
   signal willOpen
   signal didClose
+  signal panelStartedClosing(var panel)
 
   // Background slot assignments for dynamic panel background rendering
   // Slot 0: currently opening/open panel, Slot 1: closing panel
