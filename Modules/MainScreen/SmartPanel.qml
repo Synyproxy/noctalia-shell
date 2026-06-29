@@ -244,8 +244,6 @@ Item {
 
     // Start close sequence: fade opacity first
     isClosing = true;
-    Logger.i("SmartPanel", "Emitting panelStartedClosing for", objectName, "screen:", root.screen?.name);
-    PanelService.panelStartedClosing(root);
     sizeAnimationComplete = false;
     closeFinalized = false;
 

@@ -663,25 +663,6 @@ Item {
     }
   }
 
-  // Re-route keyboard to the currently focused window without altering z-order.
-  // Used when a layer shell releases keyboard interactivity to ensure Hyprland
-  // immediately sends keyboard events to the active window instead of waiting
-  // for the next input event to re-evaluate focus.
-  function refocusActive() {
-    try {
-      if (focusedWindowIndex >= 0 && focusedWindowIndex < windows.length) {
-        const window = windows[focusedWindowIndex];
-        if (window && window.id) {
-          const addr = `address:0x${window.id.toString()}`;
-          dispatchCommand("focuswindow", addr, `hl.dsp.focus({ window = "${luaQuote(addr)}" })`);
-          Logger.i("HyprlandService", "refocusActive:", addr);
-        }
-      }
-    } catch (e) {
-      Logger.e("HyprlandService", "refocusActive failed:", e);
-    }
-  }
-
   function closeWindow(window) {
     try {
       const addr = `address:0x${window.id}`;

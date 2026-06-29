@@ -436,13 +436,6 @@ Singleton {
     }
   }
 
-  // Re-route keyboard to the currently focused window without altering z-order.
-  function refocusActive() {
-    if (backend && backend.refocusActive) {
-      backend.refocusActive();
-    }
-  }
-
   // Close window
   function closeWindow(window) {
     if (backend && backend.closeWindow) {
