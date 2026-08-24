@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/timer_manager.h"
 #include "pipewire/audio_glyphs.h"
 
 #include <chrono>
@@ -217,6 +218,10 @@ private:
   void enumDefaultAudioDeviceParams();
 
   void rebuildState();
+  // Direct /dev/video* fd scan: catches camera use PipeWire's stream graph never sees, because most
+  // apps (Discord, guvcview, many browsers) open V4L2 devices directly instead of routing through
+  // PipeWire's camera portal. Complements, not replaces, the graph-linked detection above.
+  void refreshCameraProcCaptures();
   void refreshNodeIdentity(NodeData& nd);
   void applyVolumePropsFromDict(NodeData& nd, const spa_dict* props, bool applyMixerFieldsFromDict = true);
   void recomputeEffectiveMute(NodeData& nd);
@@ -265,6 +270,8 @@ private:
   std::string m_defaultSourceName;
   AudioState m_state;
   PrivacyState m_privacyState;
+  std::vector<PrivacyCapture> m_procCameraCaptures;
+  Timer m_cameraProcTimer;
   ChangeCallback m_changeCallback;
   VolumePreviewCallback m_volumePreviewCallback;
   WirePlumberMixer* m_wpMixer = nullptr;

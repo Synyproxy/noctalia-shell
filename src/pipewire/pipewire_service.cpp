@@ -14,6 +14,8 @@
 #include <chrono>
 #include <cmath>
 #include <cstring>
+#include <filesystem>
+#include <fstream>
 #include <memory>
 #include <optional>
 #include <pipewire/device.h>
@@ -767,6 +769,9 @@ PipeWireService::PipeWireService() {
   while (pw_loop_iterate(loop, 0) > 0) {
   }
   rebuildState();
+
+  refreshCameraProcCaptures();
+  m_cameraProcTimer.startRepeating(std::chrono::milliseconds(1000), [this]() { refreshCameraProcCaptures(); });
 
   kLog.info("connected (version {})", pw_get_library_version());
   const auto* sink = defaultSink();
@@ -1671,6 +1676,11 @@ void PipeWireService::rebuildState() {
     addCapture(*kind, consumer->id, privacyAppName(*consumer));
   }
 
+  // Camera opens PipeWire's graph never sees (direct V4L2 access) — see refreshCameraProcCaptures.
+  for (const PrivacyCapture& capture : m_procCameraCaptures) {
+    addCapture(capture.kind, capture.nodeId, capture.appName);
+  }
+
   // Sort by id for stable ordering
   std::ranges::sort(next.sinks, {}, &AudioNode::id);
   std::ranges::sort(next.sources, {}, &AudioNode::id);
@@ -1687,6 +1697,95 @@ void PipeWireService::rebuildState() {
   m_privacyState = std::move(nextPrivacy);
   ++m_changeSerial;
   emitChanged();
+}
+
+void PipeWireService::refreshCameraProcCaptures() {
+  namespace fs = std::filesystem;
+  std::error_code ec;
+
+  // Real capture devices under /sys/class/video4linux, skipping metadata-only nodes (UVC cams
+  // typically expose /dev/video1 etc. as metadata, which never carries frames).
+  std::vector<std::string> deviceNames;
+  fs::directory_iterator sysfsIt("/sys/class/video4linux", ec);
+  if (!ec) {
+    for (const auto& entry : sysfsIt) {
+      const std::string devName = entry.path().filename().string();
+      if (!devName.starts_with("video")) {
+        continue;
+      }
+      std::ifstream nameFile(entry.path() / "name");
+      std::string caps;
+      if (nameFile && std::getline(nameFile, caps) && caps.contains("Metadata")) {
+        continue;
+      }
+      deviceNames.push_back(devName);
+    }
+  }
+
+  std::vector<PrivacyCapture> next;
+  if (!deviceNames.empty()) {
+    fs::directory_iterator procIt("/proc", ec);
+    if (!ec) {
+      for (const auto& pidEntry : procIt) {
+        const std::string pidStr = pidEntry.path().filename().string();
+        if (pidStr.empty() || !std::ranges::all_of(pidStr, [](unsigned char c) { return std::isdigit(c) != 0; })) {
+          continue;
+        }
+
+        std::error_code fdEc;
+        fs::directory_iterator fdIt(pidEntry.path() / "fd", fdEc);
+        if (fdEc) {
+          continue;
+        }
+
+        bool holdsCamera = false;
+        for (const auto& fdEntry : fdIt) {
+          std::error_code linkEc;
+          const fs::path target = fs::read_symlink(fdEntry.path(), linkEc);
+          if (linkEc) {
+            continue;
+          }
+          const std::string targetStr = target.string();
+          if (!targetStr.starts_with("/dev/")) {
+            continue;
+          }
+          const std::string targetDev = target.filename().string();
+          if (std::ranges::contains(deviceNames, targetDev)) {
+            holdsCamera = true;
+            break;
+          }
+        }
+
+        if (!holdsCamera) {
+          continue;
+        }
+
+        std::ifstream commFile(pidEntry.path() / "comm");
+        std::string appName;
+        if (!commFile || !std::getline(commFile, appName) || appName.empty()) {
+          continue;
+        }
+
+        if (!std::ranges::any_of(next, [&](const PrivacyCapture& c) { return c.appName == appName; })) {
+          next.push_back(
+              PrivacyCapture{
+                  .kind = PrivacyCaptureKind::Camera,
+                  .nodeId = 0,
+                  .appName = appName,
+              }
+          );
+        }
+      }
+    }
+  }
+
+  std::ranges::sort(next, {}, &PrivacyCapture::appName);
+  if (next == m_procCameraCaptures) {
+    return;
+  }
+
+  m_procCameraCaptures = std::move(next);
+  rebuildState();
 }
 
 void PipeWireService::recomputeEffectiveMute(NodeData& nd) {
