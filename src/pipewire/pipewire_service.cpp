@@ -4,6 +4,7 @@
 #include "core/log.h"
 #include "ipc/ipc_arg_parse.h"
 #include "ipc/ipc_service.h"
+#include "notification/notifications.h"
 #include "pipewire/wireplumber_mixer.h"
 #include "util/string_utils.h"
 
@@ -15,6 +16,7 @@
 #include <cmath>
 #include <cstring>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <memory>
 #include <optional>
@@ -1782,6 +1784,22 @@ void PipeWireService::refreshCameraProcCaptures() {
   std::ranges::sort(next, {}, &PrivacyCapture::appName);
   if (next == m_procCameraCaptures) {
     return;
+  }
+
+  const auto holdsApp = [](const std::vector<PrivacyCapture>& captures, const std::string& appName) {
+    return std::ranges::any_of(captures, [&](const PrivacyCapture& c) { return c.appName == appName; });
+  };
+
+  for (const auto& capture : next) {
+    if (!holdsApp(m_procCameraCaptures, capture.appName)) {
+      kLog.info("camera capture started: app={}", capture.appName);
+      notify::info("Noctalia", "Camera in use", std::format("{} is using the camera", capture.appName));
+    }
+  }
+  for (const auto& capture : m_procCameraCaptures) {
+    if (!holdsApp(next, capture.appName)) {
+      kLog.info("camera capture ended: app={}", capture.appName);
+    }
   }
 
   m_procCameraCaptures = std::move(next);
