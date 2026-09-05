@@ -6,7 +6,7 @@ namespace network_display {
 
   const char* glyphForState(const NetworkState& state) noexcept {
     if (state.kind == NetworkConnectivity::Wired) {
-      return state.connected ? "ethernet" : "ethernet-off";
+      return state.connected ? "network" : "network-off";
     }
     return wifiGlyphForState(state);
   }
