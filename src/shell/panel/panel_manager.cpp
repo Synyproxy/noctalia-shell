@@ -1973,12 +1973,16 @@ void PanelManager::onKeyboardEvent(const KeyboardEvent& event) {
     return;
   }
 
-  // A focused text input owns plain printable keys; the panel's global key
-  // handler must not claim them (Space is a Validate chord but must type a space).
+  // A focused text input owns plain printable keys and the unmodified editing keys
+  // (arrows, Home/End, Backspace, Return...); the panel's global key handler must not
+  // claim them (Space is a Validate chord but must type a space, and a panel that
+  // captures "up" for list navigation must not freeze the caret in its own editor).
+  // Ctrl/Alt chords still reach the panel, so ctrl+return-style captures keep working.
   const InputArea* const focusedArea = m_inputDispatcher.focusedArea();
   const bool textInputFocused = focusedArea != nullptr && focusedArea->textInputClient() != nullptr;
-  const bool reserveForTextInput =
-      event.pressed && textInputFocused && isPlainPrintableKey(event.utf32, event.modifiers, event.preedit);
+  const bool reserveForTextInput = event.pressed && textInputFocused
+      && (isPlainPrintableKey(event.utf32, event.modifiers, event.preedit)
+          || isTextEditingKey(event.sym, event.modifiers));
 
   if (!reserveForTextInput
       && m_activePanel != nullptr

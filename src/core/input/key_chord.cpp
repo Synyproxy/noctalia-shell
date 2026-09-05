@@ -195,6 +195,37 @@ bool keyChordMatches(const KeyChord& chord, std::uint32_t sym, std::uint32_t mod
   return chord.sym == sym && chord.modifiers == modifiers;
 }
 
+bool isTextEditingKey(std::uint32_t sym, std::uint32_t modifiers) noexcept {
+  if ((modifiers & (KeyMod::Ctrl | KeyMod::Alt | KeyMod::Super)) != 0) {
+    return false;
+  }
+  switch (sym) {
+    case XKB_KEY_Left:
+    case XKB_KEY_Right:
+    case XKB_KEY_Up:
+    case XKB_KEY_Down:
+    case XKB_KEY_Home:
+    case XKB_KEY_End:
+    case XKB_KEY_Page_Up:
+    case XKB_KEY_Page_Down:
+    case XKB_KEY_BackSpace:
+    case XKB_KEY_Delete:
+    case XKB_KEY_Return:
+    case XKB_KEY_KP_Enter:
+    case XKB_KEY_Tab:
+    case XKB_KEY_ISO_Left_Tab:
+    case XKB_KEY_KP_Left:
+    case XKB_KEY_KP_Right:
+    case XKB_KEY_KP_Up:
+    case XKB_KEY_KP_Down:
+    case XKB_KEY_KP_Home:
+    case XKB_KEY_KP_End:
+      return true;
+    default:
+      return false;
+  }
+}
+
 bool isPrintableKey(std::uint32_t sym) {
   if (sym >= XKB_KEY_a && sym <= XKB_KEY_z) {
     return true;
