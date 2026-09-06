@@ -620,6 +620,32 @@ namespace {
     return 0;
   }
 
+  // panel.setEffect(table) — numeric tunables for the panel's manifest `effect`.
+  // Unknown keys are ignored by the host; non-numeric values are an error.
+  int luau_panel_setEffect(lua_State* L) {
+    luaL_checktype(L, 1, LUA_TTABLE);
+    std::vector<std::pair<std::string, double>> params;
+    lua_pushnil(L);
+    while (lua_next(L, 1) != 0) {
+      if (lua_type(L, -2) != LUA_TSTRING) {
+        luaL_error(L, "panel.setEffect: keys must be strings");
+      }
+      if (!lua_isnumber(L, -1)) {
+        luaL_error(L, "panel.setEffect: value for '%s' must be a number", lua_tostring(L, -2));
+      }
+      const double value = lua_tonumber(L, -1);
+      if (!std::isfinite(value)) {
+        luaL_error(L, "panel.setEffect: value for '%s' must be finite", lua_tostring(L, -2));
+      }
+      params.emplace_back(lua_tostring(L, -2), value);
+      lua_pop(L, 1);
+    }
+    if (auto* context = getContext(L)) {
+      context->patch.effectParams = std::move(params);
+    }
+    return 0;
+  }
+
   constexpr int kContextMenuMaxItems = 64;
   constexpr int kContextMenuMaxVisible = 30;
   constexpr std::size_t kContextMenuMaxIdBytes = 128;
@@ -772,6 +798,7 @@ namespace {
   const luaL_Reg kPanelLib[] = {
       {"render", luau_ui_render},
       {"close", luau_panel_close},
+      {"setEffect", luau_panel_setEffect},
       {"openContextMenu", luau_panel_openContextMenu},
       {"setWantsSecondTicks", luau_ui_setWantsSecondTicks},
       {"setNeedsFrameTick", luau_ui_setNeedsFrameTick},

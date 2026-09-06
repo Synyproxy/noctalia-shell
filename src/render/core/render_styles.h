@@ -232,6 +232,32 @@ enum class EffectType : std::uint8_t { None, Sun, Snow, Rain, Cloud, Fog, Stars 
 // so it can displace and re-colour content, unlike the overlay EffectType draws.
 enum class PostEffectType : std::uint8_t { None, Crt };
 
+// Tunables of the CRT post-effect. Defaults are the "very light" look; a plugin
+// panel overrides them through panel.setEffect{...} using the snake_case keys
+// noted on each field.
+struct CrtEffectParams {
+  float speed = 1.0F;           // speed: multiplier on the glitch clock
+  float staticRate = 0.012F;    // static_rate: share of 2px rows that jitter
+  float staticStrength = 0.005F; // static_strength: jitter distance (fraction of width)
+  float burstChance = 0.05F;    // burst_chance: how often a whole frame fills with static
+  float burstRate = 0.3F;       // burst_rate: row share during such a frame
+  float burstStrength = 0.012F; // burst_strength: jitter distance during such a frame
+  float slipChance = 0.035F;    // slip_chance: how often the lower part slips vertically
+  float slipStrength = 0.05F;   // slip_strength: slip distance (fraction of height)
+  float bandChance = 0.09F;     // band_chance: how often a horizontal band tears sideways
+  float bandStrength = 0.1F;    // band_strength: tear distance (fraction of width)
+  float bandHeight = 0.08F;     // band_height: max band height (fraction of height)
+  float fringe = 1.5F;          // fringe: red/blue channel offset in displaced areas (px)
+  float posterize = 6.0F;       // posterize: colour levels in displaced areas (0 = off)
+  float lift = 0.2F;            // lift: brightness lift of displaced areas
+  float scanline = 0.06F;       // scanline: darkening of scanline rows
+  float scanlinePeriod = 2.0F;  // scanline_period: one dark row every N device rows
+  float vignette = 0.5F;        // vignette: corner darkening strength
+  float vignetteScale = 0.6F;   // vignette_scale: how far the darkening reaches inward
+
+  bool operator==(const CrtEffectParams&) const = default;
+};
+
 struct ScenePostEffect {
   PostEffectType type = PostEffectType::None;
   float time = 0.0F;
@@ -242,8 +268,9 @@ struct ScenePostEffect {
   float rectWidth = 0.0F;
   float rectHeight = 0.0F;
   float radius = 0.0F;
-  // 0..1 overall strength.
+  // intensity: 0..1 overall strength.
   float intensity = 1.0F;
+  CrtEffectParams crt;
 
   bool operator==(const ScenePostEffect&) const = default;
 };

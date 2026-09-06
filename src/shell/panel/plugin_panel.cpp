@@ -329,8 +329,45 @@ std::optional<ScenePostEffect> PluginPanel::postEffect() const {
       .type = m_postEffectType,
       .time = m_postEffectTime,
       .radius = Style::scaledRadiusXl(contentScale()),
-      .intensity = 1.0F,
+      .intensity = m_postEffectIntensity,
+      .crt = m_crtParams,
   };
+}
+
+void PluginPanel::applyEffectParams(const std::vector<std::pair<std::string, double>>& params) {
+  // Snake_case keys mirror the CrtEffectParams field comments.
+  static const std::unordered_map<std::string_view, float CrtEffectParams::*> kFields = {
+      {"speed", &CrtEffectParams::speed},
+      {"static_rate", &CrtEffectParams::staticRate},
+      {"static_strength", &CrtEffectParams::staticStrength},
+      {"burst_chance", &CrtEffectParams::burstChance},
+      {"burst_rate", &CrtEffectParams::burstRate},
+      {"burst_strength", &CrtEffectParams::burstStrength},
+      {"slip_chance", &CrtEffectParams::slipChance},
+      {"slip_strength", &CrtEffectParams::slipStrength},
+      {"band_chance", &CrtEffectParams::bandChance},
+      {"band_strength", &CrtEffectParams::bandStrength},
+      {"band_height", &CrtEffectParams::bandHeight},
+      {"fringe", &CrtEffectParams::fringe},
+      {"posterize", &CrtEffectParams::posterize},
+      {"lift", &CrtEffectParams::lift},
+      {"scanline", &CrtEffectParams::scanline},
+      {"scanline_period", &CrtEffectParams::scanlinePeriod},
+      {"vignette", &CrtEffectParams::vignette},
+      {"vignette_scale", &CrtEffectParams::vignetteScale},
+  };
+  for (const auto& [key, value] : params) {
+    if (key == "intensity") {
+      m_postEffectIntensity = std::clamp(static_cast<float>(value), 0.0F, 1.0F);
+      continue;
+    }
+    const auto it = kFields.find(key);
+    if (it == kFields.end()) {
+      kLog.warn("{}: panel.setEffect: unknown key '{}'", m_entryId, key);
+      continue;
+    }
+    m_crtParams.*(it->second) = static_cast<float>(value);
+  }
 }
 
 void PluginPanel::doUpdate(Renderer& renderer) { (void)renderer; }
@@ -385,6 +422,9 @@ void PluginPanel::handleScriptResult(scripting::ScriptResult result) {
     if (m_needsFrameTick && !was && m_open) {
       PanelManager::instance().requestAnimationFrameForPanel(m_entryId);
     }
+  }
+  if (patch.effectParams.has_value()) {
+    applyEffectParams(*patch.effectParams);
   }
   if (patch.requestClose.value_or(false)) {
     closeContextMenu();

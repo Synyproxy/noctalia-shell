@@ -97,6 +97,7 @@ private:
   void doUpdate(Renderer& renderer) override;
 
   void handleScriptResult(scripting::ScriptResult result);
+  void applyEffectParams(const std::vector<std::pair<std::string, double>>& params);
   void openContextMenu(scripting::ScriptContextMenuRequest request);
   void closeContextMenu();
   [[nodiscard]] scripting::ScriptSnapshot makeScriptSnapshot() const;
@@ -137,6 +138,8 @@ private:
   // through. Time advances on frame ticks while the panel is open.
   PostEffectType m_postEffectType = PostEffectType::None;
   float m_postEffectTime = 0.0F;
+  float m_postEffectIntensity = 1.0F;
+  CrtEffectParams m_crtParams;
   InputArea* m_pendingFocusArea = nullptr;
   ui::UiTreeReconciler m_reconciler;
   std::unique_ptr<ContextMenuPopup> m_contextMenuPopup;

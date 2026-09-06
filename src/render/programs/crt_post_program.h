@@ -4,6 +4,7 @@
 #include "render/core/shader_program.h"
 
 #include <GLES2/gl2.h>
+#include <array>
 #include <cstdint>
 
 class TextureId;
@@ -29,10 +30,9 @@ private:
   ShaderProgram m_program;
   GLint m_posLoc = -1;
   GLint m_texLoc = -1;
-  GLint m_texelSizeLoc = -1;
   GLint m_logicalSizeLoc = -1;
   GLint m_rectLoc = -1;
   GLint m_radiusLoc = -1;
   GLint m_timeLoc = -1;
-  GLint m_intensityLoc = -1;
+  std::array<GLint, 5> m_paramLocs{-1, -1, -1, -1, -1};
 };

@@ -139,6 +139,8 @@ namespace scripting {
 
     // Panel field (the `panel.*` namespace): a close request.
     std::optional<bool> requestClose;
+    // panel.setEffect{...}: numeric post-effect tunables by snake_case key.
+    std::optional<std::vector<std::pair<std::string, double>>> effectParams;
 
     [[nodiscard]] bool empty() const {
       return !text.has_value()
@@ -161,7 +163,8 @@ namespace scripting {
           && !uiTree.has_value()
           && !wantsSecondTicks.has_value()
           && !needsFrameTick.has_value()
-          && !requestClose.has_value();
+          && !requestClose.has_value()
+          && !effectParams.has_value();
     }
   };
 
