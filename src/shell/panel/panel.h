@@ -2,12 +2,14 @@
 
 #include "config/config_types.h"
 #include "core/ui_phase.h"
+#include "render/core/render_styles.h"
 #include "render/scene/node.h"
 #include "wayland/layer_surface.h"
 
 #include <algorithm>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 
@@ -93,6 +95,10 @@ public:
   // slot: opening another panel leaves it on screen, and only an explicit toggle
   // or close dismisses it.
   [[nodiscard]] virtual bool isPersistent() const noexcept { return false; }
+  // Whole-surface post-process to composite the panel through (see
+  // ScenePostEffect). PanelManager fills in the card rectangle; the panel only
+  // owns the type, time and strength. nullopt = plain compositing.
+  [[nodiscard]] virtual std::optional<ScenePostEffect> postEffect() const { return std::nullopt; }
 
   [[nodiscard]] Node* root() const noexcept { return m_root ? m_root.get() : m_rootPtr; }
   [[nodiscard]] float contentScale() const noexcept { return m_contentScale; }

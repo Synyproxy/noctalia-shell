@@ -18,6 +18,9 @@ enum class RenderGraphicsResetStatus;
 struct Mat3;
 struct WallpaperMaskDrawParams;
 
+class RenderFramebuffer;
+struct ScenePostEffect;
+
 class RenderContext {
 public:
   RenderContext();
@@ -32,7 +35,12 @@ public:
   void restoreAfterGraphicsReset(GlSharedContext& shared);
   void finishGraphicsResetRecovery() noexcept { m_graphicsResetPending = false; }
 
-  void renderScene(RenderTarget& target, Node* sceneRoot, const WallpaperMaskDrawParams* wallpaperMask = nullptr);
+  // postEffect, when set to a type other than None, renders the scene offscreen
+  // and composites it through that effect (see ScenePostEffect).
+  void renderScene(
+      RenderTarget& target, Node* sceneRoot, const WallpaperMaskDrawParams* wallpaperMask = nullptr,
+      const ScenePostEffect* postEffect = nullptr
+  );
   void setGraphicsResetCallback(std::function<void(RenderGraphicsResetStatus)> callback) {
     m_graphicsResetCallback = std::move(callback);
   }
@@ -86,6 +94,10 @@ private:
   );
 
   std::unique_ptr<RenderBackend> m_backend;
+  // Scratch target for renderScene's post-effect path, resized to the last
+  // surface that used it. Shared across surfaces: only live during one render.
+  std::unique_ptr<RenderFramebuffer> m_postFramebuffer;
+  [[nodiscard]] bool ensurePostFramebuffer(std::uint32_t width, std::uint32_t height);
   CairoTextRenderer m_textRenderer;
   CairoGlyphRenderer m_glyphRenderer;
   std::string m_textFontFamily = "sans-serif";

@@ -141,6 +141,9 @@ namespace scripting {
     // the host, so the panel can drive its own key interactions. Verbatim spec strings:
     // the script is called back with the same text declared here.
     std::vector<std::string> panelCaptureKeys;
+    // Optional full-panel shader overlay drawn above the content: "none" (default)
+    // or "crt" (light scanlines, vignette and an occasional glitch burst).
+    std::string panelEffect = "none";
   };
 
   struct PluginManifest {

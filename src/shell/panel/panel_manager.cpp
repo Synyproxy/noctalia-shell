@@ -908,6 +908,7 @@ void PanelManager::openPanel(const std::string& panelId, PanelOpenRequest reques
       if (m_activePanel != nullptr) {
         m_activePanel->onFrameTick(deltaMs);
       }
+      syncPostEffect();
     });
     surface.setAnimationManager(&m_animations);
   };
@@ -1812,6 +1813,23 @@ void PanelManager::requestRedraw() {
   m_surface->requestRedraw();
 }
 
+void PanelManager::syncPostEffect() {
+  if (m_surface == nullptr) {
+    return;
+  }
+  std::optional<ScenePostEffect> effect;
+  if (m_activePanel != nullptr) {
+    effect = m_activePanel->postEffect();
+    if (effect.has_value() && m_bgNode != nullptr) {
+      effect->rectX = m_bgNode->x();
+      effect->rectY = m_bgNode->y();
+      effect->rectWidth = m_bgNode->width();
+      effect->rectHeight = m_bgNode->height();
+    }
+  }
+  m_surface->setPostEffect(effect);
+}
+
 void PanelManager::requestFrameTick() {
   if (!isOpen() || m_surface == nullptr) {
     return;
@@ -2544,6 +2562,7 @@ void PanelManager::buildScene(std::uint32_t width, std::uint32_t height) {
     }
 
     m_surface->setSceneRoot(m_sceneRoot.get());
+    syncPostEffect();
 
     // Set initial keyboard focus if the panel requests it
     if (m_activePanel != nullptr) {

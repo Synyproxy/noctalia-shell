@@ -160,6 +160,8 @@ public:
   // update/layout. Used for reactive palette restyling.
   void requestRedraw();
   void requestFrameTick();
+  // Push the active panel's postEffect() (with the card rect filled in) to the surface.
+  void syncPostEffect();
   void close();
   void beginAttachedPopup(wl_surface* surface);
   void endAttachedPopup(wl_surface* surface);

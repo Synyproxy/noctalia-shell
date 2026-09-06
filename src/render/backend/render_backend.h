@@ -171,6 +171,12 @@ public:
   virtual void drawWallpaper(const WallpaperDrawParams& params) = 0;
   virtual void drawWallpaperMask(const WallpaperMaskDrawParams& params) = 0;
   virtual void drawFullscreenTexture(TextureId texture, bool flipY) = 0;
+  // Composite an offscreen scene texture through a ScenePostEffect onto the
+  // currently bound framebuffer (fullscreen, blend mode as set by the caller).
+  virtual void drawPostEffect(
+      TextureId sourceTexture, std::uint32_t bufferWidth, std::uint32_t bufferHeight, float logicalWidth,
+      float logicalHeight, const ScenePostEffect& effect
+  ) = 0;
   virtual void drawFullscreenTint(Color color) = 0;
   virtual void drawFramebufferBlur(
       TextureId sourceTexture, std::uint32_t width, std::uint32_t height, float directionX, float directionY,

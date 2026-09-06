@@ -554,6 +554,7 @@ _noctalia_sources = files(
   'src/render/programs/effect_program.cpp',
   'src/render/programs/graph_program.cpp',
   'src/render/programs/blur_program.cpp',
+  'src/render/programs/crt_post_program.cpp',
   'src/render/programs/wallpaper_program.cpp',
   'src/render/programs/wallpaper_mask_program.cpp',
   'src/render/core/blur_cache.cpp',

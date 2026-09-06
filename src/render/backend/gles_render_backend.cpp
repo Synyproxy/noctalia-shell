@@ -708,6 +708,17 @@ void GlesRenderBackend::drawFullscreenTint(Color color) {
   drawFullscreenQuad(m_fullscreenTintProgram);
 }
 
+void GlesRenderBackend::drawPostEffect(
+    TextureId sourceTexture, std::uint32_t bufferWidth, std::uint32_t bufferHeight, float logicalWidth,
+    float logicalHeight, const ScenePostEffect& effect
+) {
+  if (sourceTexture == 0 || effect.type == PostEffectType::None) {
+    return;
+  }
+  m_crtPostProgram.ensureInitialized();
+  m_crtPostProgram.draw(sourceTexture, bufferWidth, bufferHeight, logicalWidth, logicalHeight, effect);
+}
+
 void GlesRenderBackend::drawFramebufferBlur(
     TextureId sourceTexture, std::uint32_t width, std::uint32_t height, float directionX, float directionY, float radius
 ) {
@@ -765,6 +776,7 @@ void GlesRenderBackend::destroyGpuObjects() {
   m_wallpaperProgram.destroy();
   m_wallpaperMaskProgram.destroy();
   m_blurProgram.destroy();
+  m_crtPostProgram.destroy();
   m_fullscreenTextureProgram.destroy();
   m_fullscreenTintProgram.destroy();
   m_textureManager.cleanup();
@@ -784,6 +796,7 @@ void GlesRenderBackend::abandonGpuObjects() noexcept {
   m_wallpaperProgram.abandon();
   m_wallpaperMaskProgram.abandon();
   m_blurProgram.abandon();
+  m_crtPostProgram.abandon();
   m_fullscreenTextureProgram.abandon();
   m_fullscreenTintProgram.abandon();
 }

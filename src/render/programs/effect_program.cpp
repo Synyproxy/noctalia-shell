@@ -541,8 +541,16 @@ void EffectProgram::draw(
 
   // Fog reuses the Cloud shader with alternative=1
   const bool isFog = style.type == EffectType::Fog;
-  const auto effectType = isFog ? EffectType::Cloud : style.type;
-  auto idx = static_cast<std::size_t>(effectType) - 1;
+  std::size_t idx = kEffectCount;
+  switch (style.type) {
+  case EffectType::Sun: idx = 0; break;
+  case EffectType::Snow: idx = 1; break;
+  case EffectType::Rain: idx = 2; break;
+  case EffectType::Cloud:
+  case EffectType::Fog: idx = 3; break;
+  case EffectType::Stars: idx = 4; break;
+  case EffectType::None: break;
+  }
   if (idx >= kEffectCount || !m_programs[idx].program.isValid()) {
     return;
   }

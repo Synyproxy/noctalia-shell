@@ -45,6 +45,16 @@ namespace {
     return LayerShellKeyboard::OnDemand;
   }
 
+  PostEffectType postEffectTypeFromManifest(const std::string& value) {
+    if (value == "crt") {
+      return PostEffectType::Crt;
+    }
+    if (value != "none") {
+      kLog.warn("unknown panel effect \"{}\", using none", value);
+    }
+    return PostEffectType::None;
+  }
+
   std::string readFile(const std::filesystem::path& path) {
     std::ifstream f(path);
     if (!f) {
@@ -67,6 +77,7 @@ PluginPanel::PluginPanel(scripting::PluginRuntimeContext context, PluginPanelOpt
       m_widthFill(options.widthFill), m_heightFill(options.heightFill),
       m_dismissOnOutsideClick(options.dismissOnOutsideClick),
       m_keyboardMode(keyboardModeFromManifest(options.keyboardFocus)),
+      m_postEffectType(postEffectTypeFromManifest(options.effect)),
       m_layer(layerShellLayerFromConfig(options.shellConfig.layer)), m_persistent(options.persistent),
       m_shellConfig(options.shellConfig) {
   // The manifest parser already validated every spec, so a parse failure here means the two
@@ -240,7 +251,7 @@ void PluginPanel::onOpen(std::string_view context) {
     (void)m_runtime->enqueueCallStrings("onOpen", std::string(context), {}, makeScriptSnapshot());
   }
   startTickTimer();
-  if (m_needsFrameTick) {
+  if (m_needsFrameTick || m_postEffectType != PostEffectType::None) {
     PanelManager::instance().requestAnimationFrameForPanel(m_entryId);
   }
 }
@@ -272,15 +283,25 @@ bool PluginPanel::dismissTransientUi() {
 }
 
 void PluginPanel::onFrameTick(float deltaMs) {
-  if (m_runtime == nullptr || !m_needsFrameTick || !m_open) {
+  if (!m_open) {
     return;
   }
-  // Coalesced like the desktop-widget path: a slow script only ever sees the latest frame.
-  (void)m_runtime->enqueueCallStrings(
-      "onFrameTick", std::format("{:.3F}", deltaMs), {}, makeScriptSnapshot(), /*coalesce=*/true
-  );
+  bool keepAnimating = false;
+  if (m_postEffectType != PostEffectType::None) {
+    m_postEffectTime += deltaMs * 0.001F;
+    keepAnimating = true;
+  }
+  if (m_runtime != nullptr && m_needsFrameTick) {
+    // Coalesced like the desktop-widget path: a slow script only ever sees the latest frame.
+    (void)m_runtime->enqueueCallStrings(
+        "onFrameTick", std::format("{:.3F}", deltaMs), {}, makeScriptSnapshot(), /*coalesce=*/true
+    );
+    keepAnimating = true;
+  }
   // Keep the frame loop alive while animating.
-  PanelManager::instance().requestAnimationFrameForPanel(m_entryId);
+  if (keepAnimating) {
+    PanelManager::instance().requestAnimationFrameForPanel(m_entryId);
+  }
 }
 
 void PluginPanel::doLayout(Renderer& renderer, float width, float height) {
@@ -298,6 +319,18 @@ void PluginPanel::doLayout(Renderer& renderer, float width, float height) {
     m_dragOverlay->setPosition(0.0F, 0.0F);
     m_dragOverlay->setFrameSize(width, height);
   }
+}
+
+std::optional<ScenePostEffect> PluginPanel::postEffect() const {
+  if (m_postEffectType == PostEffectType::None) {
+    return std::nullopt;
+  }
+  return ScenePostEffect{
+      .type = m_postEffectType,
+      .time = m_postEffectTime,
+      .radius = Style::scaledRadiusXl(contentScale()),
+      .intensity = 1.0F,
+  };
 }
 
 void PluginPanel::doUpdate(Renderer& renderer) { (void)renderer; }

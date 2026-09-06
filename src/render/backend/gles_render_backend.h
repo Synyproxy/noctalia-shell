@@ -5,6 +5,7 @@
 #include "render/core/shader_program.h"
 #include "render/programs/audio_spectrum_program.h"
 #include "render/programs/blur_program.h"
+#include "render/programs/crt_post_program.h"
 #include "render/programs/countdown_ring_program.h"
 #include "render/programs/effect_program.h"
 #include "render/programs/fancy_audio_visualizer_program.h"
@@ -88,6 +89,10 @@ public:
   void drawWallpaper(const WallpaperDrawParams& params) override;
   void drawWallpaperMask(const WallpaperMaskDrawParams& params) override;
   void drawFullscreenTexture(TextureId texture, bool flipY) override;
+  void drawPostEffect(
+      TextureId sourceTexture, std::uint32_t bufferWidth, std::uint32_t bufferHeight, float logicalWidth,
+      float logicalHeight, const ScenePostEffect& effect
+  ) override;
   void drawFullscreenTint(Color color) override;
   void drawFramebufferBlur(
       TextureId sourceTexture, std::uint32_t width, std::uint32_t height, float directionX, float directionY,
@@ -133,6 +138,7 @@ private:
   WallpaperProgram m_wallpaperProgram;
   WallpaperMaskProgram m_wallpaperMaskProgram;
   BlurProgram m_blurProgram;
+  CrtPostProgram m_crtPostProgram;
   ShaderProgram m_fullscreenTextureProgram;
   ShaderProgram m_fullscreenTintProgram;
 };

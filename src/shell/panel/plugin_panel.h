@@ -2,6 +2,7 @@
 
 #include "core/input/key_chord.h"
 #include "core/timer_manager.h"
+#include "render/core/render_styles.h"
 #include "scripting/plugin_ipc.h"
 #include "scripting/plugin_panel_shell.h"
 #include "scripting/plugin_script_watcher.h"
@@ -43,6 +44,8 @@ struct PluginPanelOptions {
   bool persistent = false;
   // Key chord specs the panel takes over while focused, verbatim from the manifest.
   std::vector<std::string> captureKeys;
+  // "none" or "crt": full-panel shader overlay, see PluginEntry::panelEffect.
+  std::string effect = "none";
   scripting::PluginPanelShellConfig shellConfig;
 };
 
@@ -70,6 +73,7 @@ public:
   [[nodiscard]] LayerShellKeyboard keyboardMode() const override { return m_keyboardMode; }
   [[nodiscard]] LayerShellLayer layer() const override { return m_layer; }
   [[nodiscard]] bool isPersistent() const noexcept override { return m_persistent; }
+  [[nodiscard]] std::optional<ScenePostEffect> postEffect() const override;
   [[nodiscard]] PanelPlacement panelPlacement() const noexcept override { return m_shellConfig.placement; }
   [[nodiscard]] std::string panelScreenPosition() const override { return m_shellConfig.position; }
   [[nodiscard]] bool panelOpenNearClick() const override { return m_shellConfig.openNearClick; }
@@ -129,6 +133,10 @@ private:
   Flex* m_flex = nullptr;
   Flex* m_contentFlex = nullptr;
   Node* m_dragOverlay = nullptr;
+  // Manifest `effect`: post-process the whole panel surface is composited
+  // through. Time advances on frame ticks while the panel is open.
+  PostEffectType m_postEffectType = PostEffectType::None;
+  float m_postEffectTime = 0.0F;
   InputArea* m_pendingFocusArea = nullptr;
   ui::UiTreeReconciler m_reconciler;
   std::unique_ptr<ContextMenuPopup> m_contextMenuPopup;

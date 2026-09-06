@@ -525,6 +525,14 @@ void Surface::setRenderContext(RenderContext* ctx) {
   }
 }
 
+void Surface::setPostEffect(std::optional<ScenePostEffect> effect) {
+  if (m_postEffect == effect) {
+    return;
+  }
+  m_postEffect = effect;
+  requestRedraw();
+}
+
 void Surface::setWallpaperMask(std::optional<WallpaperMaskDrawParams> mask) {
   if (m_wallpaperMask == mask) {
     return;
@@ -1234,7 +1242,10 @@ void Surface::render() {
   requestFrame();
   traceSurfaceEvent(*this, "render-begin");
   const float renderMs = elapsedMs([this] {
-    m_renderContext->renderScene(m_renderTarget, m_sceneRoot, m_wallpaperMask ? &*m_wallpaperMask : nullptr);
+    m_renderContext->renderScene(
+        m_renderTarget, m_sceneRoot, m_wallpaperMask ? &*m_wallpaperMask : nullptr,
+        m_postEffect ? &*m_postEffect : nullptr
+    );
   });
   traceSurfaceEvent(*this, "render-end");
   recordSurfaceProfileEvent(*this, SurfaceProfileEvent::Render, renderMs);

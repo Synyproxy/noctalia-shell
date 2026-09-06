@@ -597,6 +597,14 @@ namespace scripting {
               return false;
             }
           }
+          if ((*entryTable)["effect"]) {
+            const auto* effect = (*entryTable)["effect"].as_string();
+            if (effect == nullptr || (effect->get() != "none" && effect->get() != "crt")) {
+              error = "panel entry '" + entry.id + R"(': effect must be "none" or "crt")";
+              return false;
+            }
+            entry.panelEffect = effect->get();
+          }
           injectStandardPanelShellSettings(entry);
         }
         if (kind == PluginEntryKind::Widget) {

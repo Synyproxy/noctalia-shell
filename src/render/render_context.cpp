@@ -147,6 +147,10 @@ void RenderContext::prepareForGraphicsReset() {
 
   m_textRenderer.abandonGlyphTextures();
   m_glyphRenderer.abandonGlyphTextures();
+  if (m_postFramebuffer != nullptr) {
+    m_postFramebuffer->abandon();
+    m_postFramebuffer.reset();
+  }
   m_backend->abandonAfterGraphicsReset();
 }
 
@@ -192,7 +196,28 @@ void RenderContext::notifyFontConfigChanged() {
   ++m_textMetricsGeneration;
 }
 
-void RenderContext::renderScene(RenderTarget& target, Node* sceneRoot, const WallpaperMaskDrawParams* wallpaperMask) {
+bool RenderContext::ensurePostFramebuffer(std::uint32_t width, std::uint32_t height) {
+  if (m_backend == nullptr || width == 0 || height == 0) {
+    return false;
+  }
+  if (m_postFramebuffer != nullptr
+      && m_postFramebuffer->valid()
+      && m_postFramebuffer->width() == width
+      && m_postFramebuffer->height() == height) {
+    return true;
+  }
+  m_postFramebuffer = m_backend->createFramebuffer(width, height);
+  if (m_postFramebuffer == nullptr || !m_postFramebuffer->valid()) {
+    m_postFramebuffer.reset();
+    return false;
+  }
+  return true;
+}
+
+void RenderContext::renderScene(
+    RenderTarget& target, Node* sceneRoot, const WallpaperMaskDrawParams* wallpaperMask,
+    const ScenePostEffect* postEffect
+) {
   if (m_backend == nullptr || m_graphicsResetPending) {
     return;
   }
@@ -222,9 +247,31 @@ void RenderContext::renderScene(RenderTarget& target, Node* sceneRoot, const Wal
       const auto sh = static_cast<float>(target.logicalHeight());
       const auto bw = static_cast<float>(target.bufferWidth());
       const auto bh = static_cast<float>(target.bufferHeight());
+      const bool usePostEffect = postEffect != nullptr
+          && postEffect->type != PostEffectType::None
+          && ensurePostFramebuffer(target.bufferWidth(), target.bufferHeight());
+      if (usePostEffect) {
+        m_backend->bindFramebuffer(*m_postFramebuffer);
+        m_backend->setViewport(target.bufferWidth(), target.bufferHeight());
+        m_backend->setBlendMode(RenderBlendMode::PremultipliedAlpha);
+        m_backend->disableScissor();
+        m_backend->clear(Color{0.0F, 0.0F, 0.0F, 0.0F});
+      }
       renderNode(
           renderScale, sceneRoot, Mat3::identity(), 1.0F, sw, sh, bw, bh, 0.0F, 0.0F, sw, sh, false, false, false
       );
+      if (usePostEffect) {
+        m_backend->bindDefaultFramebuffer();
+        m_backend->setViewport(target.bufferWidth(), target.bufferHeight());
+        m_backend->disableScissor();
+        // The offscreen copy is already premultiplied over transparent black and
+        // the default framebuffer was cleared by beginFrame, so copy it straight.
+        m_backend->setBlendMode(RenderBlendMode::Disabled);
+        m_backend->drawPostEffect(
+            m_postFramebuffer->colorTexture(), target.bufferWidth(), target.bufferHeight(), sw, sh, *postEffect
+        );
+        m_backend->setBlendMode(RenderBlendMode::PremultipliedAlpha);
+      }
     }
     if (wallpaperMask != nullptr && wallpaperMask->texture != 0) {
       m_backend->disableScissor();
@@ -651,6 +698,7 @@ void RenderContext::cleanup() {
   // Text renderers first — they destroy GL textures and need a current context.
   m_textRenderer.cleanup();
   m_glyphRenderer.cleanup();
+  m_postFramebuffer.reset();
 
   if (m_backend != nullptr) {
     m_backend->cleanup();

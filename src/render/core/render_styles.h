@@ -227,6 +227,27 @@ constexpr bool operator==(const FancyAudioVisualizerStyle& lhs, const FancyAudio
 
 enum class EffectType : std::uint8_t { None, Sun, Snow, Rain, Cloud, Fog, Stars };
 
+// Whole-scene post-process applied when a surface's scene is composited: the
+// scene renders to an offscreen texture that the effect program then resamples,
+// so it can displace and re-colour content, unlike the overlay EffectType draws.
+enum class PostEffectType : std::uint8_t { None, Crt };
+
+struct ScenePostEffect {
+  PostEffectType type = PostEffectType::None;
+  float time = 0.0F;
+  // Card rectangle in surface logical pixels: the region that gets scanlines and
+  // vignette. Displacement applies to the whole surface.
+  float rectX = 0.0F;
+  float rectY = 0.0F;
+  float rectWidth = 0.0F;
+  float rectHeight = 0.0F;
+  float radius = 0.0F;
+  // 0..1 overall strength.
+  float intensity = 1.0F;
+
+  bool operator==(const ScenePostEffect&) const = default;
+};
+
 struct EffectStyle {
   EffectType type = EffectType::None;
   float time = 0.0F;
