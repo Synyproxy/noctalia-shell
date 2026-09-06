@@ -65,9 +65,14 @@ namespace {
       return {.initial = LayerShellKeyboard::None, .relaxed = std::nullopt};
     }
     if (hasFocusGrab) {
+      // Exclusive at map so the panel wins the keyboard from the grab (or simply on
+      // open). Without a grab an on-demand panel must still settle to OnDemand:
+      // left Exclusive it would hold the keyboard for its whole lifetime, so the
+      // user could not type into another window while it stays open.
+      const bool settleOnDemand = grabWillActivate || mode == LayerShellKeyboard::OnDemand;
       return {
           .initial = LayerShellKeyboard::Exclusive,
-          .relaxed = grabWillActivate ? std::optional{LayerShellKeyboard::OnDemand} : std::nullopt
+          .relaxed = settleOnDemand ? std::optional{LayerShellKeyboard::OnDemand} : std::nullopt
       };
     }
     if (attached) {
