@@ -341,6 +341,10 @@ foreach _p : [
     wayland_protos_dir / 'staging/ext-idle-notify/ext-idle-notify-v1.xml'],
   ['ext-background-effect-v1',
     wayland_protos_dir / 'staging/ext-background-effect/ext-background-effect-v1.xml'],
+  ['ext-image-capture-source-v1',
+    wayland_protos_dir / 'staging/ext-image-capture-source/ext-image-capture-source-v1.xml'],
+  ['ext-image-copy-capture-v1',
+    wayland_protos_dir / 'staging/ext-image-copy-capture/ext-image-copy-capture-v1.xml'],
   ['fractional-scale-v1',
     wayland_protos_dir / 'staging/fractional-scale/fractional-scale-v1.xml'],
   ['viewporter',
@@ -467,6 +471,7 @@ _noctalia_sources = files(
   'src/dbus/bluetooth/bluetooth_service.cpp',
   'src/dbus/idle/screensaver_service.cpp',
   'src/dbus/logind/logind_service.cpp',
+  'src/dbus/modem/modem_manager_service.cpp',
   'src/dbus/mpris/mpris_art.cpp',
   'src/dbus/mpris/mpris_service.cpp',
   'src/dbus/network/external_ip_service.cpp',
@@ -832,9 +837,15 @@ _noctalia_sources = files(
   'src/system/gamma_service.cpp',
   'src/system/location_service.cpp',
   'src/capture/screencopy_capture.cpp',
+  'src/capture/pointer_cursor_capture.cpp',
   'src/capture/screencopy_util.cpp',
+  'src/capture/screenshot_capture.cpp',
+  'src/capture/screenshot_image.cpp',
   'src/capture/screenshot_service.cpp',
   'src/capture/screenshot_region_overlay.cpp',
+  'src/capture/annotation_document.cpp',
+  'src/capture/annotation_raster.cpp',
+  'src/capture/annotation_overlay.cpp',
   'src/shell/bar/widgets/screenshot_widget.cpp',
   'src/system/rfkill_helper.cpp',
   'src/system/screen_time_service.cpp',
@@ -1127,6 +1138,8 @@ install_data(
 
 if build_tests
   _cpp_test_names = [
+    'annotation_document',
+    'annotation_raster',
     'animation_manager',
     'app_identity',
     'audio_glyphs',
@@ -1162,6 +1175,7 @@ if build_tests
     'disk_mounts',
     'dock_edge_overlap',
     'dock_pinned_apps',
+    'enterprise_credentials',
     'event_link',
     'fcitx_status',
     'freedesktop_key_file',
@@ -1191,6 +1205,7 @@ if build_tests
     'log',
     'math_provider',
     'monitor_selector',
+    'network_display',
     'network_manager_security',
     'niri_workspace_backend',
     'notification_dnd',
@@ -1239,6 +1254,9 @@ if build_tests
   ]
 
   foreach test_name : _cpp_test_names
+    if test_name == 'plugin_git_export' and not git_program.found()
+      continue
+    endif
     test_exe = executable(test_name + '_test',
       sources: files('tests' / (test_name + '_test.cpp')),
       dependencies: noctalia_core_dep,

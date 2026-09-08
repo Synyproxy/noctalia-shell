@@ -4,7 +4,6 @@
 #include "core/log.h"
 #include "ipc/ipc_arg_parse.h"
 #include "ipc/ipc_service.h"
-#include "notification/notifications.h"
 #include "pipewire/audio_route_selection.h"
 #include "pipewire/wireplumber_mixer.h"
 #include "util/string_utils.h"
@@ -17,9 +16,6 @@
 #include <cmath>
 #include <concepts>
 #include <cstring>
-#include <filesystem>
-#include <format>
-#include <fstream>
 #include <memory>
 #include <optional>
 #include <pipewire/device.h>
@@ -54,6 +50,47 @@ namespace {
   // Write guard: keep optimistic local volume briefly and ignore echoes within epsilon.
   constexpr auto kVolumeWriteGuardDuration = std::chrono::milliseconds(400);
   constexpr auto kVolumeWriteGuardEpsilon = 0.02F;
+  constexpr auto kInitialSyncTimeout = std::chrono::seconds(1);
+
+  [[nodiscard]] bool pipeWireVersionSupportsPassiveFollow(std::string_view version) {
+    const auto majorEnd = version.find('.');
+    if (majorEnd == std::string_view::npos) {
+      return false;
+    }
+
+    std::uint32_t major = 0;
+    const auto* const begin = version.data();
+    const auto* const majorEndPtr = begin + majorEnd;
+    const auto [majorPtr, majorError] = std::from_chars(begin, majorEndPtr, major);
+    if (majorError != std::errc{} || majorPtr != majorEndPtr) {
+      return false;
+    }
+
+    std::uint32_t minor = 0;
+    const auto* const minorBegin = majorEndPtr + 1;
+    const auto* const end = begin + version.size();
+    const auto [minorPtr, minorError] = std::from_chars(minorBegin, end, minor);
+    if (minorError != std::errc{} || minorPtr == minorBegin) {
+      return false;
+    }
+
+    return major > 1 || (major == 1 && minor >= 7);
+  }
+
+  void onCoreInfo(void* data, const pw_core_info* info) {
+    auto* svc = static_cast<PipeWireService*>(data);
+    svc->onCoreInfo(info);
+  }
+  void onCoreDone(void* data, std::uint32_t id, int sequence) {
+    auto* svc = static_cast<PipeWireService*>(data);
+    svc->onCoreDone(id, sequence);
+  }
+
+  const pw_core_events kCoreEvents = {
+      .version = PW_VERSION_CORE_EVENTS,
+      .info = onCoreInfo,
+      .done = onCoreDone,
+  };
 
   // Registry events.
   void onRegistryGlobal(
@@ -748,8 +785,14 @@ PipeWireService::PipeWireService() {
     throw std::runtime_error("pipewire: failed to connect to daemon");
   }
 
+  m_coreListener = new spa_hook{};
+  spa_zero(*m_coreListener);
+  pw_core_add_listener(m_core, m_coreListener, &kCoreEvents, this);
+
   m_registry = pw_core_get_registry(m_core, PW_VERSION_REGISTRY, 0);
   if (m_registry == nullptr) {
+    spa_hook_remove(m_coreListener);
+    delete m_coreListener;
     pw_core_disconnect(m_core);
     pw_context_destroy(m_context);
     pw_loop_destroy(m_loop);
@@ -762,10 +805,33 @@ PipeWireService::PipeWireService() {
 
   pw_loop_enter(m_loop);
 
-  // Do initial roundtrip to discover existing objects
+  // Complete the initial roundtrip before consumers inspect daemon capabilities or discovered objects.
   auto* loop = m_loop;
-  pw_core_sync(m_core, PW_ID_CORE, 0);
-  while (pw_loop_iterate(loop, 0) > 0) {
+  m_initialSyncSequence = pw_core_sync(m_core, PW_ID_CORE, 0);
+  m_initialSyncPending = m_initialSyncSequence >= 0;
+  const auto syncDeadline = std::chrono::steady_clock::now() + kInitialSyncTimeout;
+  while (m_initialSyncPending) {
+    const auto remaining =
+        std::chrono::duration_cast<std::chrono::milliseconds>(syncDeadline - std::chrono::steady_clock::now());
+    if (remaining <= std::chrono::milliseconds::zero()) {
+      break;
+    }
+    const int result = pw_loop_iterate(loop, static_cast<int>(remaining.count()));
+    if (result < 0) {
+      kLog.warn("initial daemon sync failed: {}", spa_strerror(result));
+      break;
+    }
+  }
+  if (m_initialSyncPending) {
+    kLog.warn(
+        "initial daemon sync did not complete within {}ms",
+        std::chrono::duration_cast<std::chrono::milliseconds>(kInitialSyncTimeout).count()
+    );
+  }
+  if (m_serverVersion.empty()) {
+    kLog.warn("daemon version unavailable; using node.passive=true for the spectrum stream");
+  } else {
+    kLog.info("connected to daemon {} (client library {})", m_serverVersion, pw_get_library_version());
   }
 
   enumDefaultAudioDeviceParams();
@@ -773,10 +839,6 @@ PipeWireService::PipeWireService() {
   }
   rebuildState();
 
-  refreshCameraProcCaptures();
-  m_cameraProcTimer.startRepeating(std::chrono::milliseconds(1000), [this]() { refreshCameraProcCaptures(); });
-
-  kLog.info("connected (version {})", pw_get_library_version());
   const auto* sink = defaultSink();
   if (sink != nullptr) {
     kLog.info("default sink \"{}\" vol={:.0F}%", sink->description, sink->volume * 100.0F);
@@ -823,6 +885,11 @@ PipeWireService::~PipeWireService() {
   }
   m_metadataCleanups.clear();
 
+  if (m_coreListener != nullptr) {
+    spa_hook_remove(m_coreListener);
+    delete m_coreListener;
+  }
+
   if (m_registryListener != nullptr) {
     spa_hook_remove(m_registryListener);
     delete m_registryListener;
@@ -843,6 +910,21 @@ PipeWireService::~PipeWireService() {
   }
 
   pw_deinit();
+}
+
+void PipeWireService::onCoreInfo(const pw_core_info* info) {
+  if (info == nullptr || info->version == nullptr) {
+    kLog.warn("received PipeWire core info without a version");
+    return;
+  }
+  m_serverVersion = info->version;
+  m_serverSupportsPassiveFollow = pipeWireVersionSupportsPassiveFollow(m_serverVersion);
+}
+
+void PipeWireService::onCoreDone(std::uint32_t id, int sequence) {
+  if (id == PW_ID_CORE && sequence == m_initialSyncSequence) {
+    m_initialSyncPending = false;
+  }
 }
 
 int PipeWireService::fd() const noexcept {
@@ -1715,11 +1797,6 @@ void PipeWireService::rebuildState() {
     addCapture(*kind, consumer->id, privacyAppName(*consumer));
   }
 
-  // Camera opens PipeWire's graph never sees (direct V4L2 access) — see refreshCameraProcCaptures.
-  for (const PrivacyCapture& capture : m_procCameraCaptures) {
-    addCapture(capture.kind, capture.nodeId, capture.appName);
-  }
-
   // Sort by id for stable ordering
   std::ranges::sort(next.sinks, {}, &AudioNode::id);
   std::ranges::sort(next.sources, {}, &AudioNode::id);
@@ -1736,111 +1813,6 @@ void PipeWireService::rebuildState() {
   m_privacyState = std::move(nextPrivacy);
   ++m_changeSerial;
   emitChanged();
-}
-
-void PipeWireService::refreshCameraProcCaptures() {
-  namespace fs = std::filesystem;
-  std::error_code ec;
-
-  // Real capture devices under /sys/class/video4linux, skipping metadata-only nodes (UVC cams
-  // typically expose /dev/video1 etc. as metadata, which never carries frames).
-  std::vector<std::string> deviceNames;
-  fs::directory_iterator sysfsIt("/sys/class/video4linux", ec);
-  if (!ec) {
-    for (const auto& entry : sysfsIt) {
-      const std::string devName = entry.path().filename().string();
-      if (!devName.starts_with("video")) {
-        continue;
-      }
-      std::ifstream nameFile(entry.path() / "name");
-      std::string caps;
-      if (nameFile && std::getline(nameFile, caps) && caps.contains("Metadata")) {
-        continue;
-      }
-      deviceNames.push_back(devName);
-    }
-  }
-
-  std::vector<PrivacyCapture> next;
-  if (!deviceNames.empty()) {
-    fs::directory_iterator procIt("/proc", ec);
-    if (!ec) {
-      for (const auto& pidEntry : procIt) {
-        const std::string pidStr = pidEntry.path().filename().string();
-        if (pidStr.empty() || !std::ranges::all_of(pidStr, [](unsigned char c) { return std::isdigit(c) != 0; })) {
-          continue;
-        }
-
-        std::error_code fdEc;
-        fs::directory_iterator fdIt(pidEntry.path() / "fd", fdEc);
-        if (fdEc) {
-          continue;
-        }
-
-        bool holdsCamera = false;
-        for (const auto& fdEntry : fdIt) {
-          std::error_code linkEc;
-          const fs::path target = fs::read_symlink(fdEntry.path(), linkEc);
-          if (linkEc) {
-            continue;
-          }
-          const std::string targetStr = target.string();
-          if (!targetStr.starts_with("/dev/")) {
-            continue;
-          }
-          const std::string targetDev = target.filename().string();
-          if (std::ranges::contains(deviceNames, targetDev)) {
-            holdsCamera = true;
-            break;
-          }
-        }
-
-        if (!holdsCamera) {
-          continue;
-        }
-
-        std::ifstream commFile(pidEntry.path() / "comm");
-        std::string appName;
-        if (!commFile || !std::getline(commFile, appName) || appName.empty()) {
-          continue;
-        }
-
-        if (!std::ranges::any_of(next, [&](const PrivacyCapture& c) { return c.appName == appName; })) {
-          next.push_back(
-              PrivacyCapture{
-                  .kind = PrivacyCaptureKind::Camera,
-                  .nodeId = 0,
-                  .appName = appName,
-              }
-          );
-        }
-      }
-    }
-  }
-
-  std::ranges::sort(next, {}, &PrivacyCapture::appName);
-  if (next == m_procCameraCaptures) {
-    return;
-  }
-
-  const auto holdsApp = [](const std::vector<PrivacyCapture>& captures, const std::string& appName) {
-    return std::ranges::any_of(captures, [&](const PrivacyCapture& c) { return c.appName == appName; });
-  };
-
-  for (const auto& capture : next) {
-    if (!holdsApp(m_procCameraCaptures, capture.appName)) {
-      kLog.info("camera capture started: app={}", capture.appName);
-      notify::info("Noctalia", "Camera in use", std::format("{} is using the camera", capture.appName));
-    }
-  }
-  for (const auto& capture : m_procCameraCaptures) {
-    if (!holdsApp(next, capture.appName)) {
-      kLog.info("camera capture ended: app={}", capture.appName);
-    }
-  }
-
-  m_procCameraCaptures = std::move(next);
-  rebuildState();
 }
 
 std::uint32_t PipeWireService::resolveTargetObjectSink(const std::string& target) const {
