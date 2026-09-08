@@ -123,15 +123,15 @@ void main() {
     bool displaced = false;
     if (frameHash > 1.0 - slipChance) {
         float dispX = hash1(slowFrame + 8783.0);
-        float dispY = hash1(floor(frame / 12.0) + 364719.0);
+        float dispY = hash1(floor(frame / 12.0) + 3647.0);
         if (uv.y < dispX) {
             uvS.y -= (dispY * 2.0 - 1.0) * slipStrength;
             displaced = true;
         }
     } else if (frameHash > 1.0 - slipChance - bandChance) {
-        float dispX = hash1(floor(frame / 9.0) + 147251.0);
-        float dispY = hash1(floor(frame / 11.0) + 287512.0);
-        float dispZ = hash1(floor(frame / 7.0) + 8756123.0);
+        float dispX = hash1(floor(frame / 9.0) + 1472.0);
+        float dispY = hash1(floor(frame / 11.0) + 2875.0);
+        float dispZ = hash1(floor(frame / 7.0) + 8756.0);
         if (uv.y > dispX && uv.y < dispX + dispZ * bandHeight) {
             uvS.x -= (dispY * 2.0 - 1.0) * bandStrength;
             displaced = true;
