@@ -288,7 +288,9 @@ void PluginPanel::onFrameTick(float deltaMs) {
   }
   bool keepAnimating = false;
   if (m_postEffectType != PostEffectType::None) {
-    m_postEffectTime += deltaMs * 0.001F;
+    // Keep the clock small so u_time stays precise in the shader (the CRT
+    // program wraps its own frame counter, so the jump is invisible).
+    m_postEffectTime = std::fmod(m_postEffectTime + deltaMs * 0.001F, 4096.0F);
     keepAnimating = true;
   }
   if (m_runtime != nullptr && m_needsFrameTick) {

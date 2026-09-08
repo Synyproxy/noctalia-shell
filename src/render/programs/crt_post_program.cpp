@@ -92,8 +92,11 @@ void main() {
     vec2 px = uv * u_logical_size;
 
     // Everything hashes off a nominal 60 Hz frame counter so the glitches step
-    // instead of sliding, like the original's iFrame-driven interference.
-    float frame = floor(u_time * speed * 60.0);
+    // instead of sliding, like the original's iFrame-driven interference. The
+    // counter wraps so the sin() hashes below keep small arguments: with an
+    // unbounded frame the float32 sin loses precision and the hashes collapse
+    // toward 0, which made the effect grow stronger the longer a panel lived.
+    float frame = mod(floor(u_time * speed * 60.0), 16384.0);
     float slowFrame = floor(frame / 10.0);
     float frameHash = hash1(slowFrame + 0.5);
 
