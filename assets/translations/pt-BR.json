@@ -27,7 +27,51 @@
     }
   },
   "bar": {
+    "annotate": {
+      "capture-new-region": "Capturar nova região (descarta a edição atual)",
+      "close": "Fechar sem aplicar (Esc)",
+      "color-black": "Preto",
+      "color-blue": "Azul",
+      "color-green": "Verde",
+      "color-orange": "Laranja",
+      "color-purple": "Roxo",
+      "color-red": "Vermelho",
+      "color-white": "Branco",
+      "color-yellow": "Amarelo",
+      "copy": "Copiar a imagem anotada (Ctrl+C)",
+      "cursor": "Mostrar o ponteiro capturado com a tela (p)",
+      "cursor-capture-failed": "Alternação de ponteiro não disponível: o compositor não pôde prover uma imagem de cursor separada.",
+      "cursor-live": "Congelar a tela primeiro para mudar o ponteiro capturado (F)",
+      "cursor-not-captured": "Alternação de ponteiro não disponível: este compositor não suporta captura separada de cursor.",
+      "done": "Aplicar as configurações da captura de tela (Enter)",
+      "fill-off": "Preenchimento da forma: desligado",
+      "fill-on": "Preenchimento da forma: ligado",
+      "freeze": "Congelar a tela sob a tinta (f)",
+      "move-toolbar": "Arraste para mover a barra de ferramentas",
+      "redo": "Refazer (Ctrl+Shift+Z)",
+      "save": "Salvar a imagem anotada (Ctrl+S)",
+      "size-advanced": "Ajuste fino de tamanho",
+      "size-decrease": "Mais fino ([)",
+      "size-increase": "Mais grosso (])",
+      "size-large": "Grande",
+      "size-medium": "Médio",
+      "size-small": "Pequeno",
+      "tool-arrow": "Seta (a) · segure Shift para ajustar o ângulo",
+      "tool-blur": "Borrar uma região (u)",
+      "tool-brush": "Pincel (b)",
+      "tool-circle": "Elipse (o) · segure Shift para um círculo",
+      "tool-crop": "Cortar a exportação (c)",
+      "tool-eraser": "Borracha (e)",
+      "tool-highlighter": "Marca-texto (h)",
+      "tool-line": "\"Linha (l) · segure Shift para ajustar o ângulo",
+      "tool-move": "Mover uma anotação (m)",
+      "tool-numbering": "Marcador numerado (n)",
+      "tool-rectangle": "Retângulo (s) · segure Shift para um quadrado",
+      "tool-text": "Texto (t)",
+      "undo": "Desfazer (Ctrl+Z)"
+    },
     "screenshot": {
+      "annotate-export-failed": "Falha ao construir a imagem anotada",
       "choose-display": "Escolha o monitor",
       "confirm-region": "{copy} para copiar · {save} para salvar · Enter ou Espaço para padrões · {cancel} para cancelar · Arraste para reselecionar",
       "fullscreen": "Tela cheia",
@@ -60,6 +104,7 @@
       "network": {
         "active": "Ativo",
         "band": "Banda",
+        "cellular": "Celular",
         "connected": "Conectado",
         "connecting": "Conectando",
         "download": "Download",
@@ -73,8 +118,10 @@
         "not-connected": "Não conectado",
         "off": "Desligado",
         "on": "Ligado",
+        "operator": "Operadora",
         "scanning": "Escaneando",
         "signal": "Sinal",
+        "technology": "Tecnologia",
         "upload": "Upload",
         "vpn": "VPN",
         "wan-ip": "IP Público",
@@ -239,6 +286,7 @@
     "display": {
       "disabled": "Desabilitado",
       "no-displays": "Nenhum monitor disponível",
+      "rescan": "Verificar monitores DDC/CI novamente",
       "unknown-resolution": "Resolução desconhecida"
     },
     "home": {
@@ -270,15 +318,39 @@
       "start-playback": "Iniciar reprodução em um aplicativo MPRIS"
     },
     "network": {
+      "anonymous-identity": "Identidade anônima (opcional)",
       "available": "Disponível",
+      "ca-certificate": "Caminho do certificado CA (opcional)",
+      "cellular": "Celular",
+      "cellular-connected": "Conectado",
+      "cellular-connecting": "Conectando...",
+      "cellular-connection": "Conexão do celular",
+      "cellular-enabling": "Ativando...",
+      "cellular-failed": "Falhou",
+      "cellular-locked": "SIM bloqueado",
+      "cellular-no-service": "Sem serviço",
+      "cellular-off": "Desligado",
+      "cellular-registered": "Registrado",
+      "cellular-searching": "Buscando...",
       "connect": "Conectar",
       "current-connection": "Conexão atual",
+      "domain-suffix-match": "Sufixo de domínio do servidor",
+      "eap-method": "Método EAP",
+      "enterprise-prompt-for": "Fazer login em {ssid}",
+      "error-ca-not-absolute": "O caminho do certificado precisa ser absoluto, começando com /.",
+      "error-certificate-required": "Esta rede requer autenticação baseada em certificados (EAP-TLS), que não é suportada ainda.",
+      "error-enterprise-unsupported": "O backend da rede ativa não pode configurar redes 802.1X",
+      "error-missing-identity": "Entre com a identidade que sua organização lhe forneceu.",
+      "error-missing-password": "Entre sua senha.",
+      "error-unsupported-phase2": "PEAP requer autenticação interna MSCHAPv2",
       "external-ip": "WAN {ip}",
+      "identity": "Identidade",
       "no-networks": "Nenhuma conexão ao alcance",
       "not-connected": "Não conectado",
       "password": "Senha",
       "password-prompt": "Digitar a senha",
       "password-prompt-for": "Digite a senha para {ssid}",
+      "phase2-auth": "Autenticação interna",
       "saved": "Salvo",
       "unavailable-detail": "Instale e ative o NetworkManager, wpa_supplicant ou iwd para gerenciar redes a partir daqui.",
       "unavailable-title": "Serviço de rede indisponível",
@@ -454,7 +526,7 @@
         }
       },
       "location-unavailable": "Localização indisponível",
-      "no-location-body": "Adicione seu endereço ou ative a localização automática nas configurações de localização.",
+      "no-location-body": "Adicione seu endereço ou ative a autolocalização  nas Configurações de Localização.",
       "no-location-title": "Localização não definida",
       "refreshing": "Atualizando o clima...",
       "waiting": "Aguardando dados do clima"
@@ -677,7 +749,7 @@
     },
     "empty": {
       "no-results": "Nenhum resultado encontrado",
-      "type-to-search": "Digite para pesquisar..."
+      "type-to-search": "Digite para buscar..."
     },
     "origins": {
       "appimage": "AppImage",
@@ -709,7 +781,7 @@
         "title": "Janelas"
       }
     },
-    "search-placeholder": "Pesquisar por aplicativos..."
+    "search-placeholder": "Busque por aplicativos..."
   },
   "location": {
     "errors": {
@@ -882,7 +954,7 @@
     "profiles": {
       "balanced": "Equilibrado",
       "performance": "Performance",
-      "power-saver": "Economizador de Energia"
+      "power-saver": "Econômico"
     }
   },
   "session": {
@@ -994,13 +1066,16 @@
       },
       "monitor-override": {
         "create": "Criar",
+        "custom": "Personalizado",
         "delete": "Deletar",
         "delete-confirm-desc": "Essa configuração de monitor criada pela interface gráfica será removida do arquivo settings.toml.",
         "delete-confirm-title": "Deletar \"{name}\"?",
+        "exists": "Uma substituição para este monitor já existe.",
         "label": "Monitor: {name}",
         "management": "Soprebosição de Monitor",
         "match-placeholder": "Monitor correspondente",
         "new": "Sobreposição de Monitor",
+        "new-title": "Nova Substituição de Monitor",
         "rename": "Renomear",
         "rename-save": "Salvar"
       },
@@ -1254,6 +1329,9 @@
         "screen-corners": "Cantos da Tela",
         "screen-time": "Tempo de Tela",
         "screenshot": "Captura de Tela",
+        "screenshot-annotation": "Anotação",
+        "screenshot-capture": "Captura",
+        "screenshot-output": "Saída",
         "security": "Segurança",
         "session-panel": "Sessão",
         "shape": "Forma",
@@ -1287,11 +1365,13 @@
         "plugins": "Plugins",
         "popups": "Popups",
         "power": "Energia",
+        "screenshot": "Captura de tela",
         "security": "Segurança",
         "services": "Serviços",
         "shell": "Shell",
         "system": "Sistema",
         "templates": "Modelos",
+        "umbriel": "Umbriel",
         "wallpaper": "Papel de Parede"
       }
     },
@@ -1527,6 +1607,8 @@
         "incompatible-plugin-api": "APi de plugin incoompatível",
         "remove": "Remover plugin",
         "requires": "Requer: {dependencies}",
+        "search-empty": "Não há plugins que correspondam \"{query}\".",
+        "search-placeholder": "Buscar por plugins instalados",
         "title": "Plugins",
         "update-all": "Atualizar todos({count})",
         "update-available": "atualização disponível",
@@ -1580,7 +1662,7 @@
         "open-page": "Abrir página de plugin em noctalia.dev",
         "open-source": "Abrir repositório fonte de plugin",
         "results-count": "{count} plugins",
-        "search-placeholder": "Pesquisar plugins...",
+        "search-placeholder": "Busque plugins...",
         "sort-added-at-asc": "Ordenar por data (mais antigos primeiro)",
         "sort-added-at-desc": "Ordenar por data (mais recentes primeiro)",
         "sort-name-asc": "Ordenar por nome (A-Z)",
@@ -1630,7 +1712,7 @@
         "community-palette": {
           "description": "Escolha uma paleta de cores do catálogo da comunidade",
           "label": "Paleta da Comunidade",
-          "search-placeholder": "Procurar paletas..."
+          "search-placeholder": "Busque paletas..."
         },
         "corner-roundness": {
           "description": "Dimensionar o raio dos cantos em contêineres e controles da interface do usuário do shell",
@@ -1639,7 +1721,7 @@
         "custom-palette": {
           "description": "Escolha uma paleta em ~/.config/noctalia/palettes/",
           "label": "Paleta Personalizada",
-          "search-placeholder": "Procurar paletas personalizadas..."
+          "search-placeholder": "Busque paletas personalizadas..."
         },
         "export-wallpaper-palette": {
           "button": "Salvar Paleta Customizada",
@@ -2445,7 +2527,7 @@
         },
         "launcher-session-search": {
           "description": "Incluir ações de sessão (bloquear, suspender, reiniciar, desligar, sair) nas buscas gerais do launcher, não apenas atrás do prefixo /session",
-          "label": "Habilitar Pesquisa na Sessão"
+          "label": "Habilitar Busca na Sessão"
         },
         "launcher-show-icons": {
           "description": "Exibir ícones dos aplicativos nos resultados do launcher",
@@ -2639,16 +2721,16 @@
           "label": "Latitude"
         },
         "location-address": {
-          "description": "Cidade ou endereço para localizar, usado quando auto-localizar está desabilitado",
+          "description": "Cidade ou endereço para localizar, usado quando autolocalizar está desabilitado",
           "label": "Endereço",
           "placeholder": "Cidade, País"
         },
         "location-auto-locate": {
           "description": "Detectar sua localização automaticamente a partir do seu endereço IP",
-          "label": "Localização Automática (IP)"
+          "label": "Autolocalização (IP)"
         },
         "longitude": {
-          "description": "Longitude manual para a programação de nascer/pôr do sol, usada quando auto-localizar e endereço estão desabilitados",
+          "description": "Longitude manual para a programação de nascer/pôr do sol, usada quando autolocalizar e endereço estão desabilitados",
           "label": "Longitude"
         },
         "minimum-brightness": {
@@ -3029,6 +3111,14 @@
           "description": "Apagar o histórico de uso por app em primeiro plano",
           "label": "Redefinir Dados de Tempo de Tela"
         },
+        "screenshot-annotate": {
+          "description": "Abrir o editor de anotações em cada captura de tela; Concluir aplica as configurações de salvar, área de transferência e pipe",
+          "label": "Anotar Antes de Entregar"
+        },
+        "screenshot-close-on-copy": {
+          "description": "Fechar depois de uma cópia bem sucedida do editor, incluindo quando for aberto diretamente",
+          "label": "Fechar Editor Depois da Cópia"
+        },
         "screenshot-confirm-region": {
           "description": "Depois de desenhar uma região, manter o overlay aberto até confirmar com Enter ou Espaço",
           "label": "Confirmar Região"
@@ -3049,6 +3139,9 @@
         "screenshot-freeze-screen": {
           "description": "Captura a área de trabalho antes de selecionar a região para que o conteúdo em movimento permaneça estático",
           "label": "Congelar Tela"
+        },
+        "screenshot-output": {
+          "description": "Ações aplicadas após a captura ou quando você escolher Feito no editor de anotações."
         },
         "screenshot-pipe-command": {
           "description": "Comando executado como /bin/sh -lc com o PNG na stdin; para anotadores ou uploaders (exemplo: swappy -f - ou satty -f -)",
@@ -3091,6 +3184,10 @@
         "time-format": {
           "description": "Formato de hora padrão para a interface do usuário do shell sem configuração própria",
           "label": "Formato da Hora"
+        },
+        "umbriel-overview-type-to-launch": {
+          "description": "Abrir o Launcher enquanto digite na Overveiw do Umbriel; utiliza uma pequena superfície de foco de teclado enquanto a Overview está aberta",
+          "label": "Digitar para Abrir Launcher"
         },
         "window-switcher-mru": {
           "description": "Organizar janelas no alternador por mais recentemente usadas ao invés de espaço de trabalho e layout de tela",
@@ -3142,7 +3239,7 @@
           "label": "Ordem"
         },
         "automation-recursive": {
-          "description": "Procura papéis de parede em subpastas",
+          "description": "Busca papéis de parede em subpastas",
           "label": "Incluir Subpastas"
         },
         "directory": {
@@ -3251,7 +3348,7 @@
         "filter-all": "Todos",
         "filter-enabled": "Habilitado",
         "results-count": "{count} modelos",
-        "search-placeholder": "Buscar modelos...",
+        "search-placeholder": "Busque modelos...",
         "sort-category-asc": "Ordenar por categoria (A-Z)",
         "sort-category-desc": "Ordenar por categoria (Z-A)",
         "sort-name-asc": "Ordenar por nome (A-Z)",
@@ -3263,6 +3360,10 @@
       "actions": {
         "command-placeholder": "Comando do shell",
         "commands": {
+          "annotate": {
+            "description": "Desenhar na tela sobre os aplicativos em execução; pressione F ou o botão Congelar para capturar o fundo",
+            "label": "Anotar tela"
+          },
           "bar-auto-hide-set": {
             "description": "Definir estado de auto-ocultar para uma barra",
             "label": "Definir auto-ocultar para a barra"
@@ -3570,6 +3671,10 @@
           "power-set": {
             "description": "Definir o perfil de energia UPower (ex.: desempenho, equilibrado, economia de energia)",
             "label": "Definir perfil de energia"
+          },
+          "screenshot-annotate": {
+            "description": "Congelar a tela e anotá-la, depois copiar ou salvar",
+            "label": "Anotar captura de tela"
           },
           "screenshot-fullscreen": {
             "description": "Capturar o monitor focado por padrão, pegar interativamente com pick ou todas saídas com Todos",
@@ -3950,7 +4055,7 @@
         },
         "enable-scroll": {
           "description": "Permitir ações de roda do mouse e rolagem de trackpad neste widget",
-          "label": "Avitar Rolagem"
+          "label": "Ativar Rolagem"
         },
         "focused-color": {
           "description": "Função de cor usada para a área de trabalho em foco; cores hexadecimais fixas também são suportadas",
@@ -4455,7 +4560,7 @@
       },
       "reset-page": "Redefinir Página",
       "reset-page-confirm": "Confirmar Reinício",
-      "search-placeholder": "Pesquisar configurações...",
+      "search-placeholder": "Busque configurações...",
       "search-truncated": "Exibindo as primeiras {count} correspondências. Refine sua busca para restringir os resultados.",
       "support-report": "Relatório de suporte",
       "support-report-saved": "Relatório de suporte salvo.",
@@ -4494,7 +4599,7 @@
       "m3-rainbow": "M3 Rainbow",
       "m3-tonal-spot": "M3 Tonal Spot",
       "muted": "Muted",
-      "soft": "Macio",
+      "soft": "Suave",
       "vibrant": "Vibrante"
     }
   },
@@ -4543,7 +4648,7 @@
     "controls": {
       "search-picker": {
         "empty": "Sem resultados",
-        "placeholder": "Procurar..."
+        "placeholder": "Buscar..."
       },
       "select": {
         "placeholder": "Selecione uma opção"
@@ -4581,7 +4686,7 @@
       },
       "glyph-picker": {
         "all-categories": "Todos",
-        "search-placeholder": "Procurar símbolos",
+        "search-placeholder": "Busque símbolos...",
         "title": "Selecione um símbolo"
       }
     }

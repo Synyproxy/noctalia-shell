@@ -1,0 +1,1626 @@
+{
+  "auth": {
+    "fingerprint": {
+      "disconnected": "指紋認証センサーが切断されました",
+      "error": "指紋認証センサーにエラーが発生しました",
+      "no-match": "指紋が一致しませんでした",
+      "not-centered": "指をセンサーの中央に置いて、もう一度お試しください",
+      "present": "指紋認証中…",
+      "ready": "指をセンサーに当ててください",
+      "remove-and-retry": "指を離して再度行ってください",
+      "retry": "再度指紋認証を行ってください",
+      "swipe-too-short": "スワイプが短すぎます。もう一度お試しください",
+      "too-many-attempts": "指紋認証が無効化されました（試行回数超過）"
+    },
+    "pam": {
+      "authentication-failed": "認証に失敗しました",
+      "start-failed": "PAMの起動に失敗しました",
+      "user-unavailable": "現在のユーザーが特定できません"
+    },
+    "polkit": {
+      "authenticate": "認証",
+      "authenticating": "認証中",
+      "default-message": "認証が必要です",
+      "invalid-password": "パスワードが違います",
+      "password-placeholder": "パスワード",
+      "title": "パスワードが必要です"
+    }
+  },
+  "bar": {
+    "annotate": {
+      "close": "送信せず閉じる (Esc)",
+      "color-black": "黒",
+      "color-blue": "青",
+      "color-green": "緑",
+      "color-orange": "オレンジ",
+      "color-purple": "紫",
+      "color-red": "赤",
+      "color-white": "白",
+      "color-yellow": "黄色",
+      "copy": "注釈付きの画像をコピーする（Ctrl+C）",
+      "cursor": "ポインターが写っている画面を映す（p）",
+      "done": "スクリーンショットの設定を適用（Enter）"
+    },
+    "screenshot": {
+      "choose-display": "画面を選択",
+      "overlay-alloc-failed": "スクリーンショットのオーバーレイを表示できませんでした（GPUのビデオメモリ不足？）"
+    },
+    "widgets": {
+      "bluetooth": {
+        "connected": "接続済み"
+      },
+      "brightness": {
+        "display": "ディスプレイ"
+      },
+      "network": {
+        "active": "アクティブ",
+        "band": "バンド",
+        "cellular": "モバイル通信",
+        "connected": "接続済み",
+        "connecting": "接続中",
+        "download": "下り",
+        "interface": "インターフェース",
+        "ip": "IP",
+        "network": "ネットワーク",
+        "networks": "ネットワーク",
+        "networks-count": "{count}ネットワーク",
+        "networks-count-plural": "{count}ネットワーク",
+        "no": "いいえ",
+        "not-connected": "接続していません",
+        "off": "オフ",
+        "on": "オン",
+        "operator": "通信事業者",
+        "scanning": "スキャン中",
+        "signal": "電波強度",
+        "technology": "通信方式",
+        "upload": "上り",
+        "vpn": "VPN",
+        "wan-ip": "WAN IP",
+        "wifi": "Wi-Fi",
+        "wired": "有線",
+        "yes": "はい"
+      },
+      "sysmon": {
+        "cpu-temp": "CPU温度",
+        "gpu-temp": "GPU温度",
+        "system": "システム"
+      },
+      "weather": {
+        "default": "天気",
+        "error": "天気：エラー",
+        "loading": "天気…",
+        "no-location": "現在地なし",
+        "off": "天気オフ",
+        "tooltip": {
+          "condition": "状態",
+          "feels-like": "体感温度",
+          "high": "最高",
+          "humidity": "湿度",
+          "low": "最低",
+          "sunrise": "日の出",
+          "sunset": "日の入り",
+          "temperature": "気温",
+          "uv": "UV指数",
+          "wind": "風"
+        }
+      }
+    }
+  },
+  "common": {
+    "actions": {
+      "apply": "適用",
+      "cancel": "キャンセル"
+    },
+    "states": {
+      "auto": "自動",
+      "custom": "独自設定",
+      "off": "オフ"
+    }
+  },
+  "control-center": {
+    "audio": {
+      "application-volumes": "アプリ別音量",
+      "choose-effects-profile": "プロファイルを選択",
+      "default-device": "既定のデバイス",
+      "effects-profile": "エフェクト",
+      "input-device-prefix": "入力",
+      "no-application-audio": "アプリ音声なし",
+      "no-application-audio-body": "再生中のアプリ音声はありません",
+      "no-input-devices": "入力デバイスなし",
+      "no-input-devices-body": "現在利用可能な録音入力はありません。",
+      "no-input-selected": "入力デバイスが選択されていません",
+      "no-output-devices": "出力デバイスなし",
+      "no-output-devices-body": "現在利用可能な音声出力先はありません。",
+      "no-output-selected": "出力デバイスが選択されていません",
+      "output-device-prefix": "出力",
+      "unavailable-body": "PipeWireが動作していません。",
+      "unavailable-title": "音声を利用できません"
+    },
+    "bluetooth": {
+      "accept": "承認",
+      "address": "アドレス",
+      "auto-reconnect": "自動再接続",
+      "bluetooth": "Bluetooth",
+      "enter-code": "コードを入力してください",
+      "no-devices": "デバイスが見つかりません。スキャンを開始して、近くのBluetoothデバイスを検索してください。",
+      "off": "Bluetoothはオフです",
+      "pair-title": "{device}とペアリング",
+      "pairing-detail": {
+        "authorize": "受信したペアリング要求を承認しますか？",
+        "authorize-service": "サービス{uuid}へのアクセスを許可しますか？",
+        "confirm": "このコードがデバイスに表示されたコードと一致することを確認してください：",
+        "display-passkey": "このコードをデバイスに入力してください：",
+        "display-pin": "このPINをデバイスに入力してください：",
+        "passkey": "デバイスに表示されているパスキーを入力してください：",
+        "pin-code": "デバイスに表示されているPINを入力してください："
+      },
+      "reject": "拒否",
+      "rfkill-blocked": "Bluetoothはシステムによってブロックされています。ブロックを解除するにはBluetoothを有効にしてください。",
+      "sections": {
+        "available": "利用可能",
+        "connected": "接続済み",
+        "paired": "登録済み"
+      },
+      "unavailable": "Bluetoothサービスを利用できません",
+      "unknown-device": "不明なデバイス",
+      "visible": "近くのデバイスから検出可能"
+    },
+    "calendar": {
+      "all-day": "終日",
+      "events": "予定",
+      "no-events": "予定はありません。",
+      "today": "今日",
+      "toggle-events-card": "予定カードの表示を切り替え"
+    },
+    "display": {
+      "no-displays": "利用可能な画面がありません",
+      "rescan": "DDC/CI対応画面を再検出"
+    },
+    "home": {
+      "avatar-error-title": "アバターは更新されていません",
+      "media": {
+        "idle": "待機中",
+        "no-active-player": "再生中のプレーヤーはありません",
+        "nothing-playing": "何も再生していません",
+        "paused": "一時停止中",
+        "playback-unavailable": "再生できません",
+        "playing": "再生中",
+        "unavailable": "利用できません",
+        "unknown-artist": "アーティスト不明",
+        "unknown-track": "曲名不明"
+      },
+      "select-avatar": "アバターを選択",
+      "unknown": "不明",
+      "uptime": "起動時間　–　{uptime}",
+      "weather": {
+        "data-unavailable": "天気のデータは無効化されています",
+        "disabled": "天気は設定から無効化されています",
+        "fetching": "天気予報を取得中…"
+      }
+    },
+    "media": {
+      "nothing-playing": "何も再生していません",
+      "now-playing": "再生中"
+    },
+    "network": {
+      "available": "利用可能",
+      "cellular": "モバイル通信",
+      "cellular-connected": "接続済み",
+      "cellular-connecting": "接続中…",
+      "cellular-connection": "モバイル通信接続",
+      "cellular-enabling": "起動中…",
+      "cellular-failed": "失敗",
+      "cellular-locked": "SIMロック中",
+      "cellular-no-service": "圏外",
+      "cellular-off": "オフ",
+      "cellular-registered": "登録済み",
+      "cellular-searching": "検索中…",
+      "connect": "接続",
+      "current-connection": "現在の接続",
+      "external-ip": "WAN {ip}",
+      "no-networks": "利用可能なネットワークがありません",
+      "not-connected": "接続されていません",
+      "password": "パスワード",
+      "password-prompt": "パスワードを入力してください",
+      "password-prompt-for": "{ssid}のパスワードを入力してください",
+      "saved": "保存済み",
+      "unavailable-detail": "ここからネットワークを管理するには、NetworkManager、wpa_supplicant、またはiwdをインストールして有効にしてください。",
+      "unavailable-title": "ネットワークサービスが利用できません",
+      "vpns": "VPN",
+      "wi-fi": "Wi-Fi",
+      "wifi": "Wi-Fi",
+      "wifi-off": "Wi-Fiはオフです",
+      "wifi-on": "Wi-Fiはオンです",
+      "wired-connection": "有線"
+    },
+    "notifications": {
+      "clear-all": "すべての通知を消去",
+      "dnd-off": "おやすみモードをオフ",
+      "dnd-on": "おやすみモードをオン",
+      "empty-body": "最近の通知はここに表示されます。",
+      "empty-title": "通知はありません",
+      "filter": {
+        "all": "すべて",
+        "older": "以前",
+        "today": "今日",
+        "yesterday": "昨日"
+      },
+      "filter-empty-body": "この絞り込み条件に一致する通知はありません。",
+      "filter-empty-title": "ここには何もありません",
+      "untitled": "無題の通知"
+    },
+    "power": {
+      "battery": "電池",
+      "charging": {
+        "configured": "設定済み：{limits}",
+        "display-only": "表示のみ",
+        "error-denied": "認証が拒否されました。充電上限は変更されていません。",
+        "error-failed": "充電上限を変更できませんでした。",
+        "externally-managed": "別のツールによって設定されています。充電上限を管理するには、UPowerを設定してください。",
+        "firmware-managed": "充電はシステムファームウェアによって管理されています。",
+        "full-charge": "100%まで充電可能",
+        "starts": "{start}%以下から開始",
+        "starts-stops": "{start}%以下から開始し、{end}%で終了",
+        "stops": "{end}%で終了",
+        "title": "充電中",
+        "unreadable": "利用できません",
+        "unsupported": "充電上限には対応していません",
+        "use-thresholds": "充電上限を使用します"
+      },
+      "design-capacity": "設計容量に対して",
+      "health": "電池の状態",
+      "performance-inhibited": "パフォーマンス情報を利用できません",
+      "peripherals": "接続済みデバイス",
+      "power-profile": "電源プロファイル",
+      "time-to-empty": "残り{time}",
+      "time-to-full": "満充電まで{time}",
+      "unknown-device": "不明なデバイス"
+    },
+    "screen-time": {
+      "back": "戻る",
+      "disabled": "スクリーンタイムの記録がオフです。アプリごとの使用状況を記録するには、設定で有効にしてください。",
+      "empty": "アプリの使用状況はまだ記録されていません。ウィンドウにフォーカスすると、記録が開始されます。",
+      "hour-0": "０時",
+      "hour-12": "１２時",
+      "hour-18": "１８時",
+      "hour-6": "６時",
+      "most-used": "使用時間の長いアプリ",
+      "range": {
+        "14-days": "過去１４日間",
+        "3-days": "過去３日間",
+        "today": "今日"
+      },
+      "view-day": "日別の詳細を表示"
+    },
+    "shortcuts": {
+      "audio": "音声",
+      "bluetooth": "Bluetooth",
+      "media": "メディア",
+      "notification": "おやすみモード",
+      "power-profile": "電源",
+      "screen-time": "スクリーンタイム",
+      "system": "システム",
+      "wallpaper": "壁紙",
+      "weather": "天気"
+    },
+    "system": {
+      "labels": {
+        "load": "CPU負荷",
+        "ram": "RAM",
+        "swap": "スワップ"
+      },
+      "titles": {
+        "cpu": "CPU",
+        "gpu": "GPU",
+        "memory": "メモリ",
+        "network": "ネットワーク",
+        "resources": "リソース",
+        "system": "システム"
+      },
+      "tooltips": {
+        "load": "1分／5分／15分間の平均負荷"
+      },
+      "unknown": "不明",
+      "uptime-prefix": "稼働 {uptime} · {osAge}"
+    },
+    "tabs": {
+      "audio": "音声",
+      "bluetooth": "Bluetooth",
+      "calendar": "カレンダー",
+      "home": "ホーム",
+      "media": "メディア",
+      "monitor": "画面",
+      "network": "ネットワーク",
+      "notifications": "通知",
+      "power": "電源",
+      "screen-time": "スクリーンタイム",
+      "system": "システム",
+      "weather": "天気"
+    },
+    "weather": {
+      "daily": {
+        "tooltip": {
+          "condition": "状態",
+          "high": "最高",
+          "low": "最低",
+          "sunrise": "日の出",
+          "sunset": "日の入り"
+        }
+      },
+      "data-unavailable": "気象の情報が利用できません",
+      "details": {
+        "elevation": "高度",
+        "feels-like": "体感温度",
+        "sunrise": "日の出",
+        "sunset": "日の入り",
+        "temp-max": "最高気温",
+        "temp-min": "最低気温",
+        "timezone": "タイムゾーン",
+        "uv-index": "UV指数",
+        "wind": "風"
+      },
+      "disabled": "[weather]をconfig.tomlで有効化してください",
+      "fetching": "天気予報を取得中…",
+      "forecast-placeholder": {
+        "day": "日曜日",
+        "description": "天気",
+        "temperature": "10 / 4°C"
+      },
+      "forecast-view": {
+        "daily": "日別",
+        "hourly": "時間別"
+      },
+      "hourly": {
+        "summary": "{condition} / 降水確率 {precip}%",
+        "tooltip": {
+          "condition": "状態",
+          "humidity": "湿度",
+          "rain": "雨",
+          "wind": "風"
+        }
+      },
+      "location-unavailable": "現在地が利用できません",
+      "no-location-body": "住所を入力するか、「位置情報」設定で自動位置検出を有効にしてください。",
+      "no-location-title": "現在地が指定されていません",
+      "refreshing": "気象データを更新中",
+      "waiting": "気象データを待機中"
+    }
+  },
+  "desktop-widgets": {
+    "editor": {
+      "settings": {
+        "display": "ディスプレイ",
+        "font-family-default": "システム既定",
+        "hide-when-no-media": "メディアが無い時には非表示",
+        "network-speed-compact": "コンパクトなネットワーク速度",
+        "network-speed-unit": "ネットワーク速度の単位",
+        "network-speed-unit-auto": "自動",
+        "network-speed-unit-kilobytes": "kB/s",
+        "network-speed-unit-megabytes": "MB/s",
+        "show-weather": "天気",
+        "stat-cpu-temp": "CPU温度",
+        "stat-cpu-usage": "CPU使用率",
+        "stat-gpu-temp": "GPU温度",
+        "stat-gpu-usage": "GPU使用率",
+        "stat-gpu-vram-used": "GPU VRAM使用率"
+      },
+      "types": {
+        "audio-visualizer": "音声ビジュアライザー",
+        "calendar": "カレンダー",
+        "fancy-audio-visualizer": "高機能音声ビジュアライザー",
+        "media-player": "メディアプレーヤー",
+        "system-monitor": "システム監視",
+        "weather": "天気"
+      }
+    },
+    "weather": {
+      "error": "エラー",
+      "loading": "読み込み中…",
+      "no-location": "現在地なし",
+      "off": "天気オフ"
+    }
+  },
+  "dock": {
+    "actions": {
+      "close": "閉じる",
+      "close-all": "全て閉じる"
+    },
+    "launcher": "ランチャー"
+  },
+  "internal-apps": {
+    "settings": {
+      "display-name": "設定"
+    }
+  },
+  "launcher": {
+    "categories": {
+      "all": "全て",
+      "applications": {
+        "development": "開発",
+        "education": "教育",
+        "games": "ゲーム",
+        "graphics": "グラフィックス",
+        "internet": "インターネット",
+        "multimedia": "マルチメディア",
+        "office": "オフィス",
+        "system": "システム",
+        "utilities": "ユーティリティ"
+      },
+      "emoji": {
+        "activity": "活動",
+        "animals": "動物",
+        "flags": "旗",
+        "food": "食べ物",
+        "nature": "自然",
+        "objects": "物",
+        "people": "人",
+        "symbols": "記号",
+        "travel": "旅行"
+      },
+      "recently-used": "最近使用した項目"
+    },
+    "context-menu": {
+      "open": "開く",
+      "pin": "ランチャーに固定",
+      "pin-to-dock": "ドックに固定",
+      "unpin": "ランチャーの固定を解除",
+      "unpin-from-dock": "ドックの固定を解除"
+    },
+    "empty": {
+      "no-results": "結果が見つかりません",
+      "type-to-search": "入力して検索…"
+    },
+    "origins": {
+      "appimage": "AppImage",
+      "flatpak": "Flatpak",
+      "nix": "Nix",
+      "snap": "Snap",
+      "system": "システム",
+      "user": "ユーザー"
+    },
+    "providers": {
+      "applications": {
+        "title": "アプリ"
+      },
+      "calculator": {
+        "title": "電卓"
+      },
+      "emoji": {
+        "title": "絵文字"
+      },
+      "session": {
+        "action-subtitle": "セッション操作を実行",
+        "command-subtitle": "設定済みコマンドを実行",
+        "title": "セッション"
+      },
+      "wallpaper": {
+        "title": "壁紙"
+      },
+      "window": {
+        "title": "ウィンドウ"
+      }
+    },
+    "search-placeholder": "アプリを検索…"
+  },
+  "location": {
+    "errors": {
+      "address-lookup-failed": "住所の検索に失敗しました",
+      "ip-geolocation-failed": "IPアドレスによる位置情報の取得に失敗しました",
+      "parse-geocode": "ジオコードの応答を解析できませんでした",
+      "parse-ip-geolocation": "IP位置情報の応答を解析できませんでした"
+    },
+    "locations": {
+      "current": "現在地"
+    },
+    "source": {
+      "address": "住所",
+      "auto": "自動",
+      "manual": "手動"
+    }
+  },
+  "notifications": {
+    "actions": {
+      "fallback": "操作",
+      "open": "開く"
+    },
+    "inline-reply": {
+      "button": "返信",
+      "placeholder": "返信を入力…"
+    },
+    "internal": {
+      "battery": "電池",
+      "battery-critical-body": "{device}：{percent}%です。まもなくコンピューターの電源が切れます",
+      "battery-critical-title": "電池残量が非常に少なくなっています",
+      "battery-device": "電池デバイス",
+      "battery-low-body": "{device}：残り{percent}%",
+      "battery-low-title": "電池残量が少なくなっています",
+      "calendar": "カレンダー",
+      "calendar-credential-locked-body": "Secret Serviceで使用するキーリングのロックを解除してから、設定でもう一度お試しください。GNOME Keyringを使用している場合は、「Login」など自動的にロック解除されるキーリングを既定に設定してください。",
+      "calendar-credential-locked-title": "カレンダーのキーリングがロックされています",
+      "calendar-google-connect-browser-failed": "Google認証用のブラウザーを起動できませんでした。既定のブラウザーまたはxdg-openの設定を確認してください。",
+      "calendar-google-connect-credential-store-failed": "認証は完了しましたが、更新トークンを保存できませんでした。Secret Serviceのロックを解除するか起動してから、もう一度接続してください。",
+      "calendar-google-connect-expired": "サインインが完了する前にGoogle認証の有効期限が切れました。もう一度接続を開始してください。",
+      "calendar-google-connect-failed-title": "Googleカレンダーに接続できませんでした",
+      "calendar-google-connect-missing-account": "設定済みのGoogleカレンダーアカウントに「{account}」と一致するものがありません。",
+      "calendar-google-connect-rate-limited": "Google認証は一時的に制限されています。しばらく待ってから、もう一度お試しください。",
+      "calendar-google-connect-result-failed": "Google認証を完了できませんでした。もう一度接続を開始してください",
+      "calendar-google-connect-start-failed": "Google の認証を開始できませんでした。ネットワーク接続を確認して、もう一度お試しください。",
+      "calendar-google-connect-start-http": "Google認証を開始できませんでした。OAuthブローカーからHTTP {status}が返されました。",
+      "calendar-google-connect-timeout": "Google の認証がタイムアウトしました。サインインする準備ができたら、もう一度接続を開始してください。",
+      "greeter-sync-pending": "外観設定をグリーターに同期しています。管理者の認証画面が表示された場合は承認してください。パスワード不要の認証はシステムポリシーに従います。",
+      "greeter-sync-pending-manual": "認証済みの従来方式の同期用ファイルを準備しました。ターミナルで位置引数形式の適用ヘルパーを実行してください。独自の保存先を使用している場合はNOCTALIA_GREETER_STATE_DIRを引き継ぐか、shell.greeter_sync.privilege_commandを設定してから、もう一度同期してください。",
+      "greeter-sync-timeout": "グリーターの同期は、まだ認証待ちです。TTYまたはコンソールでpolkitの認証要求を確認するか、セキュリティ設定でpolkitエージェントを有効にするか、pkexecを手動で実行してください。",
+      "greeter-sync-timeout-manual": "認証済みの従来方式の同期には、引き続き管理者の承認が必要です。ターミナルで位置引数形式の適用ヘルパーを実行し、独自の保存先を使用している場合はNOCTALIA_GREETER_STATE_DIRを引き継いでください",
+      "greeter-sync-timeout-manual-pkexec": "グリーターの同期には、まだ認証が必要です。ターミナルで次のコマンドを実行してください：pkexec noctalia-greeter-apply-appearance --sync \"/run/user/$(id -u)/noctalia-greeter-sync\"",
+      "launcher-usage-reset": "ランチャー",
+      "launcher-usage-reset-success": "使用データを消去しました。",
+      "screen-time-reset": "スクリーンタイム",
+      "screen-time-reset-success": "使用履歴を消去しました。",
+      "wallpaper-palette-export": "独自の配色",
+      "wallpaper-palette-export-success": "「{name}」を保存し、独自の配色に切り替えました。"
+    }
+  },
+  "osd": {
+    "bluetooth": {
+      "off": "Bluetoothオフ",
+      "on": "Bluetoothオン"
+    }
+  },
+  "plugins": {
+    "auto-disabled": {
+      "body-timeouts": "{plugin} が応答しなくなったため、無効化されました。問題を修正した後、再読み込みしてください。"
+    },
+    "enable-failed": {
+      "body-timeout": "{plugin}のインストールに時間がかかりすぎました。"
+    }
+  },
+  "power": {
+    "battery": {
+      "states": {
+        "battery": "電池",
+        "charging": "充電中",
+        "discharging": "放電中",
+        "empty": "空",
+        "pending-discharge": "放電待ち",
+        "plugged-in": "電源接続中"
+      },
+      "tooltip": {
+        "device": "電池",
+        "device-numbered": "電池 {index}",
+        "health": "状態",
+        "rate": "速度",
+        "status": "ステータス",
+        "time-left": "残り時間",
+        "time-to-full": "満充電までの時間",
+        "unknown-device": "不明なデバイス"
+      }
+    },
+    "profiles": {
+      "balanced": "バランス",
+      "performance": "パフォーマンス",
+      "power-saver": "省電力"
+    }
+  },
+  "settings": {
+    "badges": {
+      "monitor": "画面"
+    },
+    "calendar-accounts": {
+      "add-title": "カレンダーアカウントを追加",
+      "calendars-label": "カレンダー",
+      "color-label": "色",
+      "credential-source-file": "パスワードファイル",
+      "credential-source-keyring": "キーリング",
+      "credential-source-label": "認証情報の保存先",
+      "delete-error": "カレンダーアカウントを削除できませんでした",
+      "edit-title": "カレンダーアカウントを編集",
+      "ics-url-label": "ICSのURL",
+      "id-label": "アカウントID",
+      "invalid": "強調表示されているカレンダーアカウントの項目を確認してください。",
+      "name-label": "表示名",
+      "name-placeholder": "個人用カレンダー",
+      "password-file-error": "設定されたパスワードファイルを読み込めませんでした。ファイルが存在し、読み取り可能な通常ファイルで、パスワードが含まれていることを確認してください。",
+      "password-file-label": "パスワードファイル",
+      "password-keep-placeholder": "現在のパスワードを保持する場合は空欄のままにしてください",
+      "password-label": "アプリ用パスワード",
+      "password-placeholder": "アプリ専用パスワード",
+      "password-save-error": "カレンダーアカウントのパスワードを保存できませんでした。",
+      "provider": {
+        "custom": "CalDAV",
+        "google": "Google",
+        "icloud": "iCloud",
+        "ics": "ICSのURL",
+        "vdir": "ローカル（vdir）"
+      },
+      "provider-label": "提供元",
+      "save": "保存",
+      "save-connect": "保存して接続",
+      "save-error": "カレンダーアカウントを保存できませんでした。",
+      "secret-cleanup-error": "アカウントを保存できず、キーリングの認証情報も復元または削除できませんでした。Secret Serviceのロックを解除してから、もう一度お試しください。",
+      "secret-service-cancelled": "Secret Serviceの認証要求がキャンセルされました。ロックを解除できる状態になってから、もう一度お試しください。",
+      "secret-service-error": "Secret Service内のカレンダーの認証情報にアクセスできませんでした。もう一度お試しください。",
+      "secret-service-locked": "カレンダーの認証情報がロックされているか、アクセスが拒否されています。Secret Serviceのロックを解除して、もう一度お試しください。",
+      "secret-service-unavailable": "利用可能なSecret Serviceプロバイダーがありません。対応するプロバイダーを起動して、もう一度お試しください。",
+      "server-url-label": "サーバーのURL",
+      "username-label": "ユーザー名",
+      "username-placeholder": "name@example.com",
+      "vdir-path-label": "ディレクトリのパス"
+    },
+    "entities": {
+      "monitor-override": {
+        "create": "新規作成",
+        "custom": "独自設定",
+        "delete": "削除",
+        "delete-confirm-desc": "GUIで作成した画面用の上書き設定はsettings.tomlから削除されます。\n",
+        "delete-confirm-title": "「{name}」を削除しますか？\n",
+        "exists": "この画面には既に上書き設定があります。",
+        "label": "画面：{name}",
+        "management": "画面の上書き設定",
+        "match-placeholder": "画面の一致条件",
+        "new": "画面の上書き設定",
+        "new-title": "新しい画面の上書き設定",
+        "rename": "名前を変更",
+        "rename-save": "保存"
+      },
+      "widget": {
+        "group": {
+          "drawer-columns": "ドロワーの列数"
+        },
+        "settings": {
+          "groups": {
+            "runtime": "実行環境"
+          }
+        }
+      }
+    },
+    "errors": {
+      "avatar-accounts": "システムアカウントのアバターを更新できませんでした。",
+      "custom-schedule-times": "独自のスケジュールには、日の出と日の入りの時刻をどちらもHH:MM形式で指定する必要があります。",
+      "export-wallpaper-palette": "壁紙の配色を独自の配色として保存できませんでした。",
+      "monitor-override": {
+        "create": "画面の上書き設定を作成できませんでした。",
+        "delete": "画面の上書き設定を削除できませんでした。",
+        "rename": "画面の上書き設定の名前を変更できませんでした。"
+      },
+      "sync-greeter-timeout": "グリーターの同期は、まだ認証待ちです。TTYまたはコンソールでpolkitの認証要求を確認するか、セキュリティ設定でpolkitエージェントを有効にするか、pkexecを手動で実行してください。",
+      "sync-greeter-timeout-manual": "認証済みの従来方式の同期には、引き続き管理者の承認が必要です。ターミナルで位置引数形式の適用ヘルパーを実行し、独自の保存先を使用している場合はNOCTALIA_GREETER_STATE_DIRを引き継いでください",
+      "sync-greeter-timeout-manual-pkexec": "グリーターの同期には、まだ認証が必要です。ターミナルで次のコマンドを実行してください：pkexec noctalia-greeter-apply-appearance --sync \"/run/user/$(id -u)/noctalia-greeter-sync\""
+    },
+    "idle": {
+      "behavior": {
+        "locked-timeout-label": "ロック中のタイムアウト時間（秒、0 で無効）",
+        "summary-disabled-timeout": "{name} · タイムアウト無効",
+        "timeout-label": "タイムアウト（秒）"
+      }
+    },
+    "navigation": {
+      "groups": {
+        "audio": "音声",
+        "calendar": "カレンダー",
+        "home": "ホーム",
+        "launcher": "ランチャー",
+        "lifecycle": "ライフサイクル",
+        "location": "位置情報",
+        "media": "メディア",
+        "monitor": "システム監視",
+        "monitor-polling": "更新間隔",
+        "monitor-thresholds": "強調表示のしきい値",
+        "monitors": "画面",
+        "network": "ネットワーク",
+        "power": "電源",
+        "screen-time": "スクリーンタイム",
+        "system": "システム",
+        "theme": "テーマ",
+        "wallpaper": "壁紙",
+        "weather": "天気",
+        "window-switcher": "ウィンドウ・スイッチャー"
+      },
+      "sections": {
+        "launcher": "ランチャー",
+        "location": "位置情報",
+        "power": "電源",
+        "system": "システム",
+        "wallpaper": "壁紙"
+      }
+    },
+    "options": {
+      "dock-launcher-position": {
+        "end": "末尾",
+        "none": "なし",
+        "start": "先頭"
+      },
+      "hot-corners": {
+        "launcher": "ランチャー",
+        "window-switcher": "ウィンドウ・スイッチャー"
+      },
+      "theme": {
+        "mode": {
+          "dark": "ダーク",
+          "light": "ライト"
+        },
+        "shell-mode": {
+          "follow": "追従"
+        },
+        "source": {
+          "built-in": "内蔵",
+          "community": "コミュニティ",
+          "custom": "独自設定",
+          "wallpaper": "壁紙"
+        }
+      },
+      "theme-role": {
+        "custom": "独自設定",
+        "default": "既定"
+      },
+      "wallpaper": {
+        "fill": {
+          "center": "中央",
+          "crop": "トリミング",
+          "fit": "全体表示",
+          "repeat": "繰り返し",
+          "span": "複数画面にまたがって表示",
+          "stretch": "引き伸ばし"
+        },
+        "order": {
+          "alphabetical": "名前",
+          "random": "ランダム"
+        },
+        "transition": {
+          "disc": "ディスク",
+          "fade": "フェード",
+          "honeycomb": "ハニカム",
+          "stripes": "ストライプ",
+          "wipe": "ワイプ",
+          "zoom": "ズーム"
+        }
+      },
+      "weather": {
+        "unit": {
+          "imperial": "華氏",
+          "metric": "摂氏"
+        }
+      }
+    },
+    "plugins": {
+      "sources": {
+        "errors": {
+          "location-required": "位置情報の入力が必要です。"
+        },
+        "location-label": "位置情報",
+        "location-placeholder-git": "https://github.com/me/noctalia-plugins",
+        "location-placeholder-path": "~/dev/noctalia-plugins"
+      }
+    },
+    "schema": {
+      "appearance": {
+        "export-wallpaper-palette": {
+          "button": "独自の配色として保存",
+          "description": "現在の壁紙から、再利用可能な配色ファイルとして保存",
+          "label": "壁紙の配色をエクスポート"
+        },
+        "shell-theme-mode": {
+          "description": "Noctalia独自のライトまたはダークモードに固定します。「追従」ではテーマモードと同期します",
+          "label": "シェルのテーマモード"
+        },
+        "theme-mode": {
+          "description": "ダーク、ライト、または時間帯に応じて自動で切り替えるモードを選択します",
+          "label": "テーマモード"
+        },
+        "wallpaper-generation-scheme": {
+          "description": "壁紙の色を配色に変換する方法を選択",
+          "label": "壁紙からの配色生成方式"
+        }
+      },
+      "dock": {
+        "active-monitor-only": {
+          "description": "使用中の画面で実行中のアプリのみ表示",
+          "label": "使用中の画面のみ"
+        },
+        "launcher-custom-image": {
+          "description": "ドックのランチャーボタンに、アイコンの代わりに画像を表示",
+          "label": "ランチャー独自の画像",
+          "placeholder": "画像のパス"
+        },
+        "launcher-custom-image-colorize": {
+          "description": "独自の画像をアイコン色で着色",
+          "label": "独自の画像に色を付ける"
+        },
+        "launcher-icon": {
+          "description": "ドックのランチャーボタンに表示する Tablerアイコン",
+          "label": "ランチャーアイコン"
+        },
+        "launcher-position": {
+          "description": "ドックの先頭または末尾にランチャーボタンを表示",
+          "label": "ランチャーボタン"
+        },
+        "monitors": {
+          "description": "ドックを表示する画面を選択します（空欄の場合はすべての画面に表示）。使用中の画面のみを対象とする設定は、ここで選択した画面内で適用されます。",
+          "label": "画面"
+        }
+      },
+      "hooks": {
+        "events": {
+          "bluetooth-disabled": {
+            "description": "Bluetooth無効時に実行するコマンド",
+            "label": "Bluetooth無効時"
+          },
+          "bluetooth-enabled": {
+            "description": "Bluetooth有効時に実行するコマンド",
+            "label": "Bluetooth有効時"
+          },
+          "power-profile-changed": {
+            "description": "有効なUPower/PPD電源プロファイルが変更されたときに実行するコマンド",
+            "label": "電源プロファイル変更時"
+          },
+          "theme-mode-changed": {
+            "description": "確定したテーマモードがライトとダークの間で切り替わったときに実行するコマンドです",
+            "label": "テーマモード変更時"
+          },
+          "wallpaper-changed": {
+            "description": "壁紙変更時に実行するコマンド。NOCTALIA_WALLPAPER_PATHとNOCTALIA_WALLPAPER_CONNECTORが利用できます。",
+            "label": "壁紙変更時"
+          }
+        }
+      },
+      "idle": {
+        "behaviors": {
+          "description": "名前付きのアイドル操作を、プリセット（ロック、画面オフ、サスペンド）または独自のコマンドとして設定できます。タイムアウト、復帰時の連動、実行順序にも対応します"
+        }
+      },
+      "lockscreen": {
+        "lock-before-suspend": {
+          "description": "スリープ前にセッションをロック（ふたを閉じた場合、systemctl suspend、休止状態）。「ロックしてサスペンド」操作では、引き続き先にロックします。"
+        },
+        "monitors": {
+          "description": "ロック画面を表示する画面を選択します。空欄の場合はすべての画面に表示します。",
+          "label": "画面"
+        },
+        "wallpaper": {
+          "description": "ロック画面の背景に使用するカスタム画像。空欄の場合はデスクトップの壁紙を使用",
+          "label": "壁紙",
+          "placeholder": "デスクトップの壁紙を使用する"
+        }
+      },
+      "notifications": {
+        "monitors": {
+          "description": "通知ポップアップを表示する画面を選択します。空欄の場合はすべての画面に表示します。",
+          "label": "画面"
+        }
+      },
+      "panels": {
+        "control-center-sidebar": {
+          "description": "側面パネルの表示方法を選択"
+        },
+        "control-center-sidebar-section": {
+          "description": "特定のタブ（音量、メディアなど）を開いたとき"
+        },
+        "home-session-button": {
+          "description": "ホームタブの見出しにセッション操作ボタンを表示",
+          "label": "見出しにセッション操作ボタンを表示"
+        },
+        "home-shortcuts": {
+          "description": "ホームタブのショートカットを最大6個まで選択",
+          "label": "ホーム用ショートカット"
+        },
+        "home-shortcuts-show-labels": {
+          "description": "ホームタブのショートカットアイコン下に文字ラベルを表示",
+          "label": "ショートカット名を表示"
+        },
+        "launcher-app-actions": {
+          "description": "検索結果でアプリと並べてアプリ操作項目を表示",
+          "label": "アプリの操作を表示"
+        },
+        "launcher-app-grid": {
+          "description": "検索結果がアプリのみの場合、ラベル付きのアプリアイコンを格子状に表示",
+          "label": "アプリ一覧を格子表示"
+        },
+        "launcher-app-origin-indicator": {
+          "description": "アプリの検索結果にパッケージ配布元の表示を追加",
+          "label": "アプリ配布元を表示"
+        },
+        "launcher-auto-paste": {
+          "description": "電卓、絵文字、その他のコピー操作後に、フォーカス中のウィンドウへ貼り付け（クリップボードの自動貼り付けと同じショートカットを使用）",
+          "label": "自動貼り付け"
+        },
+        "launcher-categories": {
+          "description": "ランチャーにカテゴリ絞り込みを表示。F6で表示し、F6とShift+F6で順番に切替",
+          "label": "カテゴリを表示"
+        },
+        "launcher-compact": {
+          "description": "小さいアイコンと詰めた検索結果行を使用する",
+          "label": "コンパクト表示"
+        },
+        "launcher-currency-exchange": {
+          "description": "外部のオンライン情報源から為替レートを取得",
+          "label": "通貨換算"
+        },
+        "launcher-global-calculator": {
+          "description": "電卓の結果をプレフィックスなしの検索にも表示",
+          "label": "全体検索で電卓を使用"
+        },
+        "launcher-global-emoji": {
+          "description": "絵文字の結果をプレフィックスなしの検索にも表示",
+          "label": "全体検索で絵文字を使用"
+        },
+        "launcher-global-session": {
+          "description": "セッション操作をプレフィックスなしの検索にも表示",
+          "label": "全体検索でセッション操作を使用"
+        },
+        "launcher-global-wallpaper": {
+          "description": "壁紙の結果をプレフィックスなしの検索にも表示",
+          "label": "全体検索で壁紙操作を使用"
+        },
+        "launcher-global-windows": {
+          "description": "開いているウィンドウをプレフィックスなしの検索にも表示",
+          "label": "全体検索でウィンドウを使用"
+        },
+        "launcher-prefix-character": {
+          "description": "全てのプロバイダーのプレフィックスに使用する共通の記号（例：/）",
+          "label": "共通プレフィックス文字"
+        },
+        "launcher-prefix-session": {
+          "description": "セッション電源アクションのトリガープレフィックス"
+        },
+        "launcher-prefix-wallpaper": {
+          "description": "壁紙選択のトリガープレフィックス",
+          "label": "壁紙プレフィックス"
+        },
+        "open-near-click-wallpaper": {
+          "description": "バーウィジェットをクリックして開いたときの壁紙選択画面の位置",
+          "label": "バーに沿って表示"
+        },
+        "placement-wallpaper": {
+          "description": "壁紙選択画面をバーに固定するか、画面上の指定位置に浮かせて表示するかを選択",
+          "label": "配置"
+        },
+        "position-wallpaper": {
+          "description": "壁紙選択画面を画面上に浮かせる位置。「バーに追従」ではバーの近くに表示",
+          "label": "位置"
+        }
+      },
+      "power": {
+        "session-actions": {
+          "description": "セッションパネルの項目、順序、カスタムコマンド、アイコン",
+          "label": "項目"
+        },
+        "session-grid": {
+          "description": "セッションパネルの操作を格子状に表示",
+          "label": "格子表示"
+        },
+        "session-grid-columns": {
+          "description": "格子表示の列数",
+          "label": "列数"
+        },
+        "session-show-shortcuts": {
+          "description": "ショートカットのヒントを表示または非表示",
+          "label": "ショートカットを表示"
+        }
+      },
+      "services": {
+        "audio-overdrive": {
+          "description": "100%を超える音量を許可",
+          "label": "音量増幅"
+        },
+        "calendar": {
+          "description": "オンラインカレンダーアカウントの予定を表示",
+          "label": "カレンダー"
+        },
+        "calendar-add": {
+          "button": "アカウントを追加",
+          "description": "iCloud、CalDAV、Googleアカウント、またはICSのURLを追加",
+          "label": "カレンダーアカウント"
+        },
+        "calendar-credentials": {
+          "button": "再試行",
+          "description-cancelled": "Secret Serviceの認証画面がキャンセルされました。準備ができたら、もう一度お試しください",
+          "description-error": "Secret Serviceからカレンダーの認証情報を取得できませんでした",
+          "description-locked": "カレンダーの認証情報がロックされているか、アクセスが拒否されています。Secret Serviceのロックを解除して、もう一度お試しください",
+          "description-migration": "平文のカレンダー認証情報はSecret Serviceへの移行待ちです。カレンダー同期には使用されません",
+          "description-opening": "Secret Service経由でカレンダー認証情報を読み込んでいます",
+          "description-unavailable": "このセッションでは利用可能なSecret Serviceプロバイダーがありません",
+          "label": "カレンダー認証情報の保存先"
+        },
+        "calendar-edit": {
+          "button": "編集",
+          "button-reconnect": "再接続",
+          "button-retry": "再試行",
+          "description": "このカレンダーアカウントを更新する",
+          "description-locked": "更新トークンはロックされたキーリング内にあります。キーリングのロックを解除して、もう一度お試しください",
+          "description-reconnect": "Google認証がありません。このアカウントを再接続してください"
+        },
+        "calendar-event-date-format": {
+          "description": "カレンダー表示で予定一覧の上に表示する日付形式",
+          "label": "予定の日付形式"
+        },
+        "calendar-event-time-format": {
+          "description": "カレンダー表示で予定の時刻に使用する形式",
+          "label": "予定時刻の形式"
+        },
+        "calendar-refresh-interval": {
+          "description": "カレンダーの予定を同期する間隔（分）",
+          "label": "更新間隔"
+        },
+        "calendar-storage": {
+          "button": "再試行",
+          "description-cancelled": "暗号化された保存領域の認証画面がキャンセルされました。カレンダーの予定はこのセッション中のみ利用できます",
+          "description-error": "暗号化されたカレンダー予定のキャッシュを開くことも保存することもできませんでした",
+          "description-locked": "暗号化された保存領域がロックされているか、アクセスが拒否されています。アクセス権を修正して、もう一度お試しください",
+          "description-migration": "平文のカレンダー予定キャッシュは暗号化待ちです。移行が成功するまで保持されます",
+          "description-missing-key": "カレンダー予定キャッシュの暗号化鍵がありません。アカウントの認証情報は別の保存領域を使用します（既存のキャッシュファイルは保持されています）",
+          "description-opening": "暗号化されたカレンダー予定キャッシュを開いています",
+          "description-recovery": "カレンダー予定のキャッシュの認証に失敗したか、破損しています。正しい鍵を復元してからもう一度お試しいただくか、非公開保存領域をリセットしてください",
+          "description-unavailable": "利用可能なSecret Serviceプロバイダーがありません。カレンダーの予定はこのセッション中のみ利用できます",
+          "label": "カレンダー予定の保存先"
+        },
+        "calendar-week-numbers": {
+          "description": "カレンダーの一覧にISO 8601週番号を表示",
+          "label": "週番号"
+        },
+        "custom-schedule": {
+          "description": "座標から計算せず、日の出と日の入りの時刻を手動で指定します",
+          "label": "手動スケジュール"
+        },
+        "ddcutil": {
+          "description": "DDC/CIを使用して外部画面の明るさを調整"
+        },
+        "force-night-light": {
+          "description": "時刻に関係なく、常に夜間照明を適用します"
+        },
+        "location-address": {
+          "description": "自動検出が無効な場合に使用する都市名または住所",
+          "label": "住所",
+          "placeholder": "都市名、国名"
+        },
+        "location-auto-locate": {
+          "description": "noctalia.devを利用してIPアドレスから現在地を自動検出",
+          "label": "現在地を自動検出（IP）"
+        },
+        "mpris-blacklist": {
+          "description": "メディア操作と「再生中」で除外するプレーヤー"
+        },
+        "notification-sound": {
+          "description": "通知音に使用する音声ファイル"
+        },
+        "sunrise": {
+          "description": "位置情報未設定時に使用する日の出時刻（HH:MM形式）"
+        },
+        "sunset": {
+          "description": "位置情報未設定時に使用する日の入り時刻（HH:MM形式）"
+        },
+        "sync-monitor-brightness": {
+          "description": "すべての画面の明るさを同期",
+          "label": "画面の明るさを同期"
+        },
+        "system-monitor": {
+          "cpu-poll": {
+            "description": "CPU使用率、CPU温度、負荷平均を取得する間隔（秒、0 で無効）",
+            "label": "CPU監視間隔"
+          },
+          "description": "CPU、メモリ、ネットワーク、負荷、温度、ディスクの統計情報を取得",
+          "disk-poll": {
+            "description": "ディスク使用量とスワップ使用量を取得する間隔（秒、0 で無効）",
+            "label": "ディスク監視間隔"
+          },
+          "gpu-poll": {
+            "description": "GPU温度、使用率、VRAM使用量を取得する間隔（秒）。GPUの統計情報を表示している間のみ取得するため、待機中の機器を起動することはありません（0 で完全に無効）。",
+            "label": "GPU監視間隔"
+          },
+          "label": "システム監視",
+          "memory-poll": {
+            "description": "メモリ使用量を取得する間隔（秒、0 で無効）",
+            "label": "メモリ監視間隔"
+          },
+          "network-poll": {
+            "description": "ネットワーク通信速度を取得する間隔（秒、0で無効）",
+            "label": "ネットワーク取得間隔"
+          },
+          "stats": {
+            "cpu-freq": "CPU動作周波数",
+            "cpu-temp": "CPU温度",
+            "cpu-usage": "CPU使用率",
+            "disk-free": "ディスク空き容量",
+            "disk-free-pct": "ディスク空き率",
+            "disk-usage": "ディスク使用量",
+            "disk-used": "ディスク使用済み容量",
+            "disk-used-pct": "ディスク使用率",
+            "gpu-temp": "GPU温度",
+            "gpu-usage": "GPU使用率",
+            "gpu-vram": "GPU VRAM使用量",
+            "network-rx": "下り速度",
+            "network-tx": "上り速度",
+            "ram-usage": "RAM使用量",
+            "swap-usage": "スワップ使用量"
+          },
+          "threshold": {
+            "description": "動作しきい値（左）と危険しきい値（右）",
+            "label": "{stat}"
+          }
+        },
+        "volume-change-sound": {
+          "description": "音量変更時の通知音に使用する音声ファイル"
+        },
+        "weather": {
+          "description": "open-meteo.comを通じて天気予報サービスを有効にします",
+          "label": "天気"
+        },
+        "weather-effects": {
+          "description": "天気のエフェクトを表示する",
+          "label": "天気のエフェクト"
+        },
+        "weather-refresh-interval": {
+          "description": "気象データの更新頻度（分）",
+          "label": "更新間隔"
+        },
+        "weather-unit": {
+          "description": "気象表示の単位",
+          "label": "単位"
+        }
+      },
+      "shell": {
+        "external-ip": {
+          "description": "接続のパブリックWAN IPアドレスを（api.noctalia.dev経由で）取得し、コントロールセンターのネットワークタブに表示します"
+        },
+        "greeter-sync-auto": {
+          "description": "壁紙、配色、テーマモード、またはシェルフォントの変更時に、グリーターを自動同期します。認証は引き続きシステムの方針に従います。この設定でパスワードなしの同期が有効になることはありません。"
+        },
+        "launch-apps-as-systemd-services": {
+          "description": "アプリを個別のsystemdサービスとして起動し、Noctaliaのcgroupを共有しないようにします。",
+          "label": "アプリをsystemdサービスとして起動",
+          "requires-systemd-session": "Noctaliaをsystemdユーザーサービスとして実行する必要があります（uwsmまたはsystemdユーザーユニット）"
+        },
+        "offline-mode": {
+          "description": "すべての送信ネットワーク通信をブロック"
+        },
+        "osd-kinds-bluetooth": {
+          "description": "Bluetooth切替時にOSDポップアップを表示",
+          "label": "Bluetooth"
+        },
+        "osd-kinds-power-profile": {
+          "description": "電源プロファイル変更時にOSDポップアップを表示",
+          "label": "電源プロファイル"
+        },
+        "osd-monitors": {
+          "description": "OSDポップアップを表示する画面を選択します。空欄の場合はすべての画面に表示します。",
+          "label": "画面"
+        },
+        "screen-time-enabled": {
+          "description": "アプリごとの使用時間を記録し、コントロールセンターに表示します",
+          "label": "スクリーンタイム"
+        },
+        "screen-time-reset": {
+          "button": "リセット",
+          "description": "保存されているアプリごとの前面使用履歴を消去します",
+          "label": "スクリーンタイムのデータを消去"
+        },
+        "screenshot-filename-pattern": {
+          "description": "拡張子を除いたstrftime形式（.pngは自動的に追加されます）。UNIX時刻には%sを使用してください。"
+        },
+        "show-location": {
+          "description": "天気予報に地名を表示する",
+          "label": "位置情報を表示"
+        },
+        "sync-greeter": {
+          "description": "現在の外観設定と画面配置をNoctalia Greeterにコピーします。システムポリシーでユーザーのパスワードなし同期が許可されていない場合は、管理者の承認を求めます。"
+        },
+        "telemetry": {
+          "description": "バージョン、OS、コンポジター、画面解像度、RAM、UI倍率を含む匿名の起動時通信を送信します。"
+        },
+        "time-format": {
+          "description": "個別設定のないシェルUIで使用する既定時刻形式",
+          "label": "時刻形式"
+        },
+        "window-switcher-mru": {
+          "description": "スイッチャー内のウィンドウを、ワークスペースや画面レイアウトではなく、直近の使用順に並べ替えます",
+          "label": "最近使用した順番"
+        }
+      },
+      "system": {
+        "battery-device-warning-threshold": {
+          "description": "このデバイスの電池警告しきい値を上書き（0でこのデバイスの警告を無効）",
+          "label": "{device}の警告しきい値"
+        },
+        "battery-warning-threshold": {
+          "description": "システムの電池残量がこの値以下になると、シェルが電池残量低下の通知を表示し、電池ウィジェットが警告色を使用します（0で無効）",
+          "label": "電池警告しきい値"
+        }
+      },
+      "templates": {
+        "builtin-ids": {
+          "description": "テーマ変更ごとに反映する内蔵アプリ用テンプレートを切り替えます"
+        },
+        "community-ids": {
+          "description": "テーマ変更時に適用するコミュニティテンプレートを参照して有効化します"
+        },
+        "enable-builtins": {
+          "description": "アプリ用テーマテンプレートの同梱カタログを使用します"
+        }
+      },
+      "wallpaper": {
+        "automation": {
+          "description": "一定時間ごとに壁紙を自動切替"
+        },
+        "automation-interval": {
+          "description": "壁紙を切り替える間隔（秒）",
+          "label": "切替間隔"
+        },
+        "automation-order": {
+          "description": "壁紙をランダムまたは名前順に選択",
+          "label": "順序"
+        },
+        "automation-recursive": {
+          "description": "サブフォルダー内の壁紙も検索",
+          "label": "サブフォルダーを含める"
+        },
+        "directory-dark": {
+          "description": "ダークテーマ用の壁紙フォルダー"
+        },
+        "directory-light": {
+          "description": "ライトテーマ用の壁紙フォルダー"
+        },
+        "monitor-directory": {
+          "label": "壁紙フォルダー"
+        },
+        "monitor-directory-dark": {
+          "label": "ダークモード用ディレクトリ",
+          "placeholder": "~/Pictures/Wallpapers"
+        },
+        "monitor-directory-light": {
+          "label": "ライトモード用ディレクトリ",
+          "placeholder": "~/Pictures/Wallpapers"
+        },
+        "per-monitor-directories": {
+          "description": "画面ごとの壁紙フォルダーを使用",
+          "label": "画面別フォルダー"
+        }
+      }
+    },
+    "storage-recovery": {
+      "description": "保存済みのクリップボード履歴とカレンダー予定のキャッシュを完全に削除し、非公開保存領域を再度開きます（設定済みの鍵ファイルは変更されません）"
+    },
+    "widgets": {
+      "actions": {
+        "commands": {
+          "bluetooth-disable": {
+            "description": "Bluetoothを無効化",
+            "label": "Bluetoothを無効化"
+          },
+          "bluetooth-enable": {
+            "description": "Bluetoothを有効化",
+            "label": "Bluetoothを有効化"
+          },
+          "bluetooth-status": {
+            "description": "Bluetoothの状態を表示",
+            "label": "Bluetoothの状態"
+          },
+          "bluetooth-toggle": {
+            "description": "Bluetoothのオン・オフを切替",
+            "label": "Bluetoothのオン・オフを切替"
+          },
+          "brightness-down": {
+            "description": "明るさを下げる（既定では現在の画面）"
+          },
+          "brightness-set": {
+            "description": "明るさを設定（既定では現在の画面）"
+          },
+          "brightness-up": {
+            "description": "明るさを上げる（既定では現在の画面）"
+          },
+          "desktop-widgets-hide": {
+            "description": "デスクトップウィジェットを一時的に非表示（実行中のみ。保存設定は変更しません）"
+          },
+          "desktop-widgets-show": {
+            "description": "デスクトップウィジェットを一時的に表示（実行中のみ。保存設定は変更しません）"
+          },
+          "desktop-widgets-toggle": {
+            "description": "デスクトップウィジェットの表示・非表示を切替（実行中のみ。保存設定は変更しません）\n"
+          },
+          "dpms-off": {
+            "description": "画面の電源を切る",
+            "label": "画面の電源を切る"
+          },
+          "dpms-on": {
+            "description": "画面の電源を入れる",
+            "label": "画面の電源を入れる"
+          },
+          "greeter-sync": {
+            "description": "壁紙、配色、画面配置をNoctalia Greeterに同期"
+          },
+          "media": {
+            "description": "再生中のメディアを操作",
+            "label": "メディア操作"
+          },
+          "network-toggle": {
+            "description": "接続中のネットワークを切断し、接続されていない場合は再接続",
+            "label": "ネットワーク接続を切り替え"
+          },
+          "panel-open": {
+            "description": "IDを指定してパネルを開きます。必要に応じてコンテキストも指定できます（例：launcher /emo、control-center audio）。\n"
+          },
+          "panel-toggle": {
+            "description": "IDを指定してパネルの表示・非表示を切り替えます。必要に応じてコンテキストも指定できます（例：launcher /emo、control-center audio）。\n"
+          },
+          "power-cycle": {
+            "description": "UPowerのプロファイル一覧を順に切り替えます。既定では順方向に進み、末尾まで行くと先頭に戻ります。",
+            "label": "電源プロファイルを切り替える"
+          },
+          "power-set": {
+            "description": "UPowerの電源プロファイルを設定します（例：パフォーマンス、バランス、省電力）",
+            "label": "電源プロファイルを設定"
+          },
+          "screenshot-fullscreen": {
+            "description": "既定では現在操作中の画面を撮影し、pickで対話的に選択、allですべての画面を撮影"
+          },
+          "templates-apply": {
+            "description": "現在の配色に設定済みのテーマテンプレートを適用",
+            "label": "テーマテンプレートを適用"
+          },
+          "theme-mode-get": {
+            "description": "現在確定しているテーマモードを表示",
+            "label": "現在のテーマモードを取得"
+          },
+          "theme-mode-set": {
+            "description": "テーマモードを設定し、settings.tomlに保存",
+            "label": "テーマモードを設定"
+          },
+          "theme-mode-toggle": {
+            "description": "ダーク／ライト間でテーマモードを切替",
+            "label": "テーマモードを切り替える"
+          },
+          "volume-mute": {
+            "description": "スピーカーの消音を切替",
+            "label": "消音を切り替え"
+          },
+          "window-switcher": {
+            "description": "ウィンドウ・スイッチャーの表示・非表示を切り替えます",
+            "label": "ウィンドウ・スイッチャー"
+          },
+          "workspace-switch": {
+            "description": "対象画面で隣のワークスペースへ切替（両端で停止）"
+          }
+        }
+      },
+      "instances": {
+        "network-rx": "ネットワーク下り",
+        "network-tx": "ネットワーク上り"
+      },
+      "options": {
+        "cpu-temp": "CPU温度",
+        "cpu-usage": "CPU使用率",
+        "gpu-temp": "GPU温度",
+        "net-rx": "ネットワーク下り",
+        "net-tx": "ネットワーク上り",
+        "time": "時刻"
+      },
+      "settings": {
+        "art-size": {
+          "description": "メディアアートワークの大きさ（ピクセル）"
+        },
+        "device": {
+          "description": "監視・操作対象のデバイス"
+        },
+        "drawer": {
+          "description": "バーにトレイボタンを表示し、項目をパネルで開きます"
+        },
+        "drawer-columns": {
+          "description": "1行あたりのトレイアイコン数"
+        },
+        "drawer-item-size": {
+          "description": "ドロワーパネル内のトレイアイコンのサイズ（ピクセル）"
+        },
+        "focused-output-only": {
+          "description": "フォーカス中の画面のみワークスペースを強調表示",
+          "label": "フォーカス中の画面のみ強調",
+          "taskbar-description": "キーボードまたはポインターがフォーカスしている画面では、現在のワークスペースにフォーカス色を使用し、その他の画面では使用中の色を使用",
+          "workspaces-description": "キーボードまたはポインターのフォーカスがある画面でのみ現在のワークスペースを強調表示し、その他の画面では使用中として表示"
+        },
+        "format": {
+          "description": "時刻形式の文字列"
+        },
+        "hidden": {
+          "description": "非表示にするトレイアイテムのID"
+        },
+        "hide-passive": {
+          "description": "ステータスがPassiveのトレイ項目を非表示"
+        },
+        "hide-when-adapter-off": {
+          "description": "Bluetoothアダプターの電源が切れているときはウィジェットを非表示にする"
+        },
+        "hide-when-inactive": {
+          "description": "アプリが音声を録音していない間は、マイクウィジェットを非表示"
+        },
+        "hide-when-no-connected-device": {
+          "description": "デバイスが接続されていないときはBluetoothウィジェットを非表示"
+        },
+        "hide-when-no-media": {
+          "description": "有効なMPRISプレーヤーがない場合は、メディアウィジェットを非表示にします",
+          "label": "メディアがない場合は非表示"
+        },
+        "hide-when-plugged": {
+          "description": "電源接続中は電池ウィジェットを非表示にする"
+        },
+        "interface": {
+          "description": "監視するネットワークインターフェースです。空欄にすると、すべてのインターフェースの合計を使用します。"
+        },
+        "label-content": {
+          "description": "電池表示に表示する内容：充電率、残り時間、または消費電力"
+        },
+        "match-adjacent-spacing": {
+          "description": "トレイアイコン間の間隔を広げ、隣接するバーウィジェットと揃えます（カプセルのパディングを含みます）"
+        },
+        "mute-glyph": {
+          "description": "消音時または音量0%時に使用するアイコン文字。空欄の場合は内蔵の消音アイコンを使用"
+        },
+        "network-speed-compact": {
+          "description": "1.2 MB/sではなく、1.2Mのように短い単位表記を使用",
+          "label": "コンパクトなネットワーク速度"
+        },
+        "network-speed-unit": {
+          "description": "ネットワークの下り・上り速度に使用する単位。自動ではB/s、kB/s、MB/s、GB/s を切り替えます",
+          "label": "ネットワーク速度の単位"
+        },
+        "pinned": {
+          "description": "ドロワーモード有効時もバーに表示するトレイ項目のID"
+        },
+        "scope": {
+          "description": "各ウィジェット配置ごとに個別のスクリプト実行環境を使用するか、同じウィジェットIDを持つ複数のバーで実行環境を共有します",
+          "label": "実行環境の範囲"
+        },
+        "show-all-outputs": {
+          "description": "このウィジェットにすべての画面のウィンドウを表示",
+          "label": "すべての画面を表示"
+        },
+        "show-all-workspaces": {
+          "description": "このウィジェットにすべての画面のワークスペースを表示",
+          "label": "すべての画面を表示"
+        },
+        "show-condition": {
+          "description": "天気情報のテキストを表示する"
+        },
+        "show-vpn-label": {
+          "description": "Replaceモードではネットワーク名をVPN名に置き換え、BothモードではVPNアイコンの横にVPN名を表示します"
+        },
+        "show-when-idle": {
+          "description": "メディアを再生していない場合でも、ビジュアライザーを表示したままにします"
+        },
+        "stat": {
+          "description": "表示するシステム情報"
+        },
+        "timezone": {
+          "description": "この時計で使用するタイムゾーン識別子（例：Europe/Berlin）。空欄の場合はシステムの現地時刻を使用します",
+          "label": "タイムゾーン"
+        },
+        "vpn-status": {
+          "description": "VPNの状態表示方法。ReplaceではネットワークアイコンをVPNシールドに置き換え、Bothでは両方を並べて表示し、HiddenではVPNインジケーターを非表示にします"
+        },
+        "warning-color": {
+          "description": "電池残量が警告しきい値以下のときに使用する色"
+        }
+      },
+      "types": {
+        "audio-visualizer": "音声ビジュアライザー",
+        "bluetooth": "Bluetooth",
+        "media": "メディア",
+        "network": "ネットワーク",
+        "power-profile": "電源プロファイル",
+        "sysmon": "システム監視",
+        "theme-mode": "テーマモード",
+        "tray": "トレイ",
+        "weather": "天気"
+      }
+    },
+    "window": {
+      "offline-mode-notice": {
+        "calendar-account": "カレンダーの検出と同期は利用できません",
+        "location": "天気や場所の検索は機能しません。",
+        "services": "カレンダーアカウントの同期は利用できません"
+      }
+    }
+  },
+  "system": {
+    "hardware": {
+      "unknown": "不明",
+      "unknown-cpu": "不明なCPU",
+      "unknown-distro": "不明なディストリビューション",
+      "unknown-gpu": "不明なGPU"
+    }
+  },
+  "theme": {
+    "scheme": {
+      "dysfunctional": "ディスファンクショナル（Dysfunctional）",
+      "faithful": "フェイスフル（Faithful）",
+      "m3-content": "M3 Content",
+      "m3-fruit-salad": "M3 Fruit Salad",
+      "m3-monochrome": "M3 Monochrome",
+      "m3-rainbow": "M3 Rainbow",
+      "m3-tonal-spot": "M3 Tonal Spot",
+      "muted": "控えめ",
+      "soft": "柔らか",
+      "vibrant": "鮮やか"
+    }
+  },
+  "time": {
+    "duration": {
+      "less-than-day": "1日未満",
+      "less-than-minute": "1分未満",
+      "three-parts": "{first} {second} {third}",
+      "two-parts": "{first} {second}"
+    },
+    "file": {
+      "unknown": "不明"
+    },
+    "relative": {
+      "days-ago": "{count}日前",
+      "days-ago-plural": "{count}日前",
+      "hours-ago": "{count}時間前",
+      "hours-ago-plural": "{count}時間前",
+      "just-now": "たった今",
+      "minutes-ago": "{count}分前",
+      "minutes-ago-plural": "{count}分前"
+    },
+    "units": {
+      "day": "{count}日",
+      "day-plural": "{count}日",
+      "hour": "{count}時間",
+      "hour-compact": "{count}時間",
+      "hour-plural": "{count}時間",
+      "minute": "{count}分",
+      "minute-compact": "{count}分",
+      "minute-plural": "{count}分",
+      "month": "{count}ヶ月",
+      "month-plural": "{count}ヶ月",
+      "year": "{count}年",
+      "year-plural": "{count}年"
+    }
+  },
+  "tray": {
+    "menu": {
+      "empty": "メニュー項目なし…",
+      "pin": "ピン留め",
+      "unpin": "ピン留めを外す"
+    }
+  },
+  "wallpaper": {
+    "panel": {
+      "all-monitors": "すべて"
+    }
+  },
+  "weather": {
+    "conditions": {
+      "full": {
+        "clear-sky": "快晴",
+        "drizzle": "霧雨",
+        "fog": "霧",
+        "mainly-clear": "晴れ",
+        "overcast": "曇天",
+        "partly-cloudy": "一部曇り",
+        "rain-showers": "雨",
+        "snow": "雪",
+        "snow-showers": "にわか雪",
+        "thunderstorm": "雷雨",
+        "unknown": "不明"
+      },
+      "short": {
+        "clear": "快晴",
+        "cloudy": "曇り",
+        "drizzle": "霧雨",
+        "fog": "霧",
+        "mostly-clear": "晴れ",
+        "overcast": "曇り",
+        "showers": "にわか雨",
+        "snow": "雪",
+        "snow-showers": "にわか雪",
+        "storm": "嵐",
+        "weather": "天気"
+      }
+    },
+    "errors": {
+      "fetch-failed": "気象データの取得に失敗しました",
+      "parse-weather": "天気情報の応答を解析できませんでした"
+    }
+  },
+  "window-switcher": {
+    "empty": "ウィンドウが開いていません",
+    "hint": "Tab · Shift+Tab · 矢印キー · Altキーを離すと切り替わります · Escキーでキャンセル",
+    "title": "ウィンドウ"
+  }
+}

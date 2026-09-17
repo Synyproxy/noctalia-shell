@@ -39,7 +39,7 @@
       "color-white": "White",
       "color-yellow": "Yellow",
       "copy": "Copy the annotated image (Ctrl+C)",
-      "cursor": "Show captured pointer (P)",
+      "cursor": "Show the pointer captured with the screen (p)",
       "cursor-capture-failed": "Pointer toggle unavailable: the compositor could not provide a separate cursor image",
       "cursor-live": "Freeze the screen first to change the captured pointer (F)",
       "cursor-not-captured": "Pointer toggle unavailable: this compositor does not support separate cursor capture",
@@ -286,6 +286,7 @@
     "display": {
       "disabled": "Disabled",
       "no-displays": "No monitors available",
+      "rescan": "Rescan DDC/CI monitors",
       "unknown-resolution": "Unknown resolution"
     },
     "home": {
@@ -747,6 +748,7 @@
       "unpin-from-dock": "Unpin from Dock"
     },
     "empty": {
+      "loading": "Loading results...",
       "no-results": "No results found",
       "type-to-search": "Type to search…"
     },
@@ -767,6 +769,20 @@
       },
       "emoji": {
         "title": "Emoji"
+      },
+      "panel": {
+        "builtin": {
+          "clipboard": "Clipboard",
+          "control-center": "Control Center",
+          "launcher": "Launcher",
+          "polkit": "Authentication Prompt",
+          "session": "Session",
+          "setup-wizard": "Setup Wizard",
+          "test": "Test Panel",
+          "tray-drawer": "Tray Drawer",
+          "wallpaper": "Wallpaper"
+        },
+        "title": "Panels"
       },
       "session": {
         "action-subtitle": "Run session action",
@@ -1065,13 +1081,16 @@
       },
       "monitor-override": {
         "create": "Create",
+        "custom": "Custom",
         "delete": "Delete",
         "delete-confirm-desc": "This GUI-created monitor override will be removed from settings.toml.",
         "delete-confirm-title": "Delete \"{name}\"?",
+        "exists": "An override for this monitor already exists.",
         "label": "Monitor: {name}",
         "management": "Monitor Override",
         "match-placeholder": "Monitor match",
         "new": "Monitor Override",
+        "new-title": "New Monitor Override",
         "rename": "Rename",
         "rename-save": "Save"
       },
@@ -1324,6 +1343,7 @@
         "providers": "Providers",
         "screen-corners": "Screen Corners",
         "screen-time": "Screen Time",
+        "screenshot": "Screenshot",
         "screenshot-annotation": "Annotation",
         "screenshot-capture": "Capture",
         "screenshot-output": "Output",
@@ -1366,6 +1386,7 @@
         "shell": "Shell",
         "system": "System",
         "templates": "Templates",
+        "umbriel": "Umbriel",
         "wallpaper": "Wallpaper"
       }
     },
@@ -1601,6 +1622,8 @@
         "incompatible-plugin-api": "incompatible plugin API",
         "remove": "Remove plugin",
         "requires": "Requires: {dependencies}",
+        "search-empty": "No plugins match \"{query}\".",
+        "search-placeholder": "Search installed plugins",
         "title": "Plugins",
         "update-all": "Update all ({count})",
         "update-available": "update available",
@@ -2472,6 +2495,10 @@
           "description": "Also show emoji results in unprefixed search",
           "label": "Emoji in Global Search"
         },
+        "launcher-global-panels": {
+          "description": "Also show panels in unprefixed search",
+          "label": "Panels in Global Search"
+        },
         "launcher-global-session": {
           "description": "Also show session actions in unprefixed search",
           "label": "Session in Global Search"
@@ -2483,6 +2510,10 @@
         "launcher-global-windows": {
           "description": "Also show open windows in unprefixed search",
           "label": "Windows in Global Search"
+        },
+        "launcher-ignored-panels": {
+          "description": "Panels the panel provider never lists (e.g. authentication prompts, the setup wizard)",
+          "label": "Panels Ignored"
         },
         "launcher-pinned-apps": {
           "description": "Desktop entry IDs of apps pinned to the launcher; they appear first when the launcher opens",
@@ -2499,6 +2530,10 @@
         "launcher-prefix-emoji": {
           "description": "Trigger prefix for emoji search",
           "label": "Emoji Prefix"
+        },
+        "launcher-prefix-panels": {
+          "description": "Trigger prefix for panel search",
+          "label": "Panels Prefix"
         },
         "launcher-prefix-session": {
           "description": "Trigger prefix for session power actions",
@@ -3104,57 +3139,65 @@
           "label": "Reset Screen Time Data"
         },
         "screenshot-annotate": {
-          "description": "Open screenshots in the annotation editor before applying the output actions",
-          "label": "Edit Before Saving or Copying"
+          "description": "Open the annotation editor on every screenshot; Done applies the save, clipboard, and pipe settings",
+          "label": "Annotate Before Delivering"
         },
         "screenshot-close-on-copy": {
           "description": "Close after a successful copy from the editor, including when opened directly",
           "label": "Close Editor After Copying"
         },
+        "screenshot-close-on-save": {
+          "description": "Close after a successful save from the editor, including when opened directly",
+          "label": "Close Editor After Saving"
+        },
         "screenshot-confirm-region": {
-          "description": "Wait for Enter or Space after selecting a region",
-          "label": "Confirm Region Selection"
+          "description": "After drawing a region, keep the overlay open until you confirm with Enter or Space",
+          "label": "Confirm Region"
         },
         "screenshot-copy-to-clipboard": {
-          "description": "Copy the screenshot as a PNG image, ready to paste into another app",
+          "description": "Place the captured PNG on the clipboard selection",
           "label": "Copy to Clipboard"
         },
         "screenshot-directory": {
-          "description": "Folder for saved PNG files, including the editor's Save action; leave empty to use the standard Pictures folder",
-          "label": "Save Folder",
+          "description": "Folder for saved PNG files; leave empty to use the standard XDG Pictures directory",
+          "label": "Output Directory",
           "placeholder": "XDG Pictures directory"
         },
         "screenshot-filename-pattern": {
-          "description": "Filename format for all saved screenshots, including the editor's Save action; uses strftime tokens without the .png extension",
+          "description": "strftime pattern without extension (.png is added); use %s for unix epoch",
           "label": "Filename Pattern"
         },
         "screenshot-freeze-screen": {
-          "description": "Keep the desktop still while choosing a region",
-          "label": "Freeze During Region Selection"
+          "description": "Capture the desktop before region selection so moving content stays still",
+          "label": "Freeze Screen"
         },
         "screenshot-output": {
           "description": "Actions applied after capture, or when you choose Done in the annotation editor."
         },
         "screenshot-pipe-command": {
-          "description": "Shell command that receives the PNG image on standard input, for example an external editor or uploader",
-          "label": "Command",
+          "description": "Command run as /bin/sh -lc with the PNG on stdin; for annotators or uploaders (for example: swappy -f - or satty -f -)",
+          "label": "Pipe Command",
           "placeholder": "swappy -f -"
         },
         "screenshot-pipe-to-command": {
-          "description": "Run a shell command with the PNG image on standard input",
-          "label": "Run Command"
+          "description": "Send the captured PNG to a shell command on stdin",
+          "label": "Pipe to Command"
         },
         "screenshot-remember-last-region": {
-          "description": "Pre-select the previous region on the next capture, including after cancelling",
+          "description": "Pre-select the last region (including after cancel) on the next region screenshot",
           "label": "Remember Last Region"
         },
         "screenshot-save-to-file": {
-          "description": "Save the screenshot as a PNG file in the save folder",
+          "description": "Write screenshots as PNG files to the output directory",
           "label": "Save to File"
         },
         "screenshot-show-cursor": {
-          "description": "Show the mouse pointer initially; change it per capture when the compositor supports separate cursor capture",
-          "label": "Include Mouse Pointer"
+          "description": "Include the mouse pointer in screenshots",
+          "label": "Show Cursor"
+        },
+        "screenshot-skip-annotate-on-copy-save": {
+          "description": "Copy and Save in the region overlay deliver immediately; Enter and Space still open the editor",
+          "label": "Skip Editor on Copy or Save"
         },
         "settings-window-translucent": {
           "description": "Make the Settings background translucent for compositor effects",
@@ -3176,6 +3219,10 @@
         "time-format": {
           "description": "Default time format for shell UI without its own setting",
           "label": "Time Format"
+        },
+        "umbriel-overview-type-to-launch": {
+          "description": "Open the launcher when typing in umbriel overview; uses a tiny keyboard-focus surface while overview is open",
+          "label": "Type to Launch"
         },
         "window-switcher-mru": {
           "description": "Order windows in the switcher by most recently used rather than workspace and screen layout",
@@ -4004,6 +4051,10 @@
           "description": "Tint the custom image with the widget Icon Color setting",
           "label": "Colorize Custom Image"
         },
+        "custom-label": {
+          "description": "Custom text shown beside the glyph or custom image; remains visible when Show Glyph is disabled",
+          "label": "Custom Label"
+        },
         "detached-panel": {
           "description": "Open the drawer as a floating panel instead of anchoring it to the bar edge",
           "label": "Detached Panel"
@@ -4078,7 +4129,7 @@
           "volume-description": "Custom icon glyph; leave empty to use the built-in dynamic icons"
         },
         "glyph-position": {
-          "description": "In which order to display the glyph in relation to the text/graph/gauge",
+          "description": "Place the glyph or custom image and custom label relative to the value or visualization",
           "label": "Glyph Position"
         },
         "group-by-workspace": {

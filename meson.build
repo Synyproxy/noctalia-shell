@@ -1,5 +1,5 @@
 project('noctalia', ['c', 'cpp'],
-  version: '5.0.1',
+  version: '5.1.0',
   default_options: [
     'cpp_std=c++23',
     'cpp_extensions=false',
@@ -513,6 +513,8 @@ _noctalia_sources = files(
   'src/launcher/dmenu_stdin_provider.cpp',
   'src/launcher/emoji_provider.cpp',
   'src/launcher/math_provider.cpp',
+  'src/launcher/panel_catalog.cpp',
+  'src/launcher/panel_provider.cpp',
   'src/launcher/plugin_launcher_provider.cpp',
   'src/launcher/session_provider.cpp',
   'src/launcher/wallpaper_provider.cpp',
@@ -547,6 +549,7 @@ _noctalia_sources = files(
   'src/render/core/thumbnail_service.cpp',
   'src/render/core/image_decoder.cpp',
   'src/render/core/image_encoder.cpp',
+  'src/render/core/image_orientation.cpp',
   'src/render/programs/glyph_program.cpp',
   'src/render/programs/image_program.cpp',
   'src/render/programs/linear_gradient_program.cpp',
@@ -1190,6 +1193,7 @@ if build_tests
     'ico_decoder',
     'icon_resolver',
     'image_file_loader_data_uri',
+    'image_orientation',
     'image_source_log',
     'inotify',
     'input_area',
@@ -1242,6 +1246,7 @@ if build_tests
     'ui_tree_reconciler',
     'upower_charge_limit',
     'upower_device_catalog',
+    'uri',
     'vdir_reader',
     'virtual_grid_view_gesture',
     'wallpaper_shuffle_state',
@@ -1250,6 +1255,7 @@ if build_tests
     'webp_decoder',
     'widget_action',
     'widget_definition',
+    'widget_settings_schema',
     'workspace_alert_service',
   ]
 
@@ -1306,6 +1312,11 @@ if build_tests
   test('template_undo_signal',
     bash_program,
     args: ['tests/template_undo_signal_test.sh', meson.current_source_dir() / 'assets/templates'],
+    workdir: meson.current_source_dir(),
+  )
+  test('umbriel_apply_include_comment',
+    bash_program,
+    args: ['tests/umbriel_apply_include_comment_test.sh', meson.current_source_dir() / 'assets/templates/umbriel/apply.sh'],
     workdir: meson.current_source_dir(),
   )
 endif # build_tests

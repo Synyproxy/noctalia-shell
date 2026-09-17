@@ -1,6 +1,7 @@
 #include "render/backend/render_backend.h"
 #include "render/core/renderer.h"
 #include "render/core/texture_manager.h"
+#include "render/scene/glyph_node.h"
 #include "render/scene/input_area.h"
 #include "render/scene/rect_node.h"
 #include "ui/controls/box.h"
@@ -8,6 +9,7 @@
 #include "ui/controls/drag_source.h"
 #include "ui/controls/drop_zone.h"
 #include "ui/controls/flex.h"
+#include "ui/controls/glyph.h"
 #include "ui/controls/graph.h"
 #include "ui/controls/input.h"
 #include "ui/controls/label.h"
@@ -191,6 +193,53 @@ int main() {
       ok = expect(column->children().size() == 1, "children removed") && ok;
       ok = expect(column->children()[0].get() == labelBefore, "surviving child reused on removal") && ok;
     }
+  }
+
+  // Host label/glyph colors apply only while the tree leaves color unset.
+  {
+    ui::UiTreeReconciler reconciler;
+    Flex host;
+    const Color labelDefault = rgbHex(0x112233);
+    const Color glyphDefault = rgbHex(0x445566);
+    reconciler.setColorDefaults(fixedColorSpec(labelDefault), fixedColorSpec(glyphDefault));
+
+    ui::UiTreeNode tree = makeNode("row");
+    tree.children.push_back(makeLabel("Default"));
+    ui::UiTreeNode glyphNode = makeNode("glyph");
+    glyphNode.props.emplace("name", std::string("cpu"));
+    tree.children.push_back(std::move(glyphNode));
+    (void)reconciler.reconcile(host, tree, renderer);
+
+    auto* row = dynamic_cast<Flex*>(host.children().front().get());
+    auto* label = row != nullptr ? dynamic_cast<Label*>(row->children()[0].get()) : nullptr;
+    auto* glyph = row != nullptr ? dynamic_cast<Glyph*>(row->children()[1].get()) : nullptr;
+    auto* renderedGlyph = glyph != nullptr ? findFirst<GlyphNode>(*glyph) : nullptr;
+    ok = expect(label != nullptr && label->color() == labelDefault, "label inherits host color") && ok;
+    ok = expect(renderedGlyph != nullptr && renderedGlyph->color() == glyphDefault, "glyph inherits host color") && ok;
+
+    const Color explicitLabel = rgbHex(0x778899);
+    const Color explicitGlyph = rgbHex(0xAABBCC);
+    tree.children[0].props["color"] = std::string("#778899");
+    tree.children[1].props["color"] = std::string("#aabbcc");
+    (void)reconciler.reconcile(host, tree, renderer);
+    ok = expect(label != nullptr && label->color() == explicitLabel, "explicit label color overrides host color") && ok;
+    ok = expect(
+             renderedGlyph != nullptr && renderedGlyph->color() == explicitGlyph,
+             "explicit glyph color overrides host color"
+         )
+        && ok;
+
+    const Color nextLabelDefault = rgbHex(0x102030);
+    const Color nextGlyphDefault = rgbHex(0x405060);
+    reconciler.setColorDefaults(fixedColorSpec(nextLabelDefault), fixedColorSpec(nextGlyphDefault));
+    tree.children[0].props.erase("color");
+    tree.children[1].props.erase("color");
+    (void)reconciler.reconcile(host, tree, renderer);
+    ok = expect(label != nullptr && label->color() == nextLabelDefault, "label restores changed host color") && ok;
+    ok = expect(
+             renderedGlyph != nullptr && renderedGlyph->color() == nextGlyphDefault, "glyph restores changed host color"
+         )
+        && ok;
   }
 
   // Keyed reorder reuses control instances.
@@ -1002,6 +1051,56 @@ int main() {
       tree.children[0].props.erase("tooltip");
       (void)reconciler.reconcile(host, tree, renderer);
       ok = expect(!control->inputArea()->hasTooltip(), "dropped tooltip prop clears the tooltip") && ok;
+    }
+  }
+
+  // A tooltip on a plain container wraps it in a hover-only InputArea; dropping
+  // the only wrapper-requiring prop unwraps it. Alongside onClick, dropping just
+  // the tooltip keeps the wrapper and clears the tooltip on the retained node.
+  {
+    ui::UiTreeReconciler reconciler;
+    Flex host;
+
+    ui::UiTreeNode tree = makeNode("column");
+    ui::UiTreeNode box = makeNode("box");
+    box.props.emplace("tooltip", std::string("More info"));
+    tree.children.push_back(box);
+    (void)reconciler.reconcile(host, tree, renderer);
+
+    auto* column = dynamic_cast<Flex*>(host.children().front().get());
+    auto* area = column != nullptr && !column->children().empty()
+        ? dynamic_cast<InputArea*>(column->children()[0].get())
+        : nullptr;
+    ok = expect(area != nullptr, "tooltip-only box is wrapped in an InputArea") && ok;
+    if (area != nullptr) {
+      ok = expect(area->hasTooltip(), "container tooltip applied") && ok;
+      ok = expect(
+               area->acceptedButtons() == 0 && !area->focusable(),
+               "tooltip-only wrapper does not accept clicks or take focus"
+           )
+          && ok;
+    }
+
+    tree.children[0].props.erase("tooltip");
+    (void)reconciler.reconcile(host, tree, renderer);
+    Node* unwrapped = column != nullptr && !column->children().empty() ? column->children()[0].get() : nullptr;
+    ok = expect(dynamic_cast<Box*>(unwrapped) != nullptr, "box unwrapped after tooltip removed") && ok;
+
+    tree.children[0].props.emplace("onClick", std::string("activate"));
+    tree.children[0].props.emplace("tooltip", std::string("More info"));
+    (void)reconciler.reconcile(host, tree, renderer);
+    auto* clickable = column != nullptr && !column->children().empty()
+        ? dynamic_cast<InputArea*>(column->children()[0].get())
+        : nullptr;
+    ok = expect(clickable != nullptr && clickable->hasTooltip(), "clickable box carries a tooltip") && ok;
+    if (clickable != nullptr) {
+      tree.children[0].props.erase("tooltip");
+      (void)reconciler.reconcile(host, tree, renderer);
+      ok = expect(
+               dynamic_cast<InputArea*>(column->children()[0].get()) == clickable && !clickable->hasTooltip(),
+               "dropping tooltip keeps the click wrapper but clears the tooltip"
+           )
+          && ok;
     }
   }
 

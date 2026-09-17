@@ -7,6 +7,7 @@
 #include "core/log.h"
 #include "core/process/process.h"
 #include "i18n/i18n.h"
+#include "launcher/panel_catalog.h"
 #include "shell/bar/widget_gesture.h"
 #include "shell/bar/widget_gesture_defaults.h"
 #include "shell/control_center/control_center_panel.h"
@@ -50,6 +51,7 @@ namespace settings {
     constexpr auto kLauncherProviderSettings = std::to_array<LauncherProviderSettingSpec>({
         {.name = "calculator", .prefixPlaceholder = "calc", .globalByDefault = true},
         {.name = "emoji", .prefixPlaceholder = "emo"},
+        {.name = "panels", .prefixPlaceholder = "pan"},
         {.name = "session", .prefixPlaceholder = "session"},
         {.name = "wallpaper", .prefixPlaceholder = "wall"},
         {.name = "windows", .prefixPlaceholder = "win"},
@@ -83,7 +85,7 @@ namespace settings {
       return defaultKeybindSet(action);
     }
 
-    constexpr std::array<SettingsSectionDescriptor, 22> kSettingsSections{{
+    constexpr std::array<SettingsSectionDescriptor, 23> kSettingsSections{{
         {SettingsSection::Appearance, "appearance", "adjustments-horizontal"},
         {SettingsSection::Wallpaper, "wallpaper", "paint"},
         {SettingsSection::Templates, "templates", "color-swatch"},
@@ -104,6 +106,7 @@ namespace settings {
         {SettingsSection::Power, "power", "bolt"},
         {SettingsSection::Hooks, "hooks", "link"},
         {SettingsSection::Niri, "niri", "niri"},
+        {SettingsSection::Umbriel, "umbriel", "umbriel"},
         {SettingsSection::Bar, "bar", "crop-3-2", false},
         {SettingsSection::Plugins, "plugins", "puzzle", true, true},
     }};
@@ -1313,6 +1316,21 @@ namespace settings {
           {"shell", "launcher", "providers", std::string(provider.name), "global"}, ToggleSetting{global},
           std::format("launcher {} global search unprefixed", provider.name)
       ));
+      if (provider.name == "panels") {
+        ListSetting ignoredPanels;
+        ignoredPanels.items = cfg.shell.launcher.panels.ignored;
+        const auto knownPanelIds = panel_catalog::allKnownIds();
+        ignoredPanels.suggestedOptions.reserve(knownPanelIds.size());
+        for (const auto& panelId : knownPanelIds) {
+          ignoredPanels.suggestedOptions.push_back(SelectOption{panelId, panel_catalog::describe(panelId).title});
+        }
+        entries.push_back(makeEntry(
+            SettingsSection::Launcher, "providers", tr("settings.schema.panels.launcher-ignored-panels.label"),
+            tr("settings.schema.panels.launcher-ignored-panels.description"),
+            {"shell", "launcher", "panels", "ignored"}, std::move(ignoredPanels),
+            "launcher panels ignore hide exclude noise polkit setup wizard test"
+        ));
+      }
     }
     entries.push_back(makeEntry(
         SettingsSection::Panels, "clipboard", tr("settings.schema.panels.placement-clipboard.label"),
@@ -1863,9 +1881,23 @@ namespace settings {
     ));
     entries.push_back(makeEntry(
         SettingsSection::Screenshot, "screenshot-annotation",
+        tr("settings.schema.shell.screenshot-skip-annotate-on-copy-save.label"),
+        tr("settings.schema.shell.screenshot-skip-annotate-on-copy-save.description"),
+        {"shell", "screenshot", "skip_annotate_on_copy_save"},
+        ToggleSetting{cfg.shell.screenshot.skipAnnotateOnCopySave},
+        "screenshot annotate annotation skip copy save region quick"
+    ));
+    entries.push_back(makeEntry(
+        SettingsSection::Screenshot, "screenshot-annotation",
         tr("settings.schema.shell.screenshot-close-on-copy.label"),
         tr("settings.schema.shell.screenshot-close-on-copy.description"), {"shell", "screenshot", "close_on_copy"},
         ToggleSetting{cfg.shell.screenshot.closeOnCopy}, "screenshot annotation close copy clipboard exit"
+    ));
+    entries.push_back(makeEntry(
+        SettingsSection::Screenshot, "screenshot-annotation",
+        tr("settings.schema.shell.screenshot-close-on-save.label"),
+        tr("settings.schema.shell.screenshot-close-on-save.description"), {"shell", "screenshot", "close_on_save"},
+        ToggleSetting{cfg.shell.screenshot.closeOnSave}, "screenshot annotation close save exit"
     ));
 
     entries.push_back(makeEntry(
@@ -2209,6 +2241,17 @@ namespace settings {
             sliderFor(cfg.backdrop.tintIntensity, noctalia::config::schema::kUnitRange, false), "wallpaper"
         ));
       }
+    }
+
+    // Umbriel-specific integrations
+    if (env.umbrielOverviewTypeToLaunchSupported) {
+      entries.push_back(makeEntry(
+          SettingsSection::Umbriel, "overview", tr("settings.schema.shell.umbriel-overview-type-to-launch.label"),
+          tr("settings.schema.shell.umbriel-overview-type-to-launch.description"),
+          {"shell", "umbriel_overview_type_to_launch_enabled"},
+          ToggleSetting{cfg.shell.umbrielOverviewTypeToLaunchEnabled},
+          "umbriel overview type launch launcher search keyboard focus"
+      ));
     }
 
     // System
