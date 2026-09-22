@@ -748,6 +748,7 @@
       "unpin-from-dock": "Sblocca dalla dock"
     },
     "empty": {
+      "loading": "Caricamento dei risultati...",
       "no-results": "Nessun risultato trovato",
       "type-to-search": "Digita per cercare..."
     },
@@ -768,6 +769,20 @@
       },
       "emoji": {
         "title": "Emoji"
+      },
+      "panel": {
+        "builtin": {
+          "clipboard": "Appunti",
+          "control-center": "Centro di controllo",
+          "launcher": "Launcher",
+          "polkit": "Richiesta di autenticazione",
+          "session": "Sessione",
+          "setup-wizard": "Procedura setup guidata",
+          "test": "Pannello di prova",
+          "tray-drawer": "Cassetto dei vassoi",
+          "wallpaper": "Sfondo"
+        },
+        "title": "Pannelli"
       },
       "session": {
         "action-subtitle": "Esegui azione di sessione",
@@ -2480,6 +2495,10 @@
           "description": "Mostra anche emoji nei risultati senza prefisso",
           "label": "Emoji nella ricerca globale"
         },
+        "launcher-global-panels": {
+          "description": "Mostra i pannelli anche nella ricerca senza prefisso",
+          "label": "Pannelli nella ricerca globale"
+        },
         "launcher-global-session": {
           "description": "Mostra anche i comandi sessione nei risultati senza prefisso",
           "label": "Comandi sessione nella ricerca globale"
@@ -2491,6 +2510,10 @@
         "launcher-global-windows": {
           "description": "Mostra anche le finestre aperte nei risultati senza prefisso",
           "label": "Finestre nella ricerca globale"
+        },
+        "launcher-ignored-panels": {
+          "description": "Pannelli che il provider pannello non elenca mai (ad esempio, richieste di autenticazione, procedura guidata di configurazione)",
+          "label": "Pannelli ignorati"
         },
         "launcher-pinned-apps": {
           "description": "ID desktop delle app fissate sul launcher; appaiono per primi quando si apre il launcher",
@@ -2507,6 +2530,10 @@
         "launcher-prefix-emoji": {
           "description": "Prefisso di attivazione  per ricerca emoji",
           "label": "Prefisso Emoji"
+        },
+        "launcher-prefix-panels": {
+          "description": "Prefisso di attivazione per la ricerca nel pannello",
+          "label": "Prefisso pannelli"
         },
         "launcher-prefix-session": {
           "description": "Prefisso di attivazione per comandi di sessione",
@@ -3119,6 +3146,10 @@
           "description": "Chiudi dopo una copia  riuscita dall'editor, anche quando aperto direttamente.",
           "label": "Chiudi l'Editor dopo aver Copiato"
         },
+        "screenshot-close-on-save": {
+          "description": "Chiudi dopo un salvataggio riuscito dall'editor, anche quando aperto direttamente",
+          "label": "Chiudi l'editor dopo aver salvato."
+        },
         "screenshot-confirm-region": {
           "description": "Dopo aver selezionato un'area, mantieni aperta l'overlay finché non confermi con Invio o Spazio",
           "label": "Conferma area selezionata"
@@ -3163,6 +3194,10 @@
         "screenshot-show-cursor": {
           "description": "Includi il puntatore del mouse negli screenshot",
           "label": "Mostra cursore"
+        },
+        "screenshot-skip-annotate-on-copy-save": {
+          "description": "Copia e salva nella zona di sovrapposizione, il salvataggio avviene immediatamente; Invio e Spazio aprono comunque l'editor.",
+          "label": "Salta l'editor quando copi o salvi"
         },
         "settings-window-translucent": {
           "description": "Rendi traslucido lo sfondo delle Impostazioni per gli effetti del compositor",
@@ -4016,6 +4051,10 @@
           "description": "Tinge l'immagine personalizzata con l'impostazione Colore del widget",
           "label": "Colora immagine personalizzata"
         },
+        "custom-label": {
+          "description": "Testo personalizzato visualizzato accanto al glifo o immagine personalizzata; rimane visibile anche quando l'opzione \"Mostra glifo\" è disabilitata.",
+          "label": "Etichetta personalizzata"
+        },
         "detached-panel": {
           "description": "Apri il cassetto come un pannello mobile invece di ancorarlo al bordo della barra",
           "label": "Pannello separato"
@@ -4090,7 +4129,7 @@
           "volume-description": "Glifo personalizzato; lascia vuoto per utilizzare le icone dinamiche integrate"
         },
         "glyph-position": {
-          "description": "In quale ordine visualizzare il glifo in relazione al testo/grafico/indicatore",
+          "description": "Posiziona il glifo o l'immagine personalizzata e l'etichetta personalizzata in relazione al valore o alla visualizzazione.",
           "label": "Posizione glifo"
         },
         "group-by-workspace": {

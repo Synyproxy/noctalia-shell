@@ -2786,6 +2786,11 @@
           "description": "Play sound effects for shell events",
           "label": "Shell Sounds"
         },
+        "sound-theme": {
+          "default": "Default",
+          "description": "Sound theme used for shell sound effects",
+          "label": "Sound Theme"
+        },
         "sound-volume": {
           "description": "Volume for shell sound effects",
           "label": "Sound Volume"

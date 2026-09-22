@@ -417,6 +417,8 @@ _wlr_ls_c = custom_target('wlr-layer-shell-unstable-v1-client-source',
 _protocol_sources += _wlr_ls_c
 _protocol_headers += _wlr_ls_h
 
+alias_target('wayland-protocol-headers', _protocol_headers)
+
 # ── Main sources ──────────────────────────────────────────────────────────────
 _noctalia_sources = files(
   'src/app/application.cpp',
@@ -1249,6 +1251,7 @@ if build_tests
     'uri',
     'vdir_reader',
     'virtual_grid_view_gesture',
+    'wallpaper_scan_symlink',
     'wallpaper_shuffle_state',
     'wayland_output_scale',
     'wayland_toplevels_identity',

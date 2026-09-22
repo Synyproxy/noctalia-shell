@@ -748,6 +748,7 @@
       "unpin-from-dock": "从 Dock 取消固定"
     },
     "empty": {
+      "loading": "正在加载结果…",
       "no-results": "未找到结果",
       "type-to-search": "输入以搜索…"
     },
@@ -768,6 +769,20 @@
       },
       "emoji": {
         "title": "表情符号"
+      },
+      "panel": {
+        "builtin": {
+          "clipboard": "剪贴板",
+          "control-center": "控制中心",
+          "launcher": "启动器",
+          "polkit": "身份验证提示",
+          "session": "会话",
+          "setup-wizard": "设置向导",
+          "test": "测试面板",
+          "tray-drawer": "托盘抽屉",
+          "wallpaper": "壁纸"
+        },
+        "title": "面板"
       },
       "session": {
         "action-subtitle": "执行会话操作",
@@ -2480,6 +2495,10 @@
           "description": "在无前缀搜索中显示表情符号",
           "label": "全局搜索中的表情符号"
         },
+        "launcher-global-panels": {
+          "description": "在无前缀搜索中也显示面板",
+          "label": "全局搜索中的面板"
+        },
         "launcher-global-session": {
           "description": "在无前缀搜索中显示会话操作",
           "label": "全局搜索中的会话操作"
@@ -2491,6 +2510,10 @@
         "launcher-global-windows": {
           "description": "在无前缀搜索中显示打开的窗口",
           "label": "全局搜索中的窗口"
+        },
+        "launcher-ignored-panels": {
+          "description": "面板搜索源永不列出的面板（例如身份验证提示、设置向导）",
+          "label": "忽略的面板"
         },
         "launcher-pinned-apps": {
           "description": "固定到启动器的应用桌面项 ID；打开启动器时优先显示",
@@ -2507,6 +2530,10 @@
         "launcher-prefix-emoji": {
           "description": "触发表情符号搜索的前缀",
           "label": "表情符号前缀"
+        },
+        "launcher-prefix-panels": {
+          "description": "触发面板搜索的前缀",
+          "label": "面板前缀"
         },
         "launcher-prefix-session": {
           "description": "触发会话电源操作的前缀",
@@ -3119,6 +3146,10 @@
           "description": "从编辑器复制成功后自动关闭；直接打开编辑器时同样适用",
           "label": "复制后关闭编辑器"
         },
+        "screenshot-close-on-save": {
+          "description": "从编辑器保存成功后自动关闭；直接打开编辑器时同样适用",
+          "label": "保存后关闭编辑器"
+        },
         "screenshot-confirm-region": {
           "description": "框选区域后保持截图界面打开，直到按下 Enter 或 Space 键确认",
           "label": "确认选区"
@@ -3163,6 +3194,10 @@
         "screenshot-show-cursor": {
           "description": "在截图中包含鼠标指针",
           "label": "显示鼠标指针"
+        },
+        "screenshot-skip-annotate-on-copy-save": {
+          "description": "在截图界面中按复制或保存会立即输出；Enter 和 Space 仍会打开编辑器",
+          "label": "复制或保存时跳过编辑器"
         },
         "settings-window-translucent": {
           "description": "将设置窗口背景设为半透明，以增强合成器效果",
@@ -4016,6 +4051,10 @@
           "description": "使用小组件的“图标颜色”为自定义图片着色",
           "label": "自定义图片着色"
         },
+        "custom-label": {
+          "description": "显示在图标或自定义图片旁边的自定义文本；禁用“显示图标”时仍会保留显示",
+          "label": "自定义标签"
+        },
         "detached-panel": {
           "description": "将抽屉作为悬浮面板打开，而不是吸附在状态栏边缘",
           "label": "独立面板"
@@ -4090,7 +4129,7 @@
           "volume-description": "自定义图标；留空时使用内置的动态图标"
         },
         "glyph-position": {
-          "description": "图标相对于文本/图表/仪表的排列顺序",
+          "description": "设置图标或自定义图片及自定义标签相对于数值或可视化的排列顺序",
           "label": "图标位置"
         },
         "group-by-workspace": {

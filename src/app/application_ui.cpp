@@ -348,6 +348,9 @@ void Application::initLockScreenAndSession() {
         if (m_logindService != nullptr) {
           m_logindService->setSessionLockedHint(true);
         }
+        if (m_screenSaverService != nullptr) {
+          m_screenSaverService->emitActiveChanged(true);
+        }
         releaseSleepDelayInhibitIfPending();
       },
       [this]() {
@@ -360,6 +363,9 @@ void Application::initLockScreenAndSession() {
         requestAllSurfacesRedraw();
         if (m_logindService != nullptr) {
           m_logindService->setSessionLockedHint(false);
+        }
+        if (m_screenSaverService != nullptr) {
+          m_screenSaverService->emitActiveChanged(false);
         }
       },
       [this]() {
@@ -895,8 +901,8 @@ void Application::initBarDockAndLayout() {
   m_panelManager.setAttachedPanelAvailabilityCallback([this](wl_output* output, std::string_view barName) {
     return m_bar.canAttachPanelToBar(output, barName);
   });
-  m_panelManager.setAttachedPanelLayerProvider([this](wl_output* output, std::string_view barName) {
-    return m_bar.layerForBar(output, barName);
+  m_panelManager.setBarConfigProvider([this](wl_output* output, std::string_view barName) {
+    return m_bar.configForBar(output, barName);
   });
   m_panelManager.setAttachedPanelBarSettledCallback([this](wl_output* output, std::string_view barName) {
     return m_bar.isAttachedPanelBarSettled(output, barName);

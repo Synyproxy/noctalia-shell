@@ -8,6 +8,7 @@
 #include "core/process/process.h"
 #include "i18n/i18n.h"
 #include "launcher/panel_catalog.h"
+#include "pipewire/sound_player.h"
 #include "shell/bar/widget_gesture.h"
 #include "shell/bar/widget_gesture_defaults.h"
 #include "shell/control_center/control_center_panel.h"
@@ -946,7 +947,7 @@ namespace settings {
         ToggleSetting{cfg.dock.showInstanceCount}, "badge windows"
     ));
     entries.push_back(makeEntry(
-        SettingsSection::Dock, "behavior", tr("settings.schema.dock.launcher-position.label"),
+        SettingsSection::Dock, "layout", tr("settings.schema.dock.launcher-position.label"),
         tr("settings.schema.dock.launcher-position.description"), {"dock", "launcher_position"},
         asSegmented(enumSelect(kDockLauncherPositions, cfg.dock.launcherPosition)), "launcher apps grid"
     ));
@@ -956,7 +957,7 @@ namespace settings {
     };
     {
       auto e = makeEntry(
-          SettingsSection::Dock, "behavior", tr("settings.schema.dock.launcher-icon.label"),
+          SettingsSection::Dock, "layout", tr("settings.schema.dock.launcher-icon.label"),
           tr("settings.schema.dock.launcher-icon.description"), {"dock", "launcher_icon"},
           TextSetting{.value = cfg.dock.launcherIcon, .placeholder = "grid-dots", .browseFileExtensions = {}},
           "launcher apps icon glyph"
@@ -966,7 +967,7 @@ namespace settings {
     }
     {
       auto e = makeEntry(
-          SettingsSection::Dock, "behavior", tr("settings.schema.dock.launcher-custom-image.label"),
+          SettingsSection::Dock, "layout", tr("settings.schema.dock.launcher-custom-image.label"),
           tr("settings.schema.dock.launcher-custom-image.description"), {"dock", "launcher_custom_image"},
           TextSetting{
               .value = cfg.dock.launcherCustomImage,
@@ -982,7 +983,7 @@ namespace settings {
     }
     {
       auto e = makeEntry(
-          SettingsSection::Dock, "behavior", tr("settings.schema.dock.launcher-custom-image-colorize.label"),
+          SettingsSection::Dock, "layout", tr("settings.schema.dock.launcher-custom-image-colorize.label"),
           tr("settings.schema.dock.launcher-custom-image-colorize.description"),
           {"dock", "launcher_custom_image_colorize"}, ToggleSetting{cfg.dock.launcherCustomImageColorize},
           "launcher apps image tint color"
@@ -2708,27 +2709,17 @@ namespace settings {
         tr("settings.schema.services.sound-volume.description"), {"audio", "sound_volume"},
         sliderFor(cfg.audio.soundVolume, noctalia::config::schema::kUnitRange, false), "sound"
     ));
+    std::vector<SelectOption> soundThemeOptions;
+    for (const auto& [value, label] : SoundPlayer::availableThemes()) {
+      soundThemeOptions.push_back(SelectOption{value, label});
+    }
+    if (soundThemeOptions.empty()) {
+      soundThemeOptions.push_back(SelectOption{"freedesktop", tr("settings.schema.services.sound-theme.default")});
+    }
     entries.push_back(makeEntry(
-        SettingsSection::Services, "audio", tr("settings.schema.services.volume-change-sound.label"),
-        tr("settings.schema.services.volume-change-sound.description"), {"audio", "volume_change_sound"},
-        TextSetting{
-            .value = cfg.audio.volumeChangeSound,
-            .placeholder = tr("settings.schema.services.volume-change-sound.placeholder"),
-            .browseMode = TextSettingBrowseMode::OpenFile,
-            .browseFileExtensions = {".wav", ".flac", ".ogg", ".oga", ".opus", ".mp3", ".aiff", ".aif"}
-        },
-        "sound path file", true
-    ));
-    entries.push_back(makeEntry(
-        SettingsSection::Services, "audio", tr("settings.schema.services.notification-sound.label"),
-        tr("settings.schema.services.notification-sound.description"), {"audio", "notification_sound"},
-        TextSetting{
-            .value = cfg.audio.notificationSound,
-            .placeholder = tr("settings.schema.services.notification-sound.placeholder"),
-            .browseMode = TextSettingBrowseMode::OpenFile,
-            .browseFileExtensions = {".wav", ".flac", ".ogg", ".oga", ".opus", ".mp3", ".aiff", ".aif"}
-        },
-        "sound path file", true
+        SettingsSection::Services, "audio", tr("settings.schema.services.sound-theme.label"),
+        tr("settings.schema.services.sound-theme.description"), {"audio", "sound_theme"},
+        SelectSetting{std::move(soundThemeOptions), cfg.audio.soundTheme}, "sound theme"
     ));
     entries.push_back(makeEntry(
         SettingsSection::Services, "brightness", tr("settings.schema.services.ddcutil.label"),
