@@ -212,8 +212,6 @@ bool isTextEditingKey(std::uint32_t sym, std::uint32_t modifiers) noexcept {
     case XKB_KEY_Delete:
     case XKB_KEY_Return:
     case XKB_KEY_KP_Enter:
-    case XKB_KEY_Tab:
-    case XKB_KEY_ISO_Left_Tab:
     case XKB_KEY_KP_Left:
     case XKB_KEY_KP_Right:
     case XKB_KEY_KP_Up:
