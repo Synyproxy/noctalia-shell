@@ -86,7 +86,7 @@ namespace settings {
       return defaultKeybindSet(action);
     }
 
-    constexpr std::array<SettingsSectionDescriptor, 23> kSettingsSections{{
+    constexpr std::array<SettingsSectionDescriptor, 24> kSettingsSections{{
         {SettingsSection::Appearance, "appearance", "adjustments-horizontal"},
         {SettingsSection::Wallpaper, "wallpaper", "paint"},
         {SettingsSection::Templates, "templates", "color-swatch"},
@@ -104,6 +104,7 @@ namespace settings {
         {SettingsSection::System, "system", "activity-heartbeat"},
         {SettingsSection::Services, "services", "stack-2"},
         {SettingsSection::Location, "location", "map-pin"},
+        {SettingsSection::Calendar, "calendar", "calendar"},
         {SettingsSection::Power, "power", "bolt"},
         {SettingsSection::Hooks, "hooks", "link"},
         {SettingsSection::Niri, "niri", "niri"},
@@ -1624,6 +1625,43 @@ namespace settings {
       );
       e.visibleWhen = lockscreenOn;
       entries.push_back(std::move(e));
+
+      MultiSelectSetting transitions;
+      transitions.options.reserve(std::size(kLockscreenTransitions));
+      for (const auto& opt : kLockscreenTransitions) {
+        transitions.options.push_back(SelectOption{std::string(opt.key), tr(opt.labelKey)});
+      }
+      transitions.selectedValues.reserve(cfg.lockscreen.transitions.size());
+      for (const auto& transition : cfg.lockscreen.transitions) {
+        transitions.selectedValues.emplace_back(enumToKey(kLockscreenTransitions, transition));
+      }
+      auto transitionEffects = makeEntry(
+          SettingsSection::Security, "lock-screen", tr("settings.schema.lockscreen.transitions.label"),
+          tr("settings.schema.lockscreen.transitions.description"), {"lockscreen", "transition"},
+          std::move(transitions), "lock screen effects animation pool"
+      );
+      transitionEffects.visibleWhen = lockscreenOn;
+      entries.push_back(std::move(transitionEffects));
+
+      auto transitionDuration = makeEntry(
+          SettingsSection::Security, "lock-screen", tr("settings.schema.lockscreen.transition-duration.label"),
+          tr("settings.schema.lockscreen.transition-duration.description"), {"lockscreen", "transition_duration"},
+          sliderFor(
+              cfg.lockscreen.transitionDurationMs, noctalia::config::schema::kLockscreenTransitionDurationRange, true
+          ),
+          "lock screen transition animation duration"
+      );
+      transitionDuration.visibleWhen = lockscreenOn;
+      entries.push_back(std::move(transitionDuration));
+
+      auto edgeSmoothness = makeEntry(
+          SettingsSection::Security, "lock-screen", tr("settings.schema.lockscreen.edge-smoothness.label"),
+          tr("settings.schema.lockscreen.edge-smoothness.description"), {"lockscreen", "edge_smoothness"},
+          sliderFor(cfg.lockscreen.edgeSmoothness, noctalia::config::schema::kUnitRange, false),
+          "lock screen transition feathering", true
+      );
+      edgeSmoothness.visibleWhen = lockscreenOn;
+      entries.push_back(std::move(edgeSmoothness));
     }
     {
       const SettingVisibility lockscreenWallpaperOn = [](const Config& c) {
@@ -1734,6 +1772,11 @@ namespace settings {
         SettingsSection::Shell, "general", tr("settings.schema.shell.settings-window-translucent.label"),
         tr("settings.schema.shell.settings-window-translucent.description"), {"shell", "settings_window_translucent"},
         ToggleSetting{cfg.shell.settingsWindowTranslucent}, "settings window background transparency translucent"
+    ));
+    entries.push_back(makeEntry(
+        SettingsSection::Shell, "general", tr("settings.schema.shell.settings-expand-all-groups.label"),
+        tr("settings.schema.shell.settings-expand-all-groups.description"), {"shell", "settings_expand_all_groups"},
+        ToggleSetting{cfg.shell.settingsExpandAllGroups}, "settings window groups expand collapse expanded"
     ));
     entries.push_back(makeEntry(
         SettingsSection::Shell, "general", tr("settings.schema.shell.time-format.label"),
@@ -1963,9 +2006,46 @@ namespace settings {
       entries.push_back(std::move(e));
     }
     entries.push_back(makeEntry(
+        SettingsSection::Shell, "window-switcher", tr("settings.schema.shell.window-switcher-style.label"),
+        tr("settings.schema.shell.window-switcher-style.description"), {"shell", "window_switcher", "style"},
+        enumSelect(ShellConfig::kWindowSwitcherStyles, cfg.shell.windowSwitcher.style),
+        "window switcher alt tab style carousel compact"
+    ));
+    entries.push_back(makeEntry(
         SettingsSection::Shell, "window-switcher", tr("settings.schema.shell.window-switcher-mru.label"),
         tr("settings.schema.shell.window-switcher-mru.description"), {"shell", "window_switcher", "mru"},
         ToggleSetting{cfg.shell.windowSwitcher.mru}, "window switcher alt tab mru most recently used"
+    ));
+    entries.push_back(makeEntry(
+        SettingsSection::Shell, "window-switcher", tr("settings.schema.shell.window-switcher-show-caption.label"),
+        tr("settings.schema.shell.window-switcher-show-caption.description"),
+        {"shell", "window_switcher", "show_caption"}, ToggleSetting{cfg.shell.windowSwitcher.showCaption},
+        "window switcher alt tab caption title application name"
+    ));
+    entries.push_back(makeEntry(
+        SettingsSection::Shell, "window-switcher", tr("settings.schema.shell.window-switcher-show-count.label"),
+        tr("settings.schema.shell.window-switcher-show-count.description"), {"shell", "window_switcher", "show_count"},
+        ToggleSetting{cfg.shell.windowSwitcher.showCount}, "window switcher alt tab count position total"
+    ));
+    entries.push_back(makeEntry(
+        SettingsSection::Shell, "window-switcher", tr("settings.schema.shell.window-switcher-show-app-icon.label"),
+        tr("settings.schema.shell.window-switcher-show-app-icon.description"),
+        {"shell", "window_switcher", "show_app_icon"}, ToggleSetting{cfg.shell.windowSwitcher.showAppIcon},
+        "window switcher alt tab application app icon"
+    ));
+    entries.push_back(makeEntry(
+        SettingsSection::Shell, "window-switcher", tr("settings.schema.shell.window-switcher-show-all-outputs.label"),
+        tr("settings.schema.shell.window-switcher-show-all-outputs.description"),
+        {"shell", "window_switcher", "show_all_outputs"}, ToggleSetting{cfg.shell.windowSwitcher.showAllOutputs},
+        "window switcher alt tab monitor display output screen all current"
+    ));
+    entries.push_back(makeEntry(
+        SettingsSection::Shell, "window-switcher",
+        tr("settings.schema.shell.window-switcher-current-workspace-only.label"),
+        tr("settings.schema.shell.window-switcher-current-workspace-only.description"),
+        {"shell", "window_switcher", "current_workspace_only"},
+        ToggleSetting{cfg.shell.windowSwitcher.currentWorkspaceOnly},
+        "window switcher alt tab workspace current only filter"
     ));
     entries.push_back(makeEntry(
         SettingsSection::Osd, "osd", tr("settings.schema.shell.osd-enabled.label"),
@@ -2652,13 +2732,13 @@ namespace settings {
 
     const SettingVisibility calendarOn = [](const Config& c) { return c.calendar.enabled; };
     entries.push_back(makeEntry(
-        SettingsSection::Services, "calendar", tr("settings.schema.services.calendar.label"),
+        SettingsSection::Calendar, "general", tr("settings.schema.services.calendar.label"),
         tr("settings.schema.services.calendar.description"), {"calendar", "enabled"},
         ToggleSetting{cfg.calendar.enabled}, "calendar events caldav google"
     ));
     {
       auto e = makeEntry(
-          SettingsSection::Services, "calendar", tr("settings.schema.services.calendar-event-date-format.label"),
+          SettingsSection::Calendar, "general", tr("settings.schema.services.calendar-event-date-format.label"),
           tr("settings.schema.services.calendar-event-date-format.description"), {"calendar", "event_date_format"},
           TextSetting{.value = cfg.calendar.eventDateFormat, .placeholder = "%A %e %B", .browseFileExtensions = {}},
           "calendar date format strftime chrono"
@@ -2668,7 +2748,7 @@ namespace settings {
     }
     {
       auto e = makeEntry(
-          SettingsSection::Services, "calendar", tr("settings.schema.services.calendar-event-time-format.label"),
+          SettingsSection::Calendar, "general", tr("settings.schema.services.calendar-event-time-format.label"),
           tr("settings.schema.services.calendar-event-time-format.description"), {"calendar", "event_time_format"},
           TextSetting{.value = cfg.calendar.eventTimeFormat, .placeholder = "%H:%M", .browseFileExtensions = {}},
           "calendar time format strftime chrono"
@@ -2678,15 +2758,65 @@ namespace settings {
     }
     // Week numbers are a grid decoration, so they stay available when event syncing is off.
     entries.push_back(makeEntry(
-        SettingsSection::Services, "calendar", tr("settings.schema.services.calendar-week-numbers.label"),
+        SettingsSection::Calendar, "general", tr("settings.schema.services.calendar-week-numbers.label"),
         tr("settings.schema.services.calendar-week-numbers.description"),
         {"control_center", "calendar", "show_week_numbers"},
         ToggleSetting{cfg.controlCenter.calendarTab.showWeekNumbers}, "calendar week numbers iso"
     ));
+    {
+      auto e = makeEntry(
+          SettingsSection::Calendar, "calendar-reminders", tr("settings.schema.services.calendar-reminders.label"),
+          tr("settings.schema.services.calendar-reminders.description"), {"calendar", "reminders", "enabled"},
+          ToggleSetting{cfg.calendar.reminders.enabled}, "calendar reminder notification alarm upcoming"
+      );
+      e.visibleWhen = calendarOn;
+      entries.push_back(std::move(e));
+    }
+    const SettingVisibility remindersOn = [](const Config& c) {
+      return c.calendar.enabled && c.calendar.reminders.enabled;
+    };
+    {
+      auto e = makeEntry(
+          SettingsSection::Calendar, "calendar-reminders",
+          tr("settings.schema.services.calendar-reminder-use-event.label"),
+          tr("settings.schema.services.calendar-reminder-use-event.description"),
+          {"calendar", "reminders", "use_event_reminders"}, ToggleSetting{cfg.calendar.reminders.useEventReminders},
+          "calendar reminder valarm override event"
+      );
+      e.visibleWhen = remindersOn;
+      entries.push_back(std::move(e));
+    }
+    {
+      auto e = makeEntry(
+          SettingsSection::Calendar, "calendar-reminders", tr("settings.schema.services.calendar-reminder-lead.label"),
+          tr("settings.schema.services.calendar-reminder-lead.description"),
+          {"calendar", "reminders", "default_lead_minutes"},
+          sliderFor(
+              cfg.calendar.reminders.defaultLeadMinutes, noctalia::config::schema::kReminderLeadMinutesRange, true
+          ),
+          "calendar reminder lead minutes before default"
+      );
+      e.visibleWhen = remindersOn;
+      entries.push_back(std::move(e));
+    }
+    {
+      auto e = makeEntry(
+          SettingsSection::Calendar, "calendar-reminders", tr("settings.schema.services.calendar-digest-time.label"),
+          tr("settings.schema.services.calendar-digest-time.description"),
+          {"calendar", "reminders", "all_day_digest_time"},
+          TextSetting{
+              .value = cfg.calendar.reminders.allDayDigestTime, .placeholder = "09:00", .browseFileExtensions = {}
+          },
+          "calendar all day digest time morning"
+      );
+      e.visibleWhen = remindersOn;
+      entries.push_back(std::move(e));
+    }
     // Sync cadence belongs with the accounts it drives; the account rows are injected right after it.
     {
       auto e = makeEntry(
-          SettingsSection::Services, "calendar", tr("settings.schema.services.calendar-refresh-interval.label"),
+          SettingsSection::Calendar, "calendar-accounts",
+          tr("settings.schema.services.calendar-refresh-interval.label"),
           tr("settings.schema.services.calendar-refresh-interval.description"), {"calendar", "refresh_minutes"},
           sliderFor(cfg.calendar.refreshMinutes, noctalia::config::schema::kRefreshMinutesRange, true), "calendar sync"
       );

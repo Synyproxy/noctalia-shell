@@ -3,6 +3,8 @@
 #include "app/deferred_call_poll_source.h"
 #include "app/timer_poll_source.h"
 #include "calendar/calendar_poll_source.h"
+#include "calendar/calendar_reminder_monitor.h"
+#include "calendar/calendar_reminder_poll_source.h"
 #include "calendar/calendar_service.h"
 #include "capture/screenshot_service.h"
 #include "compositors/compositor_platform.h"
@@ -168,6 +170,7 @@ private:
   void initAuxServicesAndHooks();
   void initSystemBusServices();
   void initBrightnessAndPipewire();
+  void initEarlySessionBusAndTray();
   void initSessionBusServices();
   void initUi();
   // Sub-phases of initUi(), called in order.
@@ -252,7 +255,11 @@ private:
   LockKeysService m_lockKeysService;
   NotificationManager m_notificationManager;
   CalendarService m_calendarService;
+  CalendarReminderMonitor m_calendarReminderMonitor{m_configService, m_notificationManager};
   std::unique_ptr<SessionBus> m_bus;
+  // Set when the early session bus connection fails. Reported once i18n has been
+  // initialized in initStyleThemeAndWayland().
+  std::optional<std::string> m_earlySessionBusError;
   std::unique_ptr<SystemBus> m_systemBus;
   std::unique_ptr<LogindService> m_logindService;
   // Set on PrepareForSleep(true); cleared when the session lock engages (or the lock aborts).
@@ -267,6 +274,7 @@ private:
   IdleInhibitor m_idleInhibitor;
   IdleManager m_idleManager;
   IdleGraceOverlay m_idleGraceOverlay;
+  std::uint64_t m_idleGraceOverlayGeneration = 0;
   HookManager m_hookManager;
   DependencyService m_dependencyService;
   GammaService m_gammaService;
@@ -291,6 +299,7 @@ private:
   bool m_notificationShellRefreshScheduled = false;
   BatteryHookState m_batteryHookState;
   BatteryWarningMonitor m_batteryWarningMonitor;
+  std::optional<bool> m_prevBatteryPluggedForEvents;
   std::optional<bool> m_prevWirelessEnabledForEvents;
   std::optional<bool> m_prevBluetoothPoweredForEvents;
   std::optional<std::string> m_prevPowerProfileActiveForEvents;
@@ -385,7 +394,7 @@ private:
   LocationPollSource m_locationPollSource{m_locationService};
   WeatherPollSource m_weatherPollSource{m_weatherService};
   CalendarPollSource m_calendarPollSource{m_calendarService};
-  Timer m_trayInitTimer;
+  CalendarReminderPollSource m_calendarReminderPollSource{m_calendarReminderMonitor};
   Timer m_polkitInitTimer;
   Timer m_polkitIdleCloseTimer;
   Timer m_greeterSyncTimeoutTimer;

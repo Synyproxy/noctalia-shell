@@ -87,7 +87,8 @@
       },
       "brightness": {
         "brightness": "Luminosità",
-        "display": "Schermo"
+        "display": "Schermo",
+        "unavailable": "Controllo della luminosità non disponibile"
       },
       "lock-keys": {
         "caps": "Caps",
@@ -843,6 +844,8 @@
       "calendar": "Calendario",
       "calendar-credential-locked-body": "Sblocca il portachiavi utilizzato dal Secret Service, quindi riprova in Impostazioni. Con GNOME Keyring, imposta come predefinito un portachiavi sbloccato automaticamente al Login.",
       "calendar-credential-locked-title": "Il portachiavi del calendario è bloccato",
+      "calendar-digest-more": "+{count} altro",
+      "calendar-digest-title": "Tutto il giorno oggi",
       "calendar-google-connect-browser-failed": "Impossibile avviare un browser per l'autorizzazione Google. Controlla il browser predefinito o la configurazione di xdg-open.",
       "calendar-google-connect-credential-store-failed": "Autorizzazione completata, ma non è stato possibile salvare il token di aggiornamento. Sblocca o avvia il Secret Service, quindi connettiti di nuovo.",
       "calendar-google-connect-expired": "L'autorizzazione Google è scaduta prima del completamento dell'accesso. Avvia di nuovo la connessione.",
@@ -853,6 +856,13 @@
       "calendar-google-connect-start-failed": "Impossibile avviare l'autorizzazione Google. Controlla la connessione di rete e riprova.",
       "calendar-google-connect-start-http": "Impossibile avviare l'autorizzazione Google. Il broker OAuth ha restituito HTTP {status}.",
       "calendar-google-connect-timeout": "Autorizzazione Google scaduta. Avvia di nuovo la connessione quando sei pronto ad accedere.",
+      "calendar-reminder-catchup-body": "{count} altri eventi inizieranno presto.",
+      "calendar-reminder-catchup-title": "Altri eventi in programma",
+      "calendar-reminder-in": "Inizia tra {minutes} min · {time}",
+      "calendar-reminder-now": "Inizia ora · {time}",
+      "calendar-reminder-open": "Apri",
+      "calendar-reminder-untitled": "Evento senza titolo",
+      "calendar-reminder-with-location": "{when}\n{location}",
       "config-migration-body": "Aggiorna {path} nel source file. Noctalia applica questa sostituzione solo temporaneamente. Esegui noctalia config validate per elencare tutte le modifiche richieste.",
       "config-migration-title": "È necessario l'aggiornamento della configurazione",
       "dbus-disabled": "Notifiche DBus disabilitate",
@@ -1295,7 +1305,8 @@
         "borders": "Bordi",
         "brightness": "Luminosità",
         "built-in": "Integrato",
-        "calendar": "Calendario",
+        "calendar-accounts": "Account",
+        "calendar-reminders": "Promemoria",
         "capsules": "Capsule",
         "clipboard": "Appunti",
         "community": "Community",
@@ -1366,6 +1377,7 @@
         "appearance": "Aspetto",
         "backdrop": "Sfondo pannelli",
         "bar": "Barra",
+        "calendar": "Calendario",
         "control-center": "Centro di controllo",
         "desktop": "Desktop",
         "dock": "Dock",
@@ -1482,6 +1494,16 @@
         "overlay": "Overlay",
         "top": "In alto"
       },
+      "lockscreen": {
+        "transition": {
+          "disc": "Disco",
+          "fade": "Dissolvenza",
+          "honeycomb": "Nido d'ape",
+          "stripes": "Strisce",
+          "wipe": "Wipe",
+          "zoom": "Zoom"
+        }
+      },
       "notification-urgency": {
         "critical": "Critica",
         "low": "Bassa",
@@ -1540,6 +1562,10 @@
           "up": "In alto",
           "up-left": "In alto a sinistra",
           "up-right": "In alto a destra"
+        },
+        "window-switcher-style": {
+          "carousel": "Carosello",
+          "compact": "Compatto"
         }
       },
       "theme": {
@@ -2306,6 +2332,10 @@
           "description": "Usa un'istantanea del desktop come sfondo del blocco schermo",
           "label": "Cattura desktop"
         },
+        "edge-smoothness": {
+          "description": "Sfumatura dei bordi di transizione della schermata di blocco",
+          "label": "Fluidità transizione"
+        },
         "enabled": {
           "description": "Abilita il blocco della sessione, l'integrazione con logind e le azioni di blocco",
           "label": "Blocco schermo"
@@ -2325,6 +2355,14 @@
         "tint-intensity": {
           "description": "Tinta del colore superficie sopra lo sfondo del blocco schermo",
           "label": "Intensità tinta"
+        },
+        "transition-duration": {
+          "description": "Durata delle animazioni di blocco e sblocco in millisecondi",
+          "label": "Durata della transizione"
+        },
+        "transitions": {
+          "description": "Effetti disponibili durante il blocco e lo sblocco (ne viene scelto uno a caso)",
+          "label": "Effetti di transizione"
         },
         "wallpaper": {
           "description": "Immagine personalizzata per lo sfondo del blocco schermo; lascia vuoto per usare lo sfondo del desktop",
@@ -2690,6 +2728,10 @@
           "description-unavailable": "Nessun provider di Secret Service è disponibile in questa sessione",
           "label": "Archiviazione delle credenziali del calendario"
         },
+        "calendar-digest-time": {
+          "description": "Orario per la visualizzazione di una singola notifica con l'elenco degli eventi che si verificano durante la giornata. Lasciare vuoto per disattivare la notifica.",
+          "label": "Riassunto della giornata"
+        },
         "calendar-edit": {
           "button": "Modifica",
           "button-reconnect": "Riconnetti",
@@ -2709,6 +2751,18 @@
         "calendar-refresh-interval": {
           "description": "Frequenza di sincronizzazione degli eventi calendario (minuti)",
           "label": "Intervallo aggiornamento"
+        },
+        "calendar-reminder-lead": {
+          "description": "Con quanto anticipo avvisare per eventi che non generano un promemoria automatico.",
+          "label": "Promemoria predefinito"
+        },
+        "calendar-reminder-use-event": {
+          "description": "Rispetta i promemoria impostati per ogni evento. Se disattivato, tutti gli eventi utilizzeranno il tempo di preavviso predefinito.",
+          "label": "Utilizza i promemoria degli eventi"
+        },
+        "calendar-reminders": {
+          "description": "Avvisa prima dell'inizio di un evento.",
+          "label": "Promemoria del calendario"
         },
         "calendar-storage": {
           "button": "Riprova",
@@ -2785,6 +2839,11 @@
         "shell-sounds": {
           "description": "Riproduci effetti sonori per gli eventi della shell",
           "label": "Suoni shell"
+        },
+        "sound-theme": {
+          "default": "Default",
+          "description": "Tema sonoro utilizzato per gli effetti sonori della shell",
+          "label": "Tema sonoro"
         },
         "sound-volume": {
           "description": "Volume per gli effetti sonori della shell",
@@ -3199,6 +3258,10 @@
           "description": "Copia e salva nella zona di sovrapposizione, il salvataggio avviene immediatamente; Invio e Spazio aprono comunque l'editor.",
           "label": "Salta l'editor quando copi o salvi"
         },
+        "settings-expand-all-groups": {
+          "description": "Espandi tutti i gruppi di impostazioni anziché solo il primo in ogni pagina",
+          "label": "Espandi tutti i gruppi di impostazioni"
+        },
         "settings-window-translucent": {
           "description": "Rendi traslucido lo sfondo delle Impostazioni per gli effetti del compositor",
           "label": "Impostazioni Sfondo traslucido"
@@ -3224,9 +3287,33 @@
           "description": "Apri il launcher mentre digiti in nella Overview di Umbriel; utilizza una piccola area di focus della tastiera mentre l'Overview è aperta",
           "label": "Digita per avviare"
         },
+        "window-switcher-current-workspace-only": {
+          "description": "Elenca solo le finestre dell'area di lavoro attiva; disattiva questa opzione per includere le finestre di tutte le aree di lavoro",
+          "label": "Solo l'area di lavoro corrente"
+        },
         "window-switcher-mru": {
           "description": "Nello switcher di finestre queste vengono ordinate in base all'utilizzo più recente, anziché in base all'area di lavoro e al layout dello schermo.",
           "label": "Ordina per più recenti"
+        },
+        "window-switcher-show-all-outputs": {
+          "description": "Elenca le finestre di tutti i monitor; disattiva questa opzione per visualizzare solo le finestre sul monitor che mostra lo switcher",
+          "label": "Mostra tutti i monitor"
+        },
+        "window-switcher-show-app-icon": {
+          "description": "Mostra l'icona di ciascuna applicazione sopra l'anteprima della finestra.",
+          "label": "Mostra l'icona dell'applicazione"
+        },
+        "window-switcher-show-caption": {
+          "description": "Mostra i titoli delle finestre e i nomi delle applicazioni sotto le rispettive anteprime.",
+          "label": "Mostra caption"
+        },
+        "window-switcher-show-count": {
+          "description": "Mostra la posizione corrente e il numero totale di finestre sopra le anteprime",
+          "label": "Mostra il numero di finestre"
+        },
+        "window-switcher-style": {
+          "description": "Scegli tra il carosello a profondità libera o la striscia compatta in scatola.",
+          "label": "Stile switcher"
         }
       },
       "system": {
@@ -4436,6 +4523,10 @@
           "description": "Mostra valore attuale della temperatura",
           "label": "Mostra temperatura"
         },
+        "show-tooltip": {
+          "description": "Mostra il nome completo di un'area di lavoro al passaggio del mouse quando il suo riquadro non lo visualizza già",
+          "label": "Mostra nome nel suggerimento"
+        },
         "show-unlock-hint": {
           "description": "Mostra la scheda di stato sopra la casella di accesso per avvisi di sblocco e prompt di autenticazione; errori e avviso di capslock attivo verranno comunque visualizzati quando questo è disattivato",
           "label": "Sblocca avvisi"
@@ -4451,6 +4542,10 @@
         "show-when-idle": {
           "description": "Mantiene visibile il visualizzatore anche quando nessun media è in riproduzione",
           "label": "Mostra quando inattivo"
+        },
+        "show-when-unavailable": {
+          "description": "Mantieni visibile il widget di regolazione della luminosità quando questo monitor non dispone di un controllo della luminosità.",
+          "label": "Mostra quando non disponibile"
         },
         "show-window-title": {
           "description": "Mostra il titolo della finestra accanto alla sua icona (solo su barre orizzontali)",
@@ -4585,6 +4680,7 @@
       "no-results-hint": "Prova un nome impostazione o una chiave configurazione diversa.",
       "offline-mode-notice": {
         "appearance": "I download delle palette della comunità non funzioneranno.",
+        "calendar": "La sincronizzazione dell'account del calendario non funzionerà.",
         "calendar-account": "Il rilevamento e la sincronizzazione del calendario non funzioneranno.",
         "disable-hint": "Disattiva la modalità offline nella sezione Sicurezza.",
         "launcher": "Il recupero del tasso di cambio valuta non funzionerà.",
@@ -4592,7 +4688,6 @@
         "plugin-store": "Il catalogo dei plugin remoti e le richieste di download non funzioneranno.",
         "plugins": "Le richieste HTTP dei plugin non funzioneranno. Le origini Git possono ancora essere aggiornate.",
         "security": "La ricerca dell'IP esterno e la telemetria non funzioneranno.",
-        "services": "La sincronizzazione dell'account del calendario non funzionerà.",
         "template-store": "I download dei template della community non funzioneranno.",
         "templates": "I download e gli aggiornamenti dei template della community non funzioneranno.",
         "title": "Modalità offline"
@@ -4736,7 +4831,9 @@
       "choose-color": "Scegli il colore dello sfondo",
       "close": "Chiudi il pannello sfondi",
       "color-title": "Colore sfondo",
+      "favorite-add": "Aggiungi ai preferiti",
       "favorite-current": "Aggiungi lo sfondo corrente ai preferiti",
+      "favorite-remove": "Rimuovi dai preferiti",
       "filter-placeholder": "Filtra...",
       "flatten": "Appiattisci",
       "loading": "Caricamento sfondi...",
@@ -4786,6 +4883,8 @@
     }
   },
   "window-switcher": {
+    "count": "{count} finestra",
+    "count-plural": "{count} finestre",
     "empty": "Nessuna finestra aperta",
     "hint": "Tab · Shift+Tab · Tasti freccia · Rilascia Alt per cambiare · Esc per annullare",
     "title": "Finestre"

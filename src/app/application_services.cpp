@@ -538,6 +538,14 @@ void Application::initServices() {
   );
   m_secretStore.retryAvailabilityCheck();
   initStyleThemeAndWayland();
+  // initStyleThemeAndWayland() initialized i18n, so the early session bus failure
+  // can now be reported with a translated message.
+  if (m_earlySessionBusError.has_value()) {
+    m_notificationManager.addInternal(
+        "Noctalia", i18n::tr("notifications.internal.session-bus-unavailable"), *m_earlySessionBusError, Urgency::Low
+    );
+    m_earlySessionBusError.reset();
+  }
   initWaylandCallbacks();
   initAuxServicesAndHooks();
   initSystemBusServices();
@@ -1218,7 +1226,9 @@ void Application::initSystemBusServices() {
 
     try {
       m_upowerService = std::make_unique<UPowerService>(*m_systemBus);
-      m_batteryHookState.reset(m_upowerService->state());
+      const auto& initialPower = m_upowerService->state();
+      m_batteryHookState.reset(initialPower);
+      m_prevBatteryPluggedForEvents = initialPower.isPresent ? batteryStatePlugged(initialPower.state) : std::nullopt;
       m_batteryWarningMonitor.evaluate(m_configService.config().battery, *m_upowerService, m_notificationManager);
       m_upowerService->setChangeCallback([this, shouldRefreshControlCenter](const UPowerChange& change) {
         if (change.origin != UPowerService::ChangeOrigin::DeviceState) {
@@ -1512,18 +1522,34 @@ void Application::initBrightnessAndPipewire() {
   });
 }
 
-void Application::initSessionBusServices() {
-  auto shouldRefreshControlCenter = [this]() { return m_panelManager.isOpenPanel("control-center"); };
-
+void Application::initEarlySessionBusAndTray() {
   try {
     m_bus = std::make_unique<SessionBus>();
     kLog.info("connected to session bus");
   } catch (const std::exception& e) {
+    // i18n is initialized later, in initStyleThemeAndWayland(), so hold the reason
+    // and report it once translations are available.
     kLog.warn("dbus disabled: {}", e.what());
-    m_notificationManager.addInternal(
-        "Noctalia", i18n::tr("notifications.internal.session-bus-unavailable"), e.what(), Urgency::Low
-    );
+    m_earlySessionBusError = std::string(e.what());
+    return;
   }
+
+  m_trayService = std::make_unique<TrayService>(*m_bus);
+  m_trayService->setChangeCallback([this]() {
+    m_bar.refresh();
+    m_trayMenu.onTrayChanged();
+    m_keyboardLayoutOsd.onTrayChanged(
+        *m_trayService, m_configService.config(), m_configService.config().osd.kinds.keyboardLayout
+    );
+  });
+  m_trayService->setMenuToggleCallback([this](const std::string& itemId, float contentScale) {
+    m_trayMenu.toggleForItem(itemId, contentScale);
+  });
+  startTrayService();
+}
+
+void Application::initSessionBusServices() {
+  auto shouldRefreshControlCenter = [this]() { return m_panelManager.isOpenPanel("control-center"); };
 
   if (m_bus != nullptr) {
     try {
@@ -1573,23 +1599,28 @@ void Application::initSessionBusServices() {
     installSecretServiceCollectionWatch();
 
     m_compositorPlatform.startKdeActiveWindow(*m_bus);
-
-    m_trayService = std::make_unique<TrayService>(*m_bus);
-    m_trayService->setChangeCallback([this]() {
-      m_bar.refresh();
-      m_trayMenu.onTrayChanged();
-      m_keyboardLayoutOsd.onTrayChanged(
-          *m_trayService, m_configService.config(), m_configService.config().osd.kinds.keyboardLayout
-      );
-    });
-    m_trayService->setMenuToggleCallback([this](const std::string& itemId, float contentScale) {
-      m_trayMenu.toggleForItem(itemId, contentScale);
-    });
   }
 
   m_locationService.initialize();
   m_weatherService.initialize();
   m_calendarService.initialize();
+
+  // Load the persisted fired set before the first evaluation, or a restart would re-notify.
+  m_calendarReminderMonitor.initialize();
+  (void)m_calendarService.addChangeCallback([this]() {
+    m_calendarReminderMonitor.onSnapshotChanged(m_calendarService.snapshot());
+  });
+  // initialize() already loaded the encrypted cache, so the snapshot can be valid before the first
+  // network sync; seed from it so missed reminders fire at startup rather than after a refresh.
+  m_calendarReminderMonitor.onSnapshotChanged(m_calendarService.snapshot());
+  m_configService.addReloadCallback(
+      [this]() {
+        if (m_configService.lastChange().calendar) {
+          m_calendarReminderMonitor.onConfigReload();
+        }
+      },
+      "calendar-reminders"
+  );
 
   // LocationService is the single source of "where am I": push its resolved coordinates to the
   // weather service, night light, and theme auto mode. Manual latitude/longitude and fixed

@@ -24,7 +24,6 @@ v5 is already packaged for:
 - openSUSE
 - KaOS
 - Gentoo
-- Void Linux
 - GNU Guix
 - Debian (including Ubuntu)
 

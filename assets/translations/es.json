@@ -5,11 +5,11 @@
       "error": "Error de autenticación de huella dactilar",
       "no-match": "La huella no coincide",
       "not-centered": "Centra tu dedo e intenta de nuevo",
-      "present": "Leyendo huella...",
+      "present": "Leyendo huella…",
       "ready": "Situa tu dedo en el lector",
       "remove-and-retry": "Retira tu dedo y prueba de nuevo",
       "retry": "Por favor escanea tu huella de nuevo",
-      "swipe-too-short": "El deslizamiento fue demasiado corto, inténtalo de nuevo",
+      "swipe-too-short": "El gesto fue demasiado corto, inténtalo de nuevo",
       "too-many-attempts": "Lector de huellas deshabilitado (demasiados intentos)"
     },
     "pam": {
@@ -19,7 +19,7 @@
     },
     "polkit": {
       "authenticate": "Autenticar",
-      "authenticating": "Autenticando...",
+      "authenticating": "Autenticando…",
       "default-message": "Autenticación requerida",
       "invalid-password": "Contraseña incorrecta",
       "password-placeholder": "Contraseña",
@@ -40,9 +40,9 @@
       "color-yellow": "Amarillo",
       "copy": "Copia la imagen anotada (Ctrl+C)",
       "cursor": "Mostrar el puntero capturado con la pantalla (p)",
-      "cursor-capture-failed": "Cambio de puntero no disponible: el compositor no pudo proporcionar una imagen de cursor separada.",
+      "cursor-capture-failed": "Cambio de puntero no disponible: el compositor no pudo proporcionar una imagen de cursor separada",
       "cursor-live": "Congele primero la pantalla para cambiar el puntero capturado (F).",
-      "cursor-not-captured": "Alternado del puntero no disponible: este compositor no admite la captura separada del cursor.",
+      "cursor-not-captured": "Alternado del puntero no disponible: este compositor no admite la captura separada del cursor",
       "done": "Aplicar la configuración de captura de pantalla (Enter)",
       "fill-off": "Relleno forma: off",
       "fill-on": "Relleno forma: on",
@@ -164,7 +164,7 @@
       "weather": {
         "default": "Clima",
         "error": "Error del Clima",
-        "loading": "Clima...",
+        "loading": "Clima…",
         "no-location": "Sin ubicación",
         "off": "Clima apagado",
         "tooltip": {
@@ -190,7 +190,7 @@
     },
     "confirm": {
       "clear-desc": "Elegir si los elementos fijados deben mantenerse.",
-      "clear-desc-all-pinned": "Todas las entradas estan fijadas. Use Borrar todo para eliminarlas todas.",
+      "clear-desc-all-pinned": "Todas las entradas están fijadas. Usa Borrar todo para eliminarlas todas.",
       "clear-desc-no-pinned": "Esto elimina todas las entradas del portapapeles.",
       "clear-title": "¿Borrar el historial del portapepeles?",
       "delete-desc": "Esto elimina el elemento seleccionado del historial del portapapeles.",
@@ -206,13 +206,13 @@
       "image": "Imagen",
       "title": "Entrada del portapapeles"
     },
-    "filter-placeholder": "Filtrar el portapapeles...",
+    "filter-placeholder": "Filtrar portapapeles…",
     "preview": {
       "empty-text-payload": "Contenido sin texto",
       "image-title": "Entrada de Imagen en el portapapeles",
-      "loading": "Cargando vista previa...",
-      "text-title": "Entrada de Texto en el Portapapeles",
-      "truncated": "... truncado"
+      "loading": "Cargando vista previa…",
+      "text-title": "Entrada de texto en el portapapeles",
+      "truncated": "… truncado"
     },
     "title": "Portapapeles"
   },
@@ -241,7 +241,7 @@
       "no-input-devices-body": "No hay ningún dispositivo de grabación disponible en este momento.",
       "no-input-selected": "Dispositivo de entrada no seleccionado",
       "no-output-devices": "No hay dispositivos de salida",
-      "no-output-devices-body": "Sin audio disponible",
+      "no-output-devices-body": "No hay ningún dispositivo de salida disponible en este momento.",
       "no-output-selected": "No se ha seleccionado ningún dispositivo de salida",
       "output-device-prefix": "Salida",
       "unavailable-body": "PipeWire no está activado.",
@@ -249,7 +249,7 @@
     },
     "bluetooth": {
       "accept": "Aceptar",
-      "address": "Direccion",
+      "address": "Dirección",
       "auto-reconnect": "Reconectar automáticamente",
       "bluetooth": "Bluetooth",
       "enter-code": "Ingrese el código",
@@ -257,16 +257,16 @@
       "off": "Bluetooth apagado",
       "pair-title": "Emparejar con {device}",
       "pairing-detail": {
-        "authorize": "Aceptas la solicitud de emparejamiento entrante?",
-        "authorize-service": "Permitir acceso al servicio {uuid}?",
+        "authorize": "¿Aceptas la solicitud de emparejamiento entrante?",
+        "authorize-service": "¿Permitir acceso al servicio {uuid}?",
         "confirm": "Verifica que este código coincida con el que aparece en el dispositivo:",
-        "display-passkey": "Ingresa este código en el dispositivo:",
-        "display-pin": "Ingresa este PIN en el dispositivo:",
+        "display-passkey": "Introduce este código en el dispositivo:",
+        "display-pin": "Introduce este PIN en el dispositivo:",
         "passkey": "Introduce la clave de acceso que aparece en el dispositivo:",
         "pin-code": "Introduce el PIN que aparece en el dispositivo:"
       },
       "reject": "Rechazar",
-      "rfkill-blocked": "El sistema ha bloqueado el Bluetooth. Actívalo para remover el bloqueo.",
+      "rfkill-blocked": "El sistema ha bloqueado el Bluetooth. Actívalo para quitar el bloqueo.",
       "sections": {
         "available": "Disponible",
         "connected": "Conectado",
@@ -281,7 +281,7 @@
       "events": "Eventos",
       "no-events": "No hay eventos.",
       "today": "Hoy",
-      "toggle-events-card": "Alternar Eventos"
+      "toggle-events-card": "Alternar tarjeta de eventos"
     },
     "display": {
       "disabled": "Deshabilitado",
@@ -306,9 +306,9 @@
       "unknown": "Desconocido",
       "uptime": "Tiempo de actividad – {uptime}",
       "weather": {
-        "data-unavailable": "Datos meteorológicos no disponibles",
-        "disabled": "Clima deshabilitado en la configuracion.",
-        "fetching": "Cargando pronóstico..."
+        "data-unavailable": "Datos meteorológicos no disponibles.",
+        "disabled": "Clima deshabilitado en la configuración.",
+        "fetching": "Cargando pronóstico…"
       }
     },
     "media": {
@@ -323,7 +323,7 @@
       "ca-certificate": "Ruta del certificado de CA (opcional)",
       "cellular": "Celular ",
       "cellular-connected": "Conectado",
-      "cellular-connecting": "Conectando...",
+      "cellular-connecting": "Conectando…",
       "cellular-connection": "Conexión móvil",
       "cellular-enabling": "Encendiendo…",
       "cellular-failed": "Fallido",
@@ -352,8 +352,8 @@
       "password-prompt-for": "Introduzca contraseña para {ssid}",
       "phase2-auth": "Autenticación interna",
       "saved": "Guardadas",
-      "unavailable-detail": "Instala y habilita tu servicio de red para gestionar redes desde allí",
-      "unavailable-title": "Servicio de Red no disponible",
+      "unavailable-detail": "Instala y habilita NetworkManager, wpa_supplicant o iwd para gestionar redes desde aquí.",
+      "unavailable-title": "Servicio de red no disponible",
       "vpns": "VPNs",
       "wi-fi": "Wi-Fi",
       "wifi": "Wi-Fi",
@@ -365,7 +365,7 @@
       "clear-all": "Borrar todas las notificaciones",
       "dnd-off": "Desactivar No molestar",
       "dnd-on": "Activar No molestar",
-      "empty-body": "Las notificaciones recientes se mostrarán aquí",
+      "empty-body": "Las notificaciones recientes se mostrarán aquí.",
       "empty-title": "Sin notificaciones",
       "filter": {
         "all": "Todo",
@@ -373,7 +373,7 @@
         "today": "Hoy",
         "yesterday": "Ayer"
       },
-      "filter-empty-body": "Ninguna notificación cumple este filtro",
+      "filter-empty-body": "Ninguna notificación coincide con este filtro.",
       "filter-empty-title": "No hay nada aquí",
       "untitled": "Notificación sin título"
     },
@@ -495,7 +495,7 @@
       },
       "data-unavailable": "Datos meteorológicos no disponibles",
       "details": {
-        "elevation": "Elevacion",
+        "elevation": "Elevación",
         "feels-like": "Sensación térmica",
         "sunrise": "Amanecer",
         "sunset": "Atardecer",
@@ -506,7 +506,7 @@
         "wind": "Viento"
       },
       "disabled": "Habilita [weather] en config.toml",
-      "fetching": "Obteniendo pronóstico...",
+      "fetching": "Obteniendo pronóstico…",
       "forecast-placeholder": {
         "day": "Domingo",
         "description": "Clima",
@@ -528,7 +528,7 @@
       "location-unavailable": "Ubicación no disponible",
       "no-location-body": "Añade tu dirección o activa la localización automática en la configuración de ubicación.",
       "no-location-title": "Ubicación no establecida",
-      "refreshing": "Actualizando clima...",
+      "refreshing": "Actualizando clima…",
       "waiting": "Esperando por la información del Clima"
     }
   },
@@ -564,7 +564,7 @@
         "center-password-text": "Centrar el texto de la contraseña",
         "center-text": "Centrar texto",
         "centered": "Centrado",
-        "change-image": "Cambiar...",
+        "change-image": "Cambiar…",
         "circle": "Circulo",
         "clock-style": "Estilo del reloj",
         "clock-style-analog": "Análogo",
@@ -626,7 +626,7 @@
         "show-login-button": "Botón de login",
         "show-media": "Media",
         "show-password-hint": "Sugerencia de contraseña",
-        "show-session-buttons": "Botones de sesion",
+        "show-session-buttons": "Botones de sesión",
         "show-unlock-hint": "Sugerencia desbloqueo",
         "show-vpn-label": "Mostrar etiqueta VPN",
         "show-weather": "Tiempo",
@@ -696,7 +696,7 @@
     },
     "weather": {
       "error": "Error",
-      "loading": "Cargando...",
+      "loading": "Cargando…",
       "no-location": "Sin ubicación",
       "off": "Clima apagado"
     }
@@ -748,9 +748,9 @@
       "unpin-from-dock": "Desanclar del Dock"
     },
     "empty": {
-      "loading": "Cargando resultados...",
-      "no-results": "No se han encontrado resultados.",
-      "type-to-search": "Escribe para buscar..."
+      "loading": "Cargando resultados…",
+      "no-results": "No se han encontrado resultados",
+      "type-to-search": "Escribe para buscar…"
     },
     "origins": {
       "appimage": "AppImage",
@@ -796,7 +796,7 @@
         "title": "Ventanas"
       }
     },
-    "search-placeholder": "Buscar aplicaciones..."
+    "search-placeholder": "Buscar aplicaciones…"
   },
   "location": {
     "errors": {
@@ -815,23 +815,23 @@
     }
   },
   "lockscreen": {
-    "authenticating": "Autenticando...",
+    "authenticating": "Autenticando…",
     "authentication-failed": "Autenticación fallida",
     "caps-lock-on": "Bloq Mayús está activado",
     "password-cleared": "Contraseña eliminada",
     "password-placeholder": "Contraseña",
     "ready": "Ingrese su contraseña y presione Enter.",
     "unlocked": "Desbloqueado",
-    "waiting": "Esperando confirmacion de bloqueo..."
+    "waiting": "Esperando confirmación de bloqueo…"
   },
   "notifications": {
     "actions": {
-      "fallback": "Accion",
+      "fallback": "Acción",
       "open": "Abrir"
     },
     "inline-reply": {
       "button": "Responder",
-      "placeholder": "Escribe una respuesta..."
+      "placeholder": "Escribe una respuesta…"
     },
     "internal": {
       "battery": "Bateria",
@@ -844,7 +844,7 @@
       "calendar-credential-locked-body": "Desbloquea el keyring utilizado por el Servicio Secreto y, a continuación, vuelve a intentarlo en la configuración. En GNOME Keyring, establece como predeterminado un llavero que se desbloquee automáticamente, como el de «Inicio de sesión» (Login).",
       "calendar-credential-locked-title": "El keyring del calendario está bloqueado",
       "calendar-google-connect-browser-failed": "No se pudo iniciar ningún navegador para la autorización de Google. Compruebe su navegador predeterminado o la configuración de xdg-open.",
-      "calendar-google-connect-credential-store-failed": "Autorizacion completada, pero el nuevo token no se puede guardar. Desbloquea o inicia el Almacen de Credenciales, y luego conecta de nuevo.",
+      "calendar-google-connect-credential-store-failed": "Autorización completada, pero el nuevo token no se puede guardar. Desbloquea o inicia el Almacén de Credenciales, y luego conecta de nuevo.",
       "calendar-google-connect-expired": "La autorización de Google caducó antes de que finalizara el inicio de sesión. Vuelva a iniciar la conexión.",
       "calendar-google-connect-failed-title": "Conexion fallida con Google Calendar",
       "calendar-google-connect-missing-account": "Ninguna cuenta de Google Calendar configurada coincide con «{account}».",
@@ -854,7 +854,7 @@
       "calendar-google-connect-start-http": "No se pudo iniciar la autorización de Google. El intermediario de OAuth devolvió HTTP {status}.",
       "calendar-google-connect-timeout": "La autorización de Google expiró. Inicie la conexión nuevamente cuando esté listo para iniciar sesión.",
       "config-migration-body": "Actualiza {path} en el archivo de origen. Noctalia está aplicando este reemplazo solo temporalmente. Ejecuta noctalia config validate para listar todos los cambios necesarios.",
-      "config-migration-title": "Se necesita actualizar configuracion",
+      "config-migration-title": "Se necesita actualizar configuración",
       "dbus-disabled": "Notificaciones DBus deshabilitada",
       "desktop-widgets-editor": "Editor de Widget",
       "desktop-widgets-editor-enabled": "El editor de widgets de escritorio está activado. Cambie a un espacio de trabajo vacío para que las ventanas abiertas no tapen el editor.",
@@ -983,7 +983,7 @@
       "suspend": "Suspender"
     },
     "errors": {
-      "lock-body": "El protocolo de bloqueo de sesión no está disponible",
+      "lock-body": "El protocolo de bloqueo de sesión no está disponible.",
       "lock-title": "Bloqueo no disponible"
     }
   },
@@ -1006,8 +1006,8 @@
       "calendars-label": "Calendarios",
       "color-label": "Color",
       "credential-source-file": "Archivo de contraseña",
-      "credential-source-keyring": "Almacen de claves",
-      "credential-source-label": "Almacen de credenciales",
+      "credential-source-keyring": "Almacén de claves",
+      "credential-source-label": "Almacén de credenciales",
       "delete-error": "No se pudo eliminar la cuenta de calendario.",
       "edit-title": "Modificar Cuenta de Calendario",
       "ics-url-label": "URL de ICS",
@@ -1032,11 +1032,11 @@
       "save": "Guardar",
       "save-connect": "Guardar y Conectar",
       "save-error": "No se pudo guardar la cuenta de calendario.",
-      "secret-cleanup-error": "La cuenta no se puede guardar, y su credencial no se puede restaurar ni borrar. Reintentalo despues de desbloquear el Almacen de Credenciales",
-      "secret-service-cancelled": "El prompt del Almacen de Credenciales se ha cancelado. Reintentalo de nuevo cuando estes preparado para desbloquearlo.",
-      "secret-service-error": "No se puede acceder a las credenciales del Calendario en el Almacen de Credenciales. Reintenta de nuevo.",
-      "secret-service-locked": "Las credenciales del Calendario estan bloqueadas o se denego el acceso. Desbloquea el Almacen de Credenciales y reintentalo.",
-      "secret-service-unavailable": "No hay Almacen de Credenciales disponible. Inicia / instala Gnome-keyring, kwallet o keepassXC para reintentarlo",
+      "secret-cleanup-error": "La cuenta no se puede guardar, y su credencial no se puede restaurar ni borrar. Reinténtalo después de desbloquear el Almacén de Credenciales.",
+      "secret-service-cancelled": "El prompt del Almacén de Credenciales se ha cancelado. Reinténtalo de nuevo cuando estés preparado para desbloquearlo.",
+      "secret-service-error": "No se puede acceder a las credenciales del Calendario en el Almacén de Credenciales. Reintenta de nuevo.",
+      "secret-service-locked": "Las credenciales del Calendario están bloqueadas o se denegó el acceso. Desbloquea el Almacén de Credenciales y reinténtalo.",
+      "secret-service-unavailable": "No hay ningún proveedor de Servicio de secretos disponible. Inicia un proveedor compatible y vuelve a intentarlo.",
       "server-url-label": "URL del Servidor",
       "username-label": "Nombre de Usuario",
       "username-placeholder": "nombre@ejemplo.com",
@@ -1044,12 +1044,12 @@
     },
     "controls": {
       "keybind": {
-        "add": "Clic para añadir una combinacion",
-        "recording-placeholder": "Presione una combinación de teclas.",
+        "add": "Clic para añadir una combinación",
+        "recording-placeholder": "Presiona una combinación de teclas…",
         "unset-placeholder": "Haz clic para asignar…"
       },
       "list": {
-        "add-entry-placeholder": "Agregar entrada..."
+        "add-entry-placeholder": "Agregar entrada…"
       },
       "path-browse": {
         "file-title": "Seleccione archivo",
@@ -1068,7 +1068,7 @@
       "bar": {
         "create": "Crear",
         "delete": "Eliminar",
-        "delete-confirm-desc": "Esta barra creada por la interfaz sera eliminada de settings.toml.",
+        "delete-confirm-desc": "Esta barra creada por la interfaz será eliminada de settings.toml.",
         "delete-confirm-title": "Eliminar \"{name}\"?",
         "id-placeholder": "ID de Barra",
         "label": "Barra: {name}",
@@ -1083,9 +1083,9 @@
         "create": "Crear",
         "custom": "Personalizado",
         "delete": "Eliminar",
-        "delete-confirm-desc": "Este monitor de sobreescritura creado en el interfaz grafico sera eliminado de settings.toml.",
+        "delete-confirm-desc": "Este monitor de sobreescritura creado en el interfaz gráfico será eliminado de settings.toml.",
         "delete-confirm-title": "Eliminar \"{name}\"?",
-        "exists": "Ya existe una anulación para este monitor",
+        "exists": "Ya existe una anulación para este monitor.",
         "label": "Monitor: {name}",
         "management": "Sobrescribir Monitor",
         "match-placeholder": "Coincidencia de monitor",
@@ -1151,7 +1151,7 @@
           "style": "Estilo",
           "title": "Grupo de cápsulas",
           "ungroup": "Desagrupar",
-          "widget-spacing": "Separacion",
+          "widget-spacing": "Separación",
           "widget-spacing-description": "Espacio entre los widgets de este grupo, en píxeles; «Auto» hereda el espaciado de widgets de la barra"
         },
         "inspector": {
@@ -1182,7 +1182,7 @@
           "empty": "No se encontraron widgets",
           "instance-description": "Widget con nombre para el tipo \"{type}\"",
           "instance-toggle": "Widget con nombre",
-          "placeholder": "Buscar widgets..."
+          "placeholder": "Buscar widgets…"
         },
         "raw": {
           "delete": "Eliminar",
@@ -1251,7 +1251,7 @@
       "merged-user-description": "Combina los archivos de configuración y las anulaciones de la GUI en un único archivo TOML. Los valores predeterminados integrados permanecen implícitos.",
       "merged-user-save-title": "Guardar configuración de usuario combinada",
       "merged-user-title": "Configuración de usuario combinada (recomendado)",
-      "title": "Exportar Configuracion"
+      "title": "Exportar Configuración"
     },
     "idle": {
       "behavior": {
@@ -1265,7 +1265,7 @@
           "screen-off": "Apagar pantalla",
           "suspend": "Suspender"
         },
-        "kind-section-label": "Accion",
+        "kind-section-label": "Acción",
         "locked-timeout-label": "Tiempo de espera mientras está bloqueado (segundos, 0 = apagado)",
         "name-label": "Nombre",
         "name-placeholder": "idle-behavior",
@@ -1286,8 +1286,8 @@
       "groups": {
         "accessibility": "Accesibilidad",
         "audio": "Sonido",
-        "authentication": "Autenticacion",
-        "automation": "Automatizacion",
+        "authentication": "Autenticación",
+        "automation": "Automatización",
         "backdrop": "Fondo",
         "background": "Fondo",
         "battery": "Batería",
@@ -1295,7 +1295,6 @@
         "borders": "Bordes",
         "brightness": "Brillo",
         "built-in": "Integrado",
-        "calendar": "Calendario",
         "capsules": "Cápsulas",
         "clipboard": "Portapapeles",
         "community": "Comunidad",
@@ -1372,7 +1371,7 @@
         "hooks": "Hooks",
         "keybinds": "Atajos de teclado",
         "launcher": "Lanzador",
-        "location": "Localizacion",
+        "location": "Localización",
         "niri": "Niri",
         "notifications": "Notificaciones",
         "osd": "OSD",
@@ -1409,7 +1408,7 @@
         "match-content-placeholder": "Patrón de expresión regular para coincidir con el resumen o el cuerpo…",
         "match-label": "Aplicación",
         "match-placeholder": "Nombre de la aplicación, entrada de escritorio o categoría…",
-        "override-duration": "Sobreescribir duracion",
+        "override-duration": "Sobreescribir duración",
         "play-sound": "Reproducir sonido",
         "save-history": "Guardar en el historial",
         "show-toast": "Mostrar notificación emergente",
@@ -1481,6 +1480,16 @@
       "layer": {
         "overlay": "Overlay",
         "top": "Arriba"
+      },
+      "lockscreen": {
+        "transition": {
+          "disc": "Disco",
+          "fade": "Desvanecer",
+          "honeycomb": "Panal de abeja",
+          "stripes": "Rayas",
+          "wipe": "Limpiar",
+          "zoom": "Zoom"
+        }
       },
       "notification-urgency": {
         "critical": "Crítico",
@@ -1617,7 +1626,7 @@
         "delete-confirm-title": "¿Borrar \"{name}\"?",
         "deprecated": "obsoleto",
         "empty": "No hay complementos activados.",
-        "held-back": "version antigua",
+        "held-back": "versión antigua",
         "held-back-hint": "v{version} requiere la API de complementos {required}; esta versión de Noctalia admite hasta la {current}. Actualiza Noctalia para obtenerla.",
         "incompatible-plugin-api": "API de complemento incompatible",
         "remove": "Eliminar complemento",
@@ -1626,7 +1635,7 @@
         "search-placeholder": "Buscar complementos instalados",
         "title": "Complementos",
         "update-all": "Actualizar los ({count})",
-        "update-available": "actualizacion disponible",
+        "update-available": "actualización disponible",
         "update-to": "actualizar a {version}"
       },
       "settings": {
@@ -1667,17 +1676,17 @@
         "categories": "Categorías",
         "category-all": "Todo",
         "empty": "No se encontraron complementos",
-        "held-back": "Version antigua",
+        "held-back": "Versión antigua",
         "held-back-hint": "Instala la versión v{version} para la API de complemento {resolved}. La versión más reciente, v{latest}, requiere la API de plugin {latestRequired}; esta versión de Noctalia admite hasta la {current}.",
         "incompatible": "Incompatible",
         "incompatible-hint": "Requiere la API de complementos {required}; esta versión de Noctalia es compatible con {oldest}–{current}.",
         "installed": "Instalado",
-        "loading": "Cargando catálogo...",
+        "loading": "Cargando catálogo…",
         "no-readme": "No hay descripción disponible.",
-        "open-page": "Abrir la pagina de complementos en noctalia.dev",
+        "open-page": "Abrir la página de complementos en noctalia.dev",
         "open-source": "Abrir repositorio del complemento",
         "results-count": "{count} plugins",
-        "search-placeholder": "Buscar complementos...",
+        "search-placeholder": "Buscar complementos…",
         "sort-added-at-asc": "Ordenar por fecha de incorporación (de la más antigua a la más reciente)",
         "sort-added-at-desc": "Ordenar por fecha de incorporación (los más recientes primero)",
         "sort-name-asc": "Ordenar por nombre (A-Z)",
@@ -1782,7 +1791,7 @@
           "label": "Modo de tema del shell"
         },
         "theme-mode": {
-          "description": "Elige Oscuro, Claro o Automático según la hora del día; también se aplica a las aplicaciones mediante plantillas.",
+          "description": "Elige Oscuro, Claro o Automático según la hora del día; también se aplica a las aplicaciones mediante plantillas",
           "label": "Modo de tema"
         },
         "ui-scale": {
@@ -1913,11 +1922,11 @@
           "label": "Grosor de fuente"
         },
         "hover-highlight": {
-          "description": "Suave decoloracion del widget bajo el puntero del raton con su  propio color de fondo",
+          "description": "Suave decoloración del widget bajo el puntero del ratón con su  propio color de fondo",
           "label": "Destacar al pasar el cursor"
         },
         "layer": {
-          "description": "Utilizar superposición para mostrar la barra encima de las aplicaciones en pantalla completa; los paneles adjuntos siguen a la barra",
+          "description": "Utiliza Overlay para mostrar la barra encima de las aplicaciones a pantalla completa; los paneles adjuntos siguen a la barra",
           "label": "Capa de Wayland"
         },
         "opposite-edge-margin": {
@@ -2052,8 +2061,8 @@
           "label": "Ancho del borde"
         },
         "concave-edge-corners": {
-          "description": "Interior concavo en el lado que toca el limite de pantalla; requiere que el margen del borde de pantalla sea 0",
-          "label": "Esquinas concavas"
+          "description": "Recorta hacia dentro las esquinas del lado que toca el borde de la pantalla; requiere que el margen al borde de la pantalla sea 0",
+          "label": "Esquinas de borde cóncavo"
         },
         "corner-bottom-left": {
           "description": "Radio de la esquina inferior izquierda del dock"
@@ -2306,6 +2315,10 @@
           "description": "Usar una instantánea del escritorio como fondo de la pantalla de bloqueo",
           "label": "Captura de escritorio"
         },
+        "edge-smoothness": {
+          "description": "Difuminado de los bordes de transición de la pantalla de bloqueo",
+          "label": "Suavidad de los bordes de transición"
+        },
         "enabled": {
           "description": "Activar el bloqueo de sesión, la integración con logind y las acciones de bloqueo",
           "label": "Pantalla de bloqueo"
@@ -2325,6 +2338,14 @@
         "tint-intensity": {
           "description": "Tinte de color de superficie sobre el fondo de la pantalla de bloqueo",
           "label": "Intensidad del tinte"
+        },
+        "transition-duration": {
+          "description": "Duración de las animaciones de bloqueo y desbloqueo en milisegundos",
+          "label": "Duración de la transición"
+        },
+        "transitions": {
+          "description": "Efectos disponibles al bloquear y desbloquear (se elige uno al azar)",
+          "label": "Efectos de transición"
         },
         "wallpaper": {
           "description": "Imagen personalizada para el fondo de la pantalla de bloqueo. Deja vacío para usar el fondo de pantalla del escritorio",
@@ -2521,31 +2542,31 @@
         },
         "launcher-prefix-calculator": {
           "description": "Prefijo de activación para cálculos de la calculadora",
-          "label": "Prefijo para Calculadora"
+          "label": "Prefijo de calculadora"
         },
         "launcher-prefix-character": {
-          "description": "Caracter usado para cualquier prefijo (ej: /)",
-          "label": "Caracter usado para todos los prefijos"
+          "description": "Carácter usado para cualquier prefijo (ej: /)",
+          "label": "Carácter usado para todos los prefijos"
         },
         "launcher-prefix-emoji": {
           "description": "Prefijo para activar la busqueda de emoji",
-          "label": "Prefijo para emoji"
+          "label": "Prefijo de emoji"
         },
         "launcher-prefix-panels": {
           "description": "Prefijo de activación para la búsqueda en el panel",
           "label": "Prefijo de paneles"
         },
         "launcher-prefix-session": {
-          "description": "Prefijo para activar las acciones de energia de esta sesion",
-          "label": "Prefijo para la sesion"
+          "description": "Prefijo para activar las acciones de energia de esta sesión",
+          "label": "Prefijo de sesión"
         },
         "launcher-prefix-wallpaper": {
           "description": "Prefijo para activar el selector de fondos de pantalla",
-          "label": "Prefijo para fondos de pantalla"
+          "label": "Prefijo de fondos de pantalla"
         },
         "launcher-prefix-windows": {
           "description": "Prefijo para activar la busqueda de ventanas",
-          "label": "Prefijo para ventanas"
+          "label": "Prefijo de ventanas"
         },
         "launcher-reset-usage": {
           "button": "Restablecer",
@@ -2658,7 +2679,7 @@
           "label": "Plantilla de la rejilla"
         },
         "session-grid-columns": {
-          "description": "Numero de columnas para la disposicion de la rejilla",
+          "description": "Número de columnas para la disposición de la rejilla",
           "label": "Columnas"
         },
         "session-show-shortcuts": {
@@ -2685,7 +2706,7 @@
           "description-cancelled": "La solicitud del Servicio Secreto fue cancelada; inténtelo de nuevo cuando esté listo",
           "description-error": "No se pudo acceder a las credenciales del calendario a través del Servicio Secreto",
           "description-locked": "Las credenciales del calendario están bloqueadas o se denegó el acceso; desbloquee el Servicio Secreto e inténtelo de nuevo",
-          "description-migration": "Las credenciales del calendario en texto plano se moverán al Almacen de credenciales; no se usaran para sincronizar el calendario.",
+          "description-migration": "Las credenciales del calendario en texto plano se moverán al Almacen de credenciales; no se usarán para sincronizar el calendario",
           "description-opening": "Las credenciales del calendario se están abriendo a través del Servicio Secreto",
           "description-unavailable": "No hay ningún proveedor del Servicio Secreto disponible en esta sesión",
           "label": "Almacenamiento de las credenciales del Calendario"
@@ -2696,7 +2717,7 @@
           "button-retry": "Reintentar",
           "description": "Actualizar esta cuenta de calendario",
           "description-locked": "El token de actualización se encuentra en un keyring bloqueado; desbloquee el keyring y vuelva a intentarlo",
-          "description-reconnect": "Se ha perdido la autorizacion de Google. Reconecte esta cuenta."
+          "description-reconnect": "Se ha perdido la autorización de Google; reconecta esta cuenta"
         },
         "calendar-event-date-format": {
           "description": "El formato de fecha que se muestra para los eventos del calendario en las vistas de calendario",
@@ -2718,8 +2739,8 @@
           "description-migration": "La caché de eventos del calendario en texto plano está a la espera de ser cifrada; se conserva hasta que la migración se complete con éxito",
           "description-missing-key": "Falta la clave de caché del evento del calendario; las credenciales de la cuenta utilizan un almacenamiento separado (se han conservado los archivos de caché existentes)",
           "description-opening": "Se está abriendo la caché cifrada de eventos del calendario",
-          "description-recovery": "La cache de eventos del calendario no se puede autenticar o está dañada; reintentar despues de restaurar la key correcta, o reinicie el almacenamiento privado.",
-          "description-unavailable": "No hay ningun Almacen de Credenciales disponible; los eventos del calendario permaneceran disponibles para esta sesion unicamente.",
+          "description-recovery": "La caché de eventos del calendario no se puede autenticar o está dañada; reintenta después de restaurar la key correcta, o reinicia el almacenamiento privado",
+          "description-unavailable": "No hay ningún Almacén de Credenciales disponible; los eventos del calendario permanecerán disponibles para esta sesion únicamente",
           "label": "Almacenamiento de eventos del calendario"
         },
         "calendar-week-numbers": {
@@ -2785,6 +2806,11 @@
         "shell-sounds": {
           "description": "Reproducir efectos de sonido para eventos del shell",
           "label": "Sonidos del shell"
+        },
+        "sound-theme": {
+          "default": "Por defecto",
+          "description": "Tema de sonido utilizado para los efectos de sonido del shell",
+          "label": "Tema de sonido"
         },
         "sound-volume": {
           "description": "Volumen de los efectos de sonido del shell",
@@ -2862,7 +2888,7 @@
         },
         "weather-refresh-interval": {
           "description": "Con qué frecuencia actualizar los datos meteorológicos (minutos)",
-          "label": "Intervalo de actualizacion"
+          "label": "Intervalo de actualización"
         },
         "weather-unit": {
           "description": "Sistema de unidades usado en la pantalla del clima",
@@ -2961,14 +2987,14 @@
         },
         "clipboard-storage": {
           "button": "Reintentar",
-          "description-cancelled": "El Almacen de Credenciales se ha cancelado; el historial del portapapeles permanecera disponible en esta sesion unicamente.",
+          "description-cancelled": "El Almacén de Credenciales se ha cancelado; el historial del portapapeles permanecerá disponible en esta sesión únicamente",
           "description-error": "No se pudo abrir ni guardar el historial cifrado del portapapeles",
           "description-locked": "El almacenamiento de claves del portapapeles está bloqueado o se denegó el acceso; corrija el acceso y vuelva a intentarlo",
           "description-migration": "El historial de texto plano del portapapeles está pendiente de cifrado; los archivos existentes se conservan hasta que la migración se complete con éxito",
           "description-missing-key": "Falta la clave de almacenamiento cifrado configurada; se han conservado los archivos existentes del historial del portapapeles",
           "description-opening": "Se está abriendo el historial cifrado del portapapeles",
-          "description-recovery": "El historial del portapapeles no se puede autenticar o esta dañado; reintentar despues de restaurar la key correcta, o reinicie el almacenamiento privado.",
-          "description-unavailable": "No hay ningun Almacen de Credenciales disponible; el historial del portapapeles permanecera disponible en esta sesion unicamente.",
+          "description-recovery": "El historial del portapapeles no se puede autenticar o esta dañado; reintenta después de restaurar la key correcta, o reinicia el almacenamiento privado",
+          "description-unavailable": "No hay ningún Almacén de Credenciales disponible; el historial del portapapeles permanecerá disponible en esta sesión únicamente",
           "label": "Almacenamiento del historial del portapapeles"
         },
         "date-format": {
@@ -3204,7 +3230,7 @@
           "label": "Configuración de fondo translúcido"
         },
         "show-location": {
-          "description": "Mostrar el nombre de la ubicacion en el widget del pronóstico",
+          "description": "Mostrar el nombre de la ubicación en el widget del pronóstico",
           "label": "Mostrar ubicación"
         },
         "sync-greeter": {
@@ -3749,7 +3775,7 @@
           },
           "taskbar-cycle": {
             "description": "Pase a la tarea o grupo de espacios de trabajo adyacente en la barra de tareas que lo invocó",
-            "label": "Ciclar barra de tareas"
+            "label": "Alternar barra de tareas"
           },
           "templates-apply": {
             "description": "Aplicar las plantillas de tema configuradas para la paleta actual",
@@ -4086,7 +4112,7 @@
         },
         "effects-profile-glyphs": {
           "description": "Asignar nombres de perfil de EasyEffects a glifos de iconos",
-          "label": ""
+          "label": "Glifos del perfil de efectos "
         },
         "empty-color": {
           "description": "Rol de color usado para espacios de trabajo vacíos; también se admiten colores hexadecimales fijos",
@@ -4264,7 +4290,7 @@
         },
         "label-content": {
           "description": "Lo que muestra la etiqueta de la batería: porcentaje de carga, tiempo restante o consumo de energía",
-          "label": ""
+          "label": "Etiquetar contenido"
         },
         "label-min-width": {
           "description": "Ancho mínimo de etiqueta en píxeles para evitar el redimensionado",
@@ -4581,8 +4607,8 @@
       "filter-overridden": "Sobreescrito",
       "legacy-config-warning": "Configuración heredada: {issue}. Edite esta entrada de origen; Noctalia aplicará el reemplazo solo temporalmente. Ejecute noctalia config validate para ver todos los cambios necesarios.",
       "native-title": "Ajustes de Noctalia",
-      "no-results": "Ajustes no encontrados.",
-      "no-results-hint": "Prueba con otro nombre de configuración o clave de config.",
+      "no-results": "Ajustes no encontrados",
+      "no-results-hint": "Prueba con otro nombre o clave de configuración.",
       "offline-mode-notice": {
         "appearance": "Las descargas de paletas de la comunidad no funcionarán.",
         "calendar-account": "La detección y sincronización del calendario no funcionará.",
@@ -4592,7 +4618,6 @@
         "plugin-store": "Las solicitudes de descarga y catálogo de complementos remotos no funcionarán.",
         "plugins": "Las solicitudes HTTP del complemento no funcionarán. Las fuentes de Git aún se pueden actualizar.",
         "security": "La búsqueda de IP externa y la telemetría no funcionarán.",
-        "services": "La sincronización de la cuenta de calendario no funcionará.",
         "template-store": "Las descargas de plantillas de la comunidad no funcionarán.",
         "templates": "Las descargas y actualizaciones de plantillas de la comunidad no funcionarán.",
         "title": "Modo sin conexión"
@@ -4624,7 +4649,7 @@
     "hardware": {
       "unknown": "Desconocido",
       "unknown-cpu": "CPU desconocido",
-      "unknown-distro": "Distribucion desconocida",
+      "unknown-distro": "Distribución desconocida",
       "unknown-gpu": "GPU desconocida"
     }
   },

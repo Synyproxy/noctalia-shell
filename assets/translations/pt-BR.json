@@ -87,7 +87,8 @@
       },
       "brightness": {
         "brightness": "Brilho",
-        "display": "Tela"
+        "display": "Tela",
+        "unavailable": "Controle de brilho não disponível"
       },
       "lock-keys": {
         "caps": "Caps",
@@ -843,6 +844,8 @@
       "calendar": "Calendário",
       "calendar-credential-locked-body": "Desbloqueie o chaveiro usado pelo Serviço Secreto e, em seguida, tente novamente em “Configurações”. No GNOME Keyring, defina como padrão um chaveiro que seja desbloqueado automaticamente, como o “Login”.",
       "calendar-credential-locked-title": "Keyring do calendário está bloqueado",
+      "calendar-digest-more": "mais +{count}",
+      "calendar-digest-title": "Dia todo hoje",
       "calendar-google-connect-browser-failed": "Não foi possível abrir nenhum navegador com a autorização do Google. Verifique seu navegador padrão ou a configuração do xdg-open.",
       "calendar-google-connect-credential-store-failed": "A autorização foi concluída, mas não foi possível salvar o token de atualização. Desbloqueie ou inicie o Secret Service e, em seguida, conecte-se novamente.",
       "calendar-google-connect-expired": "A autorização do Google expirou antes da conclusão do login. Inicie a conexão novamente.",
@@ -853,6 +856,13 @@
       "calendar-google-connect-start-failed": "Não foi possível iniciar a autorização do Google. Verifique sua conexão de rede e tente novamente.",
       "calendar-google-connect-start-http": "Não foi possível iniciar a autorização do Google. O agente OAuth retornou HTTP {status}.",
       "calendar-google-connect-timeout": "A autorização do Google expirou. Reinicie a conexão quando estiver pronto para fazer login.",
+      "calendar-reminder-catchup-body": "mais {count} eventos iniciarão em breve.",
+      "calendar-reminder-catchup-title": "Mais eventos por vir",
+      "calendar-reminder-in": "Inicia em {minutes} min · {time}",
+      "calendar-reminder-now": "Inicia agora · {time}",
+      "calendar-reminder-open": "Abrir",
+      "calendar-reminder-untitled": "Evento sem título",
+      "calendar-reminder-with-location": "{when}\n{location}",
       "config-migration-body": "Atualize {path} no arquivo fonte. Noctalia está aplicando está substituição só temporariamente. Execute nocatlia config validade para listar cada mudança necessária.",
       "config-migration-title": "Atualiação de configuração necessária",
       "dbus-disabled": "Notificações DBus desabilitadas",
@@ -1295,7 +1305,8 @@
         "borders": "Bordas",
         "brightness": "Brilho",
         "built-in": "Integrado",
-        "calendar": "Calendário",
+        "calendar-accounts": "Contas",
+        "calendar-reminders": "Lembretes",
         "capsules": "Cápsulas",
         "clipboard": "Área de Transferência",
         "community": "Comunidade",
@@ -1366,6 +1377,7 @@
         "appearance": "Aparência",
         "backdrop": "Camada de Fundo",
         "bar": "Barra",
+        "calendar": "Calendário",
         "control-center": "Central de Controle",
         "desktop": "Área de Trabalho",
         "dock": "Dock",
@@ -1482,6 +1494,16 @@
         "overlay": "Overlay",
         "top": "Topo"
       },
+      "lockscreen": {
+        "transition": {
+          "disc": "Disco",
+          "fade": "Esvanescer",
+          "honeycomb": "Favo de Mel",
+          "stripes": "Listras",
+          "wipe": "Limpar",
+          "zoom": "Zoom"
+        }
+      },
       "notification-urgency": {
         "critical": "Crítica",
         "low": "Baixa",
@@ -1540,6 +1562,10 @@
           "up": "Acima",
           "up-left": "Acima à Esquerda",
           "up-right": "Acima à Direita"
+        },
+        "window-switcher-style": {
+          "carousel": "Carrossel ",
+          "compact": "Compacto"
         }
       },
       "theme": {
@@ -2306,6 +2332,10 @@
           "description": "Use uma captura de tela da área de trabalho como plano de fundo da tela de bloqueio",
           "label": "Captura da Área de Trabalho"
         },
+        "edge-smoothness": {
+          "description": "Suavização das extremidades da transição da tela de bloqueio",
+          "label": "Suavidade das Extremidades da Transição"
+        },
         "enabled": {
           "description": "Habilitar bloqueio de sessão, integração com logind e ações de bloqueio",
           "label": "Tela de Bloqueio"
@@ -2325,6 +2355,14 @@
         "tint-intensity": {
           "description": "Base de cor da superfície sobre o fundo da tela de bloqueio",
           "label": "Intensidade da Cor"
+        },
+        "transition-duration": {
+          "description": "Comprimento das animações de bloqueio e desbloqueio em milissegundos",
+          "label": "Duração de Transição"
+        },
+        "transitions": {
+          "description": "Efeitos disponíveis ao bloquear e desbloquear (um é escolhido aleatoriamente)",
+          "label": "Efeitos de Transição"
         },
         "wallpaper": {
           "description": "Imagem personalizada para o fundo da tela de bloqueio; deixe em branco para usar o papel de parede da área de trabalho.",
@@ -2690,6 +2728,10 @@
           "description-unavailable": "Nenhum provedor de Secret Service disponível nesta sessão",
           "label": "Armazenamento de Credenciais de Calendário"
         },
+        "calendar-digest-time": {
+          "description": "Horário do dia para uma única notificação listando todos os eventos do dia. Deixe em branco para desabilitar.",
+          "label": "Resumo para o Dia Inteiro"
+        },
         "calendar-edit": {
           "button": "Editar",
           "button-reconnect": "Reconectar",
@@ -2709,6 +2751,18 @@
         "calendar-refresh-interval": {
           "description": "Com que frequência sincronizar eventos do calendário (minutos)",
           "label": "Intervalo de Atualização"
+        },
+        "calendar-reminder-lead": {
+          "description": "Com quanta antecedência notificar de eventos que não definem seus próprios lembretes.",
+          "label": "Definição Padrão de Lembrete"
+        },
+        "calendar-reminder-use-event": {
+          "description": "Honrar o lembrete definido em cada evento. Quando desligado, cada evento utiliza Definição Padrão de Lembrete",
+          "label": "Usar Lembretes de Evento"
+        },
+        "calendar-reminders": {
+          "description": "Notificar antes de um evento começar.",
+          "label": "Lembretes de Calendário"
         },
         "calendar-storage": {
           "button": "Tentar Novamente",
@@ -2785,6 +2839,11 @@
         "shell-sounds": {
           "description": "Tocar efeitos de som para eventos do shell",
           "label": "Sons do Shell"
+        },
+        "sound-theme": {
+          "default": "Padrão",
+          "description": "Tema sonoro utilizado para efeitos do shell",
+          "label": "Tema de Som"
         },
         "sound-volume": {
           "description": "Volume para efeitos de som do shell",
@@ -3199,6 +3258,10 @@
           "description": "Copia e Salva na região do overlay é entregue imediatamente; Enter ou Espaço continuam abrindo o editor",
           "label": "Ignora o Editor ao Copiar ou Salvar"
         },
+        "settings-expand-all-groups": {
+          "description": "Abrir cada grupo de configuração expandido ao invés de somente o primeiro em cada página",
+          "label": "Expandir Todos os Grupos de Configuração"
+        },
         "settings-window-translucent": {
           "description": "Torne o fundo das Configurações transparente para efeitos dos compositores",
           "label": "Fundo Transparente das Configurações"
@@ -3224,9 +3287,33 @@
           "description": "Abrir o Launcher enquanto digite na Overveiw do Umbriel; utiliza uma pequena superfície de foco de teclado enquanto a Overview está aberta",
           "label": "Digitar para Abrir Launcher"
         },
+        "window-switcher-current-workspace-only": {
+          "description": "Listar somente janelas no espaço de trabalho ativo; desligue para incluir janelas de todos espaços de trabalho",
+          "label": "Espaço de Trabalho Atual Somente"
+        },
         "window-switcher-mru": {
           "description": "Organizar janelas no alternador por mais recentemente usadas ao invés de espaço de trabalho e layout de tela",
           "label": "Ordem Mais Recentemente Usada"
+        },
+        "window-switcher-show-all-outputs": {
+          "description": "Listar janelas de cada monitor; desligar para listar somente janelas no monitor onde o alternador está sendo mostrado",
+          "label": "Mostrar Todos Monitores"
+        },
+        "window-switcher-show-app-icon": {
+          "description": "Mostrar ícone de cada aplicação sobre sua janela de pré-visualização",
+          "label": "Mostrar Ícone de Aplicação"
+        },
+        "window-switcher-show-caption": {
+          "description": "Mostrar títulos de janelas e nomes de aplicações abaixo de suas pré-visualização",
+          "label": "Mostrar Legenda"
+        },
+        "window-switcher-show-count": {
+          "description": "Mostrar a posição atual e contagem total de janelas acima das pré-visualizações",
+          "label": "Mostrar Contagem de Janelas"
+        },
+        "window-switcher-style": {
+          "description": "Escolher o carrossel independente de profundidade ou a faixa compacta em caixa",
+          "label": "Estilo do Alternador"
         }
       },
       "system": {
@@ -4436,6 +4523,10 @@
           "description": "Mostrar texto com temperatura atual",
           "label": "Exibir Temperatura"
         },
+        "show-tooltip": {
+          "description": "Mostrar o nome completo de um espaço de trabalho ao passar o ponteiro do mouse sobre, quando a pílula não estiver mostrando",
+          "label": "Mostrar Dica do Nome"
+        },
         "show-unlock-hint": {
           "description": "Exibir o cartão de status acima da caixa de login para dicas de desbloqueio e caixas de diálogo de autenticação; Erros e avisos de Caps Lock ainda aparecem quando isto está desligado",
           "label": "Dica de Desbloqueio"
@@ -4451,6 +4542,10 @@
         "show-when-idle": {
           "description": "Mantenha o visualizador visível mesmo quando nenhum conteúdo estiver sendo reproduzido",
           "label": "Exibir Quando Inativo"
+        },
+        "show-when-unavailable": {
+          "description": "Manter o widget de brilho visível quando este monitor não tiver controle de brilho",
+          "label": "Mostrar Quando Indisponível"
         },
         "show-window-title": {
           "description": "Exibir o título da janela ao lado do ícone (somente em barras horizontais)",
@@ -4585,6 +4680,7 @@
       "no-results-hint": "Tente um nome diferente de configuração ou uma tecla de config.",
       "offline-mode-notice": {
         "appearance": "O download de paletas da comunidade não funcionará.",
+        "calendar": "Sincronização de conta de calendário não funcionará.",
         "calendar-account": "A descoberta e sincronização do calendário não funcionarão.",
         "disable-hint": "Desabilite o Modo Off-line na seção Segurança.",
         "launcher": "A busca de taxas de câmbio não funcionará.",
@@ -4592,7 +4688,6 @@
         "plugin-store": "As solicitações de catálogo e download de plugins remotos não funcionarão.",
         "plugins": "As solicitações HTTP de plugins não funcionarão. Fontes Git ainda podem ser atualizadas.",
         "security": "A consulta de IP externo e a telemetria não funcionarão.",
-        "services": "A sincronização da conta do calendário não funcionará.",
         "template-store": "O download de modelos da comunidade não funcionará.",
         "templates": "Os download e atualizações de modelos da comunidade não funcionarão.",
         "title": "Modo Off-line"
@@ -4736,7 +4831,9 @@
       "choose-color": "Escolher cor de papel de parede",
       "close": "Fechar painel de papel de parede",
       "color-title": "Cor do papel de parede",
+      "favorite-add": "Adicionar aos favoritos",
       "favorite-current": "Adicionar o papel de parede atual aos favoritos",
+      "favorite-remove": "Remover dos favoritos",
       "filter-placeholder": "Filtrar...",
       "flatten": "Achatar",
       "loading": "Carregando papéis de parede...",
@@ -4786,6 +4883,8 @@
     }
   },
   "window-switcher": {
+    "count": "{count} janela",
+    "count-plural": "{count} janelas",
     "empty": "Sem janelas abertas",
     "hint": "Tab · Shift+Tab · Setas · Solte o Alt para alterar · Esc para cancelar",
     "title": "Janelas"
