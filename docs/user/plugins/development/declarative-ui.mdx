@@ -232,7 +232,9 @@ any callback that changes state):
 `render(tree)` · `close()` · `openContextMenu(request)` · `setWantsSecondTicks(bool)` · `setNeedsFrameTick(bool)`
 
 Panel **size is host-owned**: declare `width` and `height` on the `[[panel]]` entry, so the surface is the
-same size on every open. There is no `setSize` at runtime. Each axis takes a positive number (logical px) or the
+same size on every open. On the `custom-v5` build a script may resize the open panel with
+`panel.setSize(width, height)` (logical px, clamped to the output; a `"fill"` axis ignores it); the new size sticks
+for later opens until the shell restarts. Each axis takes a positive number (logical px) or the
 string `"fill"`, which spans the output's available extent on that axis, the compositor subtracts every exclusive
 zone (bars, docks, third-party clients), so a `height = "fill"` panel sits exactly between them. `"fill"` requires
 `placement = "floating"`. Fixed pixel sizes are clamped to the output, so an oversized value degrades to

@@ -98,6 +98,7 @@ private:
 
   void handleScriptResult(scripting::ScriptResult result);
   void applyEffectParams(const std::vector<std::pair<std::string, double>>& params);
+  void applyPanelSize(double width, double height);
   void openContextMenu(scripting::ScriptContextMenuRequest request);
   void closeContextMenu();
   [[nodiscard]] scripting::ScriptSnapshot makeScriptSnapshot() const;

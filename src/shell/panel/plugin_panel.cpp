@@ -28,6 +28,7 @@ namespace {
   constexpr int kTickIntervalMs = 1000;
   constexpr float kDefaultPanelWidth = 480.0F;
   constexpr float kDefaultPanelHeight = 400.0F;
+  constexpr float kMinScriptPanelExtent = 120.0F;
 
   // Manifest vocabulary (scripting::kPanelKeyboardFocusModes) to layer-shell mode.
   // The manifest parser rejects anything else, so an unknown token here means the
@@ -336,6 +337,20 @@ std::optional<ScenePostEffect> PluginPanel::postEffect() const {
   };
 }
 
+void PluginPanel::applyPanelSize(double width, double height) {
+  const float newWidth = std::max(kMinScriptPanelExtent, static_cast<float>(width));
+  const float newHeight = std::max(kMinScriptPanelExtent, static_cast<float>(height));
+  if (newWidth == m_preferredWidth && newHeight == m_preferredHeight) {
+    return;
+  }
+  m_preferredWidth = newWidth;
+  m_preferredHeight = newHeight;
+  // Closed panels pick the size up on the next open.
+  if (auto* manager = PanelManager::current(); manager != nullptr && manager->isOpenPanel(m_entryId)) {
+    manager->relayoutActivePanelPreferredSize();
+  }
+}
+
 void PluginPanel::applyEffectParams(const std::vector<std::pair<std::string, double>>& params) {
   // Snake_case keys mirror the CrtEffectParams field comments.
   static const std::unordered_map<std::string_view, float CrtEffectParams::*> kFields = {
@@ -427,6 +442,9 @@ void PluginPanel::handleScriptResult(scripting::ScriptResult result) {
   }
   if (patch.effectParams.has_value()) {
     applyEffectParams(*patch.effectParams);
+  }
+  if (patch.panelSize.has_value()) {
+    applyPanelSize(patch.panelSize->first, patch.panelSize->second);
   }
   if (patch.requestClose.value_or(false)) {
     closeContextMenu();

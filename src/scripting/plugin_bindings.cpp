@@ -646,6 +646,20 @@ namespace {
     return 0;
   }
 
+  // panel.setSize(width, height) — resize the open panel (logical px). The
+  // host clamps to the output; axes declared "fill" in the manifest ignore it.
+  int luau_panel_setSize(lua_State* L) {
+    const double width = luaL_checknumber(L, 1);
+    const double height = luaL_checknumber(L, 2);
+    if (!std::isfinite(width) || !std::isfinite(height) || width <= 0.0 || height <= 0.0) {
+      luaL_error(L, "panel.setSize: width and height must be positive numbers");
+    }
+    if (auto* context = getContext(L)) {
+      context->patch.panelSize = std::pair{width, height};
+    }
+    return 0;
+  }
+
   constexpr int kContextMenuMaxItems = 64;
   constexpr int kContextMenuMaxVisible = 30;
   constexpr std::size_t kContextMenuMaxIdBytes = 128;
@@ -799,6 +813,7 @@ namespace {
       {"render", luau_ui_render},
       {"close", luau_panel_close},
       {"setEffect", luau_panel_setEffect},
+      {"setSize", luau_panel_setSize},
       {"openContextMenu", luau_panel_openContextMenu},
       {"setWantsSecondTicks", luau_ui_setWantsSecondTicks},
       {"setNeedsFrameTick", luau_ui_setNeedsFrameTick},
