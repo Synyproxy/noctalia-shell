@@ -164,7 +164,11 @@ namespace {
 
 } // namespace
 
-SoundPlayer::SoundPlayer(pw_loop* loop) : m_loop(loop) {}
+SoundPlayer::SoundPlayer(pw_loop* loop) : m_loop(loop) {
+  if (m_loop != nullptr) {
+    m_streamCloseTimer = pw_loop_add_timer(m_loop, onStreamCloseTimer, this);
+  }
+}
 
 std::vector<std::pair<std::string, std::string>> SoundPlayer::availableThemes() {
   std::map<std::string, std::string> themes;
@@ -197,7 +201,7 @@ void SoundPlayer::setTheme(std::string theme) {
 
   std::unordered_map<std::string, std::shared_ptr<const SoundBuffer>> buffers;
   for (const std::string_view event :
-       {"message-new-instant", "audio-volume-change", "power-plug", "power-unplug", "screen-capture"}) {
+       {kEventNotification, kEventVolumeChange, kEventPowerPlug, kEventPowerUnplug, kEventScreenCapture}) {
     const auto result = findThemeSound(event, theme);
     if (result.state == ThemeSoundLookupState::Disabled) {
       kLog.info("sound theme '{}': event '{}' is disabled", theme, event);
@@ -222,12 +226,11 @@ void SoundPlayer::setTheme(std::string theme) {
 }
 
 SoundPlayer::~SoundPlayer() {
+  if (m_streamCloseTimer != nullptr) {
+    pw_loop_destroy_source(m_loop, m_streamCloseTimer);
+    m_streamCloseTimer = nullptr;
+  }
   for (auto& active : m_active) {
-    if (active->listener != nullptr) {
-      spa_hook_remove(active->listener);
-      delete active->listener;
-      active->listener = nullptr;
-    }
     if (active->stream != nullptr) {
       pw_stream_disconnect(active->stream);
       pw_stream_destroy(active->stream);
@@ -278,12 +281,15 @@ SoundPlayer::loadPluginSound(std::uint64_t ownerId, const std::string& name, con
 
 void SoundPlayer::unloadPluginSounds(std::uint64_t ownerId) { m_pluginBuffers.erase(ownerId); }
 
-void SoundPlayer::play(const std::string& name) {
-  const auto it = m_buffers.find(name);
+void SoundPlayer::play(std::string_view name) {
+  if (!m_shellSoundsEnabled || m_disabledEvents.contains(name)) {
+    return;
+  }
+  const auto it = m_buffers.find(std::string(name));
   if (it == m_buffers.end()) {
     return;
   }
-  playBuffer(name, it->second);
+  playBuffer(std::string(name), it->second);
 }
 
 void SoundPlayer::playPluginSound(std::uint64_t ownerId, const std::string& name) {
@@ -317,8 +323,6 @@ void SoundPlayer::playBuffer(const std::string& name, const std::shared_ptr<cons
   auto active = std::make_unique<ActiveStream>();
   active->owner = this;
   active->buffer = buffer;
-  active->listener = new spa_hook{};
-  spa_zero(*active->listener);
 
   pw_properties* props = pw_properties_new(
       PW_KEY_MEDIA_TYPE, "Audio", PW_KEY_MEDIA_CATEGORY, "Playback", PW_KEY_MEDIA_ROLE, "Notification", PW_KEY_APP_NAME,
@@ -326,12 +330,9 @@ void SoundPlayer::playBuffer(const std::string& name, const std::shared_ptr<cons
   );
   active->stream = pw_stream_new_simple(m_loop, "noctalia-sound", props, &kStreamEvents, active.get());
   if (active->stream == nullptr) {
-    delete active->listener;
     kLog.warn("failed to create stream for sound \"{}\"", name);
     return;
   }
-
-  pw_stream_add_listener(active->stream, active->listener, &kStreamEvents, active.get());
 
   std::uint8_t formatBuffer[1024];
   spa_pod_builder builder{};
@@ -349,13 +350,21 @@ void SoundPlayer::playBuffer(const std::string& name, const std::shared_ptr<cons
   );
   if (rc < 0) {
     kLog.warn("failed to connect stream for sound \"{}\": {}", name, spa_strerror(rc));
-    spa_hook_remove(active->listener);
-    delete active->listener;
     pw_stream_destroy(active->stream);
     return;
   }
 
   m_active.push_back(std::move(active));
+}
+
+void SoundPlayer::setShellSoundsEnabled(bool enabled) { m_shellSoundsEnabled = enabled; }
+
+void SoundPlayer::setEventEnabled(std::string_view event, bool enabled) {
+  if (enabled) {
+    m_disabledEvents.erase(std::string(event));
+  } else {
+    m_disabledEvents.insert(std::string(event));
+  }
 }
 
 void SoundPlayer::setVolume(float volume) { m_volume = std::clamp(volume, 0.0F, 1.0F); }
@@ -440,17 +449,24 @@ void SoundPlayer::processStream(ActiveStream& streamState) {
   }
 }
 
-void SoundPlayer::markFinished(ActiveStream& streamState) { streamState.finished = true; }
+void SoundPlayer::onStreamCloseTimer(void* userdata, std::uint64_t /*expirations*/) {
+  static_cast<SoundPlayer*>(userdata)->removeFinished();
+}
+
+void SoundPlayer::markFinished(ActiveStream& streamState) {
+  streamState.finished = true;
+  // A finished stream stays connected and keeps the sink running until destroyed. Streams cannot be
+  // destroyed from their own callbacks, so close them on the next loop iteration.
+  if (m_streamCloseTimer != nullptr) {
+    timespec soon{.tv_sec = 0, .tv_nsec = 1};
+    pw_loop_update_timer(m_loop, m_streamCloseTimer, &soon, nullptr, false);
+  }
+}
 
 void SoundPlayer::removeFinished() {
   std::erase_if(m_active, [](const std::unique_ptr<ActiveStream>& active) {
     if (!active->finished) {
       return false;
-    }
-    if (active->listener != nullptr) {
-      spa_hook_remove(active->listener);
-      delete active->listener;
-      active->listener = nullptr;
     }
     if (active->stream != nullptr) {
       pw_stream_destroy(active->stream);

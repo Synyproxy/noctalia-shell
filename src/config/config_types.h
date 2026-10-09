@@ -35,6 +35,8 @@ struct BarCapsuleGroupStyle {
   // True when `border` is explicitly present (empty value = no outline); mirrors bar/widget border semantics.
   bool borderSpecified = false;
   std::optional<ColorSpec> border;
+  // Outline thickness in logical pixels before content-scale; only drawn when `border` is set.
+  float borderWidth = Style::borderWidth;
   std::optional<ColorSpec> foreground;
   float padding = Style::barCapsulePadding;
   std::optional<float> radius;
@@ -72,6 +74,7 @@ struct BarMonitorOverride {
   std::optional<std::string> layer; // top | overlay
   std::optional<std::int32_t> thickness;
   std::optional<float> backgroundOpacity;
+  std::optional<bool> compositorBlur;
   std::optional<ColorSpec> border;
   std::optional<float> borderWidth;
   std::optional<std::int32_t> radius;
@@ -106,7 +109,9 @@ struct BarMonitorOverride {
   std::optional<double> widgetCapsulePadding;
   std::optional<double> widgetCapsuleRadius;
   std::optional<double> widgetCapsuleOpacity;
+  std::optional<float> widgetCapsuleBorderWidth;
   std::optional<bool> hoverHighlight;
+  std::optional<bool> showTooltip;
   BarDeadZoneOverride deadZone;
 
   [[nodiscard]] bool isAutoHideEnabled(bool baseAutoHide, bool baseSmartAutoHide) const noexcept {
@@ -140,6 +145,7 @@ struct BarConfig {
   std::string layer = "top"; // top | overlay; attached panels use the same layer
   std::int32_t thickness = Style::barThicknessDefault;
   float backgroundOpacity = 1.0F;
+  bool compositorBlur = true;
   // Inside outline for the bar background; attached panels inherit the resolved values.
   ColorSpec border = colorSpecFromRole(ColorRole::Outline);
   float borderWidth = 0.0F;
@@ -192,8 +198,12 @@ struct BarConfig {
   // True when `capsule_border` appears under `[bar.*]` (empty value = no outline for widgets that inherit border).
   bool widgetCapsuleBorderSpecified = false;
   std::optional<ColorSpec> widgetCapsuleBorder;
+  // Capsule outline thickness in logical pixels before content-scale; only drawn when a border color is set.
+  float widgetCapsuleBorderWidth = Style::borderWidth;
   // Soft tint of a widget's foreground color over the widget under the pointer (per member in capsule groups).
   bool hoverHighlight = true;
+  // Default for the per-widget `show_tooltip`; widgets on this bar show hover tooltips unless overridden.
+  bool showTooltip = true;
   BarDeadZoneConfig deadZone;
   std::vector<BarMonitorOverride> monitorOverrides;
 
@@ -362,7 +372,7 @@ using ConfigOverrideValue = std::variant<
     std::vector<KeyChord>, std::vector<BarCapsuleGroupStyle>>;
 
 // Optional rounded “capsule” behind a bar widget (see `[widget.*] capsule_*` in CONFIG.md).
-// Corner shape, border width, and edge softness are fixed in the shell code; padding/radius are configurable.
+// Corner shape and edge softness are fixed in the shell code; padding, radius, and border width are configurable.
 struct WidgetBarCapsuleSpec {
   bool enabled = false;
   ColorSpec fill = colorSpecFromRole(ColorRole::SurfaceVariant);
@@ -371,6 +381,8 @@ struct WidgetBarCapsuleSpec {
   std::string group;
   // Set only when `capsule_border` is present and non-empty in config; otherwise no outline.
   std::optional<ColorSpec> border;
+  // Outline thickness in logical pixels before content-scale (see `capsule_border_width` / bar default).
+  float borderWidth = Style::borderWidth;
   // Icon + primary label color when the capsule is visible; unset = widget defaults.
   std::optional<ColorSpec> foreground;
   // Inner padding in logical pixels before content-scale (see `capsule_padding` / bar default).
@@ -395,6 +407,7 @@ struct CommonWidgetOptions {
   bool interactive = true;
   float contentScale = 1.0F;
   float fontScale = 1.0F;
+  bool showTooltip = true;
   std::optional<ColorSpec> color;
   std::optional<ColorSpec> iconColor;
   std::optional<std::int64_t> labelFontWeight;
@@ -547,6 +560,12 @@ struct LockscreenConfig {
   // Lock on PrepareForSleep (lid close / systemctl suspend) via logind sleep-delay inhibit.
   // Distinct from idle/session lock_and_suspend actions.
   bool lockBeforeSuspend = true;
+  // Opt-in convenience window: allow passwordless unlock for this many seconds
+  // after locking on any keypress or mouse movement beyond 5px. Defaults to 0
+  // (disabled) so existing configurations keep requiring authentication; grace is
+  // additionally revoked on sleep transitions (PrepareForSleep, Lock & Suspend)
+  // and on logind resume as a defense in depth.
+  int gracePeriodSeconds = 0;
   bool fingerprint = true;
   bool allowEmptyPassword = false;
   bool blurredDesktop = false;
@@ -627,6 +646,51 @@ constexpr EnumOption<DockLauncherPosition> kDockLauncherPositions[] = {
     {DockLauncherPosition::End, "end", "settings.options.dock-launcher-position.end"},
 };
 
+struct DockMonitorOverride {
+  // tableName is the TOML subtable key; match may be overridden explicitly.
+  std::string tableName;
+  std::string match;
+  std::optional<bool> enabled;
+  std::optional<DockEdge> position;
+  std::optional<bool> activeMonitorOnly;
+  std::optional<std::int32_t> iconSize;
+  std::optional<std::int32_t> mainAxisPadding;
+  std::optional<std::int32_t> crossAxisPadding;
+  std::optional<std::int32_t> itemSpacing;
+  std::optional<float> backgroundOpacity;
+  std::optional<ColorSpec> border;
+  std::optional<float> borderWidth;
+  std::optional<std::int32_t> radius;
+  std::optional<std::int32_t> radiusTopLeft;
+  std::optional<std::int32_t> radiusTopRight;
+  std::optional<std::int32_t> radiusBottomLeft;
+  std::optional<std::int32_t> radiusBottomRight;
+  std::optional<bool> concaveEdgeCorners;
+  std::optional<std::int32_t> marginEnds;
+  std::optional<std::int32_t> marginEdge;
+  std::optional<bool> shadow;
+  std::optional<bool> showRunning;
+  std::optional<bool> autoHide;
+  std::optional<bool> smartAutoHide;
+  std::optional<std::string> layer;
+  std::optional<bool> reserveSpace;
+  std::optional<float> activeScale;
+  std::optional<float> inactiveScale;
+  std::optional<bool> magnification;
+  std::optional<float> magnificationScale;
+  std::optional<float> activeOpacity;
+  std::optional<float> inactiveOpacity;
+  std::optional<bool> showDots;
+  std::optional<bool> showInstanceCount;
+  std::optional<DockLauncherPosition> launcherPosition;
+  std::optional<std::string> launcherIcon;
+  std::optional<std::string> launcherCustomImage;
+  std::optional<bool> launcherCustomImageColorize;
+  std::optional<std::vector<std::string>> pinned;
+
+  bool operator==(const DockMonitorOverride&) const = default;
+};
+
 struct DockConfig {
   bool enabled = false; // opt-in; dock is hidden by default
   DockEdge position = DockEdge::Bottom;
@@ -668,9 +732,11 @@ struct DockConfig {
   std::string launcherCustomImage = "";     // image path; overrides launcherIcon glyph when set
   bool launcherCustomImageColorize = false; // tint the custom image with the icon color role
   std::vector<std::string> pinned;          // desktop entry IDs to always show
-  std::vector<std::string> monitors;        // connector names to show on; empty = all outputs
+  std::vector<DockMonitorOverride> monitorOverrides;
   bool operator==(const DockConfig&) const = default;
 };
+
+[[nodiscard]] DockConfig resolveDockMonitorOverride(const DockConfig& base, const DockMonitorOverride& override);
 
 struct DesktopWidgetsGridState {
   bool visible = true;
@@ -745,9 +811,13 @@ struct OsdConfig {
   std::string position = "top_center";
   std::string positionVertical = "top_center";
   std::string orientation = "horizontal";
+  std::int32_t hideDelayMs = 1400;
   float scale = 1.0F;
   float backgroundOpacity = 0.97F;
   bool border = true; // outline around OSD popup cards
+  ColorSpec borderColor = colorSpecFromRole(ColorRole::Outline);
+  float borderWidth = Style::borderWidth;
+  bool followFocusedOutput = false;
   int offsetX = 20;
   int offsetY = 8;
   std::vector<std::string> monitors;
@@ -757,16 +827,22 @@ struct OsdConfig {
 };
 
 struct NotificationConfig {
+  static constexpr std::int32_t kDefaultWidth = 360;
+
   bool enableDaemon = true;
   bool showAppName = true;
   bool showActions = true;
   std::string position = "top_right";
   std::string layer = "top"; // top | overlay
   float scale = 1.0F;
+  std::int32_t width = kDefaultWidth;
   float backgroundOpacity = 0.97F; // toast card background alpha (0.0–1.0)
   bool border = true;              // outline around toast cards
-  int offsetX = 20;                // absolute horizontal margin from the screen edge
-  int offsetY = 8;                 // absolute vertical margin from the screen edge
+  ColorSpec borderColor = colorSpecFromRole(ColorRole::Outline);
+  float borderWidth = Style::borderWidth;
+  bool followFocusedOutput = false;
+  int offsetX = 20; // absolute horizontal margin from the screen edge
+  int offsetY = 8;  // absolute vertical margin from the screen edge
   std::vector<std::string> monitors;
   bool collapseOnDismiss = true;
   bool keepDismissedInHistory = true;
@@ -987,9 +1063,12 @@ struct ShellConfig {
 
   struct PanelConfig {
     PanelTransparencyMode transparencyMode = PanelTransparencyMode::Solid;
-    bool borders = true;                   // outline on floating panel surfaces
+    bool borders = true; // outline on floating panel surfaces
+    ColorSpec borderColor = colorSpecFromRole(ColorRole::Outline);
+    float borderWidth = Style::borderWidth;
     bool shadow = true;                    // cast the global [shell.shadow] from panel surfaces
     bool listItemBackground = false;       // filled rounded background behind launcher/clipboard list items
+    bool wallpaperShowNames = true;        // caption wallpaper picker thumbnails with their file name
     std::string floatingLayer = "overlay"; // top | overlay; attached panels follow their bar
     PanelPlacement launcherPlacement = PanelPlacement::Floating;
     PanelPlacement clipboardPlacement = PanelPlacement::Floating;
@@ -1143,6 +1222,8 @@ struct ShellConfig {
   bool umbrielOverviewTypeToLaunchEnabled = false;
   bool polkitAgent = false;
   PasswordMaskStyle passwordMaskStyle = PasswordMaskStyle::CircleFilled;
+  /// Readline-style editing shortcuts in every text input (Ctrl+A moves to the start instead of selecting all).
+  bool readlineShortcuts = false;
   AnimationConfig animation;
   std::string avatarPath;
   bool settingsShowAdvanced = true;
@@ -1238,6 +1319,8 @@ struct CalendarConfig {
   };
 
   bool enabled = false;
+  bool dedupeEvents = false; // collapse an occurrence that appears in more than one calendar, across accounts too
+  std::vector<std::string> dedupeIgnorePatterns; // regexes stripped from a title before two events are compared
   std::int32_t refreshMinutes = 15;
   std::string eventDateFormat = "%A %e %B";
   std::string eventTimeFormat = "%H:%M";
@@ -1326,6 +1409,10 @@ struct SystemConfig {
 struct AudioConfig {
   bool enableOverdrive = false;
   bool enableSounds = true;
+  bool enableVolumeSounds = true;
+  bool enableNotificationSounds = true;
+  bool enablePowerSounds = true;
+  bool enableScreenshotSounds = true;
   float soundVolume = 0.5F;
   std::string soundTheme = "freedesktop";
 

@@ -317,8 +317,9 @@ TextMetrics RenderContext::measureTextScaled(
   };
 }
 
-TextMetrics RenderContext::measureFontScaled(float scale, float fontSize, FontWeight fontWeight) {
-  auto m = m_textRenderer.measureFont(scale, fontSize, fontWeight);
+TextMetrics
+RenderContext::measureFontScaled(float scale, float fontSize, FontWeight fontWeight, std::string_view fontFamily) {
+  auto m = m_textRenderer.measureFont(scale, fontSize, fontWeight, fontFamily);
   return TextMetrics{
       .width = m.width,
       .left = m.left,
@@ -457,8 +458,6 @@ void RenderContext::renderNode(
   case NodeType::Image: {
     const auto* img = static_cast<const ImageNode*>(node);
     if (img->textureId() != 0) {
-      auto tint = img->tint();
-      tint.a *= effectiveOpacity;
       m_backend->drawImage(
           RenderImageDraw{
               .texture = img->textureId(),
@@ -466,7 +465,7 @@ void RenderContext::renderNode(
               .surfaceHeight = sh,
               .width = node->width(),
               .height = node->height(),
-              .tint = tint,
+              .tint = img->tint(),
               .monochromeTint = img->monochromeTint(),
               .alphaMaskTint = img->alphaMaskTint(),
               .opacity = effectiveOpacity,
