@@ -25,6 +25,7 @@
 #include "compositors/workspace_alert_service.h"
 #include "core/log.h"
 #include "core/process/process.h"
+#include "util/string_utils.h"
 #include "wayland/output_probe.h"
 #include "wayland/wayland_connection.h"
 #include "wayland/wayland_workspaces.h"
@@ -48,6 +49,8 @@ namespace compositors {
   public:
     virtual ~FocusedOutputBackend() = default;
     [[nodiscard]] virtual std::optional<std::string> focusedOutputName() const = 0;
+    [[nodiscard]] virtual std::unordered_map<std::string, bool> outputPowerStates() const = 0;
+    virtual void setOutputPowerChangeCallback(CompositorPlatform::ChangeCallback callback) = 0;
   };
 
   class OutputPowerBackend {
@@ -249,6 +252,19 @@ namespace {
 
     [[nodiscard]] std::optional<std::string> focusedOutputName() const override {
       return m_backend.focusedOutputName();
+    }
+
+    [[nodiscard]] std::unordered_map<std::string, bool> outputPowerStates() const override {
+      if constexpr (requires { m_backend.outputPowerStates(); }) {
+        return m_backend.outputPowerStates();
+      }
+      return {};
+    }
+
+    void setOutputPowerChangeCallback(CompositorPlatform::ChangeCallback callback) override {
+      if constexpr (requires { m_backend.setOutputPowerChangeCallback(std::move(callback)); }) {
+        m_backend.setOutputPowerChangeCallback(std::move(callback));
+      }
     }
 
   private:
@@ -851,7 +867,26 @@ std::optional<ActiveToplevel> CompositorPlatform::activeToplevel() const {
   return m_wayland.activeToplevel();
 }
 
-wl_output* CompositorPlatform::activeToplevelOutput() const { return m_wayland.activeToplevelOutput(); }
+wl_output* CompositorPlatform::activeToplevelOutput() const {
+  if (compositors::isKde() && m_kwinActiveWindow != nullptr) {
+    if (const auto focusedName = m_kwinActiveWindow->focusedOutputName(); focusedName.has_value()) {
+      if (wl_output* output = resolveOutputName(*focusedName); output != nullptr) {
+        return output;
+      }
+    }
+  }
+  if (compositors::detect() == compositors::CompositorKind::Mango && m_workspaces != nullptr) {
+    if (wl_output* selected = m_workspaces->mangoIpcSelectedOutput(); selected != nullptr) {
+      return selected;
+    }
+  }
+  if (compositors::detect() == compositors::CompositorKind::Dwl && m_workspaces != nullptr) {
+    if (wl_output* selected = m_workspaces->dwlIpcSelectedOutput(); selected != nullptr) {
+      return selected;
+    }
+  }
+  return m_wayland.activeToplevelOutput();
+}
 
 std::vector<std::string> CompositorPlatform::runningAppIds(wl_output* outputFilter) const {
   if (compositors::isKde() && m_kwinActiveWindow != nullptr && m_kwinActiveWindow->isAvailable()) {
@@ -955,6 +990,18 @@ bool CompositorPlatform::hasExactWindowIdentity() const noexcept {
 
 void CompositorPlatform::activateToplevel(zwlr_foreign_toplevel_handle_v1* handle) {
   m_wayland.activateToplevel(handle);
+}
+
+void CompositorPlatform::activateToplevelForAppId(std::string_view appId) {
+  if (appId.empty()) {
+    return;
+  }
+  const std::string idLower = StringUtils::toLower(std::string(appId));
+  const auto windows = windowsForApp(idLower, idLower);
+  if (windows.empty()) {
+    return;
+  }
+  activateToplevelInfo(windows.back());
 }
 
 void CompositorPlatform::activateToplevelInfo(const ToplevelInfo& window) {
@@ -1548,6 +1595,13 @@ bool CompositorPlatform::requestSessionExit() const {
   const compositors::CompositorKind compositor = compositors::detect();
   logSessionExitContext(compositor);
 
+  constexpr std::chrono::milliseconds kUwsmProbeTimeout{2000};
+  if (process::commandExists("uwsm")
+      && process::runSyncWithTimeout({"uwsm", "check", "is-active", "compositor-only"}, kUwsmProbeTimeout).exitCode
+          == 0) {
+    return process::runAsync({"uwsm", "stop"});
+  }
+
   switch (compositor) {
   case compositors::CompositorKind::Hyprland: {
     auto& runtime = m_runtimeRegistry->hyprland();
@@ -1591,10 +1645,49 @@ bool CompositorPlatform::setOutputPower(bool on) const {
   if (m_outputPowerBackend == nullptr) {
     return false;
   }
-  if (m_outputPowerBackend->isPerOutputTargeted()) {
-    m_lastRequestedOutputPowerState = on;
+  // A failed multi-output request may still have powered off some outputs.
+  if (!on) {
+    m_lastRequestedOutputPowerState = false;
   }
-  return m_outputPowerBackend->setOutputPower(m_wayland, on);
+  if (!m_outputPowerBackend->setOutputPower(m_wayland, on)) {
+    return false;
+  }
+  m_lastRequestedOutputPowerState = on;
+  return true;
+}
+
+bool CompositorPlatform::shouldSuppressLockTransition() const {
+  if (m_outputPowerOffPending) {
+    return true;
+  }
+  std::unordered_map<std::string, bool> states;
+  for (const auto& backend : m_focusedOutputBackends) {
+    states = backend->outputPowerStates();
+  }
+  bool hasOutput = false;
+  bool allKnown = true;
+  for (const auto& output : m_wayland.outputs()) {
+    if (!output.done || output.output == nullptr || !output.hasUsableGeometry()) {
+      continue;
+    }
+    hasOutput = true;
+    const auto state = states.find(output.connectorName);
+    if (state == states.end()) {
+      allKnown = false;
+    } else if (!state->second) {
+      return true;
+    }
+  }
+  if (hasOutput && allKnown) {
+    return false;
+  }
+  return m_lastRequestedOutputPowerState == false;
+}
+
+void CompositorPlatform::setOutputPowerChangeCallback(ChangeCallback callback) {
+  for (auto& backend : m_focusedOutputBackends) {
+    backend->setOutputPowerChangeCallback(callback);
+  }
 }
 
 bool CompositorPlatform::tracksOverviewState() const noexcept {

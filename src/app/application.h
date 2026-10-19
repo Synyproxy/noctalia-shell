@@ -33,6 +33,7 @@
 #include "render/gl_shared_context.h"
 #include "render/render_context.h"
 #include "scripting/plugin_manager.h"
+#include "scripting/plugin_recommendations.h"
 #include "scripting/plugin_service_host.h"
 #include "scripting/script_api_context.h"
 #include "security/secret_store.h"
@@ -125,6 +126,9 @@ class NotificationDBusHost;
 class PipeWirePollSource;
 class PipeWireService;
 class WirePlumberMixer;
+namespace compositors::umbriel {
+  class UmbrielAudioProvider;
+}
 class PipeWireSpectrum;
 class PipeWireSpectrumPollSource;
 class PolkitAgent;
@@ -220,6 +224,7 @@ private:
   void scheduleGreeterAutoSync();
   bool runShellCommandBlocking(const std::string& command);
   bool runIdleAction(const IdleActionRequest& action);
+  bool setOutputPower(bool on);
   void onIconThemeChanged();
   void onGraphicsReset(RenderGraphicsResetStatus status);
   void recoverGraphicsAfterReset();
@@ -250,6 +255,7 @@ private:
   scripting::ScriptApiContext m_scriptApi;
   std::function<void()> m_syncScriptApiOutputs;
   scripting::PluginManager m_pluginManager{m_configService};
+  scripting::PluginRecommendations m_pluginRecommendations{m_configService, m_httpClient, m_pluginManager};
   scripting::PluginServiceHost m_pluginServiceHost{m_scriptApi, &m_httpClient, &m_clipboardService, &m_fileWatcher};
   TimeService m_timeService;
   LockKeysService m_lockKeysService;
@@ -266,6 +272,7 @@ private:
   bool m_releaseSleepDelayWhenLocked = false;
   // Set before Noctalia-initiated suspend so PrepareForSleep skips lock-before-sleep.
   bool m_skipLockOnNextSleep = false;
+  std::uint64_t m_outputPowerRequestGeneration = 0;
   std::unique_ptr<AccountsService> m_accountsService;
   std::unique_ptr<ScreenSaverService> m_screenSaverService;
   std::unique_ptr<ScreenSaverPollSource> m_screenSaverPollSource;
@@ -321,6 +328,8 @@ private:
   std::unique_ptr<WirePlumberMixer> m_wirePlumberMixer;
   std::unique_ptr<EasyEffectsService> m_easyEffectsService;
   std::unique_ptr<PipeWireSpectrum> m_pipewireSpectrum;
+  std::unique_ptr<compositors::umbriel::UmbrielAudioProvider> m_umbrielAudioProvider;
+  std::uint64_t m_umbrielAudioListener = 0;
   std::shared_ptr<SoundPlayer> m_soundPlayer;
 
   TelemetryService m_telemetryService;
@@ -329,6 +338,8 @@ private:
   GlSharedContext m_glShared;
   SharedTextureCache m_sharedTextureCache;
   RenderContext m_renderContext;
+  // Image controls in panels retain cache-backed handles during teardown.
+  AsyncTextureCache m_asyncTextureCache;
   ThumbnailService m_thumbnailService;
   WallpaperScanner m_wallpaperScanner;
   Bar m_bar;
@@ -364,7 +375,6 @@ private:
   ColorPickerDialogPopup m_colorPickerDialogPopup;
   GlyphPickerDialogPopup m_glyphPickerDialogPopup;
   FileDialogPopup m_fileDialogPopup;
-  AsyncTextureCache m_asyncTextureCache;
 
   // Poll sources (must outlive MainLoop)
   std::unique_ptr<SessionBusPollSource> m_busPollSource;

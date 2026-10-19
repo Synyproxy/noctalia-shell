@@ -399,7 +399,8 @@ namespace {
     toml::array actions;
     const auto& source = session.actions.empty() ? defaultSessionPanelActions() : session.actions;
     for (const SessionPanelActionConfig& row : source) {
-      if (!row.enabled || !session_action::isKnown(row.action)) {
+      // The greeter has its own firmware-setup button and no consumer for reboot_uefi rows.
+      if (!row.enabled || !session_action::isKnown(row.action) || row.action == "reboot_uefi") {
         continue;
       }
       if (row.action == "command" && (!row.command.has_value() || StringUtils::trim(*row.command).empty())) {
@@ -633,11 +634,12 @@ namespace {
 
     std::string transforms;
     for (const WaylandOutput* output : ready) {
-      const auto token = greeterTransformToken(output->transform);
+      const std::int32_t transform = output->effectiveTransform();
+      const auto token = greeterTransformToken(transform);
       if (!token.has_value()) {
         kLog.warn(
             "greeter sync: output '{}' has unknown transform {}; skipping output transforms sync",
-            output->connectorName, output->transform
+            output->connectorName, transform
         );
         return std::nullopt;
       }
@@ -732,7 +734,8 @@ namespace {
           "transform={}",
           output.connectorName.empty() ? "?" : output.connectorName,
           output.description.empty() ? "?" : output.description, output.done, output.logicalX, output.logicalY,
-          output.logicalWidth, output.logicalHeight, output.width, output.height, output.scale, output.transform
+          output.logicalWidth, output.logicalHeight, output.width, output.height, output.scale,
+          output.effectiveTransform()
       );
     }
 

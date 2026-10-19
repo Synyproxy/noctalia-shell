@@ -73,9 +73,9 @@ namespace {
       return false;
     }
 
-    bool onPointerRelease(std::optional<std::size_t> index) override {
+    PointerReleaseResult onPointerRelease(std::optional<std::size_t> index) override {
       releases.push_back(index);
-      return false;
+      return {};
     }
 
     void reset() {

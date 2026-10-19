@@ -76,8 +76,9 @@ namespace noctalia::cli {
                                                                                       "false", "1",   "0"};
   inline constexpr std::array<std::string_view, 2> kMsgPowerCycleDirectionChoices{"next", "prev"};
   inline constexpr std::array<std::string_view, 3> kMsgScreenshotFullscreenModeChoices{"pick", "monitor", "all"};
-  inline constexpr std::array<std::string_view, 6> kMsgSessionActionChoices{"lock",   "suspend", "lock-and-suspend",
-                                                                            "logout", "reboot",  "shutdown"};
+  inline constexpr std::array<std::string_view, 7> kMsgSessionActionChoices{"lock",    "suspend", "lock-and-suspend",
+                                                                            "logout",  "reboot",  "reboot-uefi",
+                                                                            "shutdown"};
   inline constexpr std::array<std::string_view, 2> kMsgTaskbarCycleDirectionChoices{"next", "prev"};
   inline constexpr std::array<std::string_view, 3> kMsgThemeModeSetModeChoices{"dark", "light", "auto"};
   inline constexpr std::array<std::string_view, 2> kMsgWorkspaceSwitchDirectionChoices{"next", "prev"};
@@ -241,8 +242,12 @@ namespace noctalia::cli {
       Positional{"path", {}, {}, true, false, false},
   };
   inline constexpr std::array<std::string_view, 3> kMsgWindowSwitcherActionChoices{"close", "hide", "hold"};
+  inline constexpr std::array<std::string_view, 4> kMsgWindowSwitcherScopeChoices{
+      "all", "output", "workspace", "current"
+  };
   inline constexpr std::array kMsgWindowSwitcherPositionals{
       Positional{"action", {}, kMsgWindowSwitcherActionChoices, false, false, false},
+      Positional{"scope", {}, kMsgWindowSwitcherScopeChoices, false, false, false},
   };
   inline constexpr std::array kMsgWorkspaceAlertAddPositionals{
       Positional{"workspace", {}, {}, true, false, false},

@@ -4,6 +4,7 @@
 #include "config/config_service.h"
 #include "config/schema/config_schema.h"
 #include "config/schema/engine.h"
+#include "core/deferred_call.h"
 #include "core/log.h"
 #include "core/process/process.h"
 #include "core/scoped_timer.h"
@@ -1225,7 +1226,7 @@ void SettingsWindow::rebuildSettingsContent() {
 }
 
 std::unique_ptr<Flex> SettingsWindow::buildHeaderRow(float scale) {
-  return ui::row(
+  auto row = ui::row(
       {
           .align = FlexAlign::Center,
           .justify = FlexJustify::SpaceBetween,
@@ -1249,19 +1250,24 @@ std::unique_ptr<Flex> SettingsWindow::buildHeaderRow(float scale) {
           .radius = Style::scaledRadiusMd(scale),
           .onClick = [this]() { openActionsMenu(); },
           .configure = [](Button& button) { button.setTabStop(false); },
-      }),
-      ui::button({
-          .glyph = "close",
-          .glyphSize = Style::fontSizeBody * scale,
-          .variant = ButtonVariant::Default,
-          .minWidth = Style::controlHeightSm * scale,
-          .minHeight = Style::controlHeightSm * scale,
-          .padding = Style::spaceXs * scale,
-          .radius = Style::scaledRadiusMd(scale),
-          .onClick = [this]() { close(); },
-          .configure = [](Button& button) { button.setTabStop(false); },
       })
   );
+  if (Style::closeButtonsEnabled()) {
+    row->addChild(
+        ui::button({
+            .glyph = "close",
+            .glyphSize = Style::fontSizeBody * scale,
+            .variant = ButtonVariant::Default,
+            .minWidth = Style::controlHeightSm * scale,
+            .minHeight = Style::controlHeightSm * scale,
+            .padding = Style::spaceXs * scale,
+            .radius = Style::scaledRadiusMd(scale),
+            .onClick = [this]() { close(); },
+            .configure = [](Button& button) { button.setTabStop(false); },
+        })
+    );
+  }
+  return row;
 }
 
 std::unique_ptr<Flex> SettingsWindow::buildFilterRow(
@@ -1562,6 +1568,11 @@ void SettingsWindow::refreshSettingsRegistry(const Config& cfg) {
   phaseProfileWatch.reset();
 
   for (auto& entry : m_settingsRegistry) {
+    if (entry.section == settings::SettingsSection::Appearance && entry.path.empty() && entry.group == "theme") {
+      if (auto* button = std::get_if<settings::ButtonSetting>(&entry.control)) {
+        button->action = [this]() { DeferredCall::callLater([this]() { openPaletteInspector(); }); };
+      }
+    }
     if (entry.section != settings::SettingsSection::Templates || entry.group != "community") {
       continue;
     }
@@ -1830,7 +1841,7 @@ void SettingsWindow::refreshSettingsRegistry(const Config& cfg) {
   if (m_resetLauncherUsage) {
     auto it = std::ranges::find_if(m_settingsRegistry, [](const settings::SettingEntry& e) {
       return e.section == settings::SettingsSection::Launcher
-          && e.group == "launcher"
+          && e.group == "history"
           && e.path == std::vector<std::string>{"shell", "launcher", "sort_by_usage"};
     });
     if (it != m_settingsRegistry.end()) {
@@ -1838,7 +1849,7 @@ void SettingsWindow::refreshSettingsRegistry(const Config& cfg) {
     }
     settings::SettingEntry btn{
         .section = settings::SettingsSection::Launcher,
-        .group = "launcher",
+        .group = "history",
         .title = i18n::tr("settings.schema.panels.launcher-reset-usage.label"),
         .subtitle = i18n::tr("settings.schema.panels.launcher-reset-usage.description"),
         .path = {},

@@ -50,6 +50,9 @@ namespace settings {
     if (key == "auto_hide") {
       return override->autoHide.has_value();
     }
+    if (key == "auto_hide_delay_ms") {
+      return override->autoHideDelayMs.has_value();
+    }
     if (key == "smart_auto_hide") {
       return override->smartAutoHide.has_value();
     }
@@ -481,6 +484,7 @@ namespace settings {
         {"suspend", i18n::tr("session.actions.suspend"), {}},
         {"lock_and_suspend", i18n::tr("session.actions.lock-and-suspend"), {}},
         {"reboot", i18n::tr("session.actions.reboot"), {}},
+        {"reboot_uefi", i18n::tr("session.actions.reboot-uefi"), {}},
         {"shutdown", i18n::tr("session.actions.shutdown"), {}},
         {"command", i18n::tr("session.actions.custom"), {}},
     };

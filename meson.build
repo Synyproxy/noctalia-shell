@@ -73,7 +73,7 @@ freetype2_dep       = dependency('freetype2')
 fontconfig_dep      = dependency('fontconfig')
 cairo_dep           = dependency('cairo')
 cairo_ft_dep        = dependency('cairo-ft')
-pango_dep           = dependency('pango')
+pango_dep           = dependency('pango', version: '>=1.50')
 pangocairo_dep      = dependency('pangocairo')
 pangoft2_dep        = dependency('pangoft2')
 harfbuzz_dep        = dependency('harfbuzz')
@@ -264,6 +264,7 @@ _luau_sources = files(
   'third_party/luau/VM/src/ltm.cpp',
   'third_party/luau/VM/src/ludata.cpp',
   'third_party/luau/VM/src/lutf8lib.cpp',
+  'third_party/luau/VM/src/lvector.cpp',
   'third_party/luau/VM/src/lveclib.cpp',
   'third_party/luau/VM/src/lvmexecute.cpp',
   'third_party/luau/VM/src/lvmload.cpp',
@@ -475,6 +476,7 @@ _noctalia_sources = files(
   'src/dbus/accounts/accounts_service.cpp',
   'src/dbus/bluetooth/bluetooth_agent.cpp',
   'src/dbus/bluetooth/bluetooth_service.cpp',
+  'src/dbus/bluetooth/bluetooth_uuid_names.cpp',
   'src/dbus/idle/screensaver_service.cpp',
   'src/dbus/logind/logind_service.cpp',
   'src/dbus/modem/modem_manager_service.cpp',
@@ -601,6 +603,7 @@ _noctalia_sources = files(
   'src/scripting/plugin_ipc.cpp',
   'src/scripting/plugin_lint.cpp',
   'src/scripting/plugin_manager.cpp',
+  'src/scripting/plugin_recommendations.cpp',
   'src/scripting/plugin_manifest.cpp',
   'src/scripting/plugin_panel_shell.cpp',
   'src/scripting/plugin_registry.cpp',
@@ -745,6 +748,7 @@ _noctalia_sources = files(
   'src/shell/settings/settings_sheet_modal.cpp',
   'src/shell/settings/settings_window_mutations.cpp',
   'src/shell/settings/settings_window_popups.cpp',
+  'src/shell/settings/settings_window_palette.cpp',
   'src/shell/settings/settings_window_scene.cpp',
   'src/shell/settings/settings_window.cpp',
   'src/shell/test/test_panel.cpp',
@@ -850,6 +854,7 @@ _noctalia_sources = files(
   'src/system/format_units.cpp',
   'src/system/hardware_info.cpp',
   'src/system/icon_resolver.cpp',
+  'src/system/icon_theme_poll_source.cpp',
   'src/system/internal_app_metadata.cpp',
   'src/system/easyeffects_service.cpp',
   'src/system/day_night_schedule.cpp',
@@ -863,6 +868,7 @@ _noctalia_sources = files(
   'src/capture/screenshot_image.cpp',
   'src/capture/screenshot_service.cpp',
   'src/capture/screenshot_region_overlay.cpp',
+  'src/capture/screenshot_region_badge.cpp',
   'src/capture/annotation_document.cpp',
   'src/capture/annotation_raster.cpp',
   'src/capture/annotation_overlay.cpp',
@@ -964,6 +970,7 @@ _noctalia_sources = files(
   'src/compositors/niri/niri_keyboard_backend.cpp',
   'src/compositors/niri/niri_workspace_backend.cpp',
   'src/compositors/umbriel/umbriel_runtime.cpp',
+  'src/compositors/umbriel/umbriel_audio_provider.cpp',
   'src/compositors/umbriel/umbriel_event_handler.cpp',
   'src/compositors/umbriel/umbriel_workspace_backend.cpp',
   'src/compositors/umbriel/umbriel_keyboard_backend.cpp',
@@ -1163,6 +1170,12 @@ if build_tests
     command: [wayland_scanner, 'server-header', '@INPUT@', '@OUTPUT@'],
   )
 
+  _idle_test_server_h = custom_target('ext-idle-notify-v1-test-server-header',
+    input: wayland_protos_dir / 'staging/ext-idle-notify/ext-idle-notify-v1.xml',
+    output: 'ext-idle-notify-v1-test-server-protocol.h',
+    command: [wayland_scanner, 'server-header', '@INPUT@', '@OUTPUT@'],
+  )
+
   _cpp_test_names = [
     'annotation_document',
     'annotation_raster',
@@ -1173,6 +1186,7 @@ if build_tests
     'audio_route_selection',
     'battery_health',
     'battery_hook_state',
+    'bluetooth_uuid_names',
     'button_layout',
     'cairo_text_renderer',
     'caldav_client',
@@ -1203,6 +1217,7 @@ if build_tests
     'desktop_entry_launch',
     'desktop_entry_localization',
     'desktop_entry_symlink',
+    'desktop_entry_watch',
     'disk_mounts',
     'dock_edge_overlap',
     'dock_pinned_apps',
@@ -1248,10 +1263,13 @@ if build_tests
     'notification_dnd',
     'notification_filter',
     'notification_history_dismiss',
+    'notification_history_image_bounds',
     'notification_history_utf8',
+    'notification_inline_reply',
     'notification_internal_history',
     'path_browse',
     'pipewire_error',
+    'umbriel_audio_provider',
     'privacy_capture_classification',
     'plugin_bindings',
     'plugin_catalog',
@@ -1260,10 +1278,12 @@ if build_tests
     'plugin_lifecycle',
     'plugin_manifest',
     'plugin_process',
+    'plugin_recommendations',
     'plugin_source_locks',
     'plugin_source_paths',
     'process',
     'scheme',
+    'screenshot_region_badge',
     'scrollbar_geometry',
     'secret_store',
     'security_primitives',
@@ -1316,6 +1336,17 @@ if build_tests
       test_args = [meson.project_source_root() / 'assets' / 'translations']
     endif
     test(test_name, test_exe, args: test_args)
+    if test_name == 'plugin_recommendations' and git_program.found()
+      recommendations_python = find_program('python3', required: false)
+      recommendations_openssl = find_program('openssl', required: false)
+      if recommendations_python.found() and recommendations_openssl.found()
+        test('plugin_recommendations_http', recommendations_python,
+          args: [files('tests/plugin_recommendations_http_test.py'), test_exe],
+          workdir: meson.project_source_root(),
+          timeout: 90,
+        )
+      endif
+    endif
   endforeach
 
   screencopy_connection_isolation_exe = executable('screencopy_connection_isolation_test',
@@ -1324,6 +1355,20 @@ if build_tests
     override_options: ['b_ndebug=false'],
   )
   test('screencopy_connection_isolation', screencopy_connection_isolation_exe)
+
+  idle_manager_exe = executable('idle_manager_test',
+    sources: files('tests/idle_manager_test.cpp') + [_idle_test_server_h],
+    dependencies: [noctalia_core_dep, wayland_server_dep],
+    override_options: ['b_ndebug=false'],
+  )
+  test('idle_manager', idle_manager_exe)
+
+  brightness_service_exe = executable('brightness_service_test',
+    sources: files('tests/brightness_service_test.cpp'),
+    dependencies: [noctalia_core_dep, wayland_server_dep],
+    override_options: ['b_ndebug=false'],
+  )
+  test('brightness_service', brightness_service_exe, timeout: 60)
 
   upower_integration_exe = executable('upower_charge_limit_integration_test',
     sources: files('tests/upower_charge_limit_integration_test.cpp'),
@@ -1393,6 +1438,19 @@ if build_tests
         'sh', bluetooth_property_integration_exe.full_path(),
       ],
       depends: bluetooth_property_integration_exe,
+    )
+  endif
+
+  notification_reply_integration_exe = executable('notification_reply_integration_test',
+    sources: files('tests/notification_reply_integration_test.cpp'),
+    dependencies: noctalia_core_dep,
+    override_options: ['b_ndebug=false'],
+  )
+  if dbus_run_session.found()
+    test('notification_reply_integration',
+      dbus_run_session,
+      args: ['--', notification_reply_integration_exe.full_path()],
+      depends: notification_reply_integration_exe,
     )
   endif
 

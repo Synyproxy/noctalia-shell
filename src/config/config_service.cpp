@@ -693,6 +693,23 @@ bool ConfigService::setStateBool(std::string_view owner, std::string_view key, b
   return m_stateStore.setBool(owner, key, value);
 }
 
+bool ConfigService::stateOwnerValid(std::string_view owner) const { return m_stateStore.ownerValid(owner); }
+
+bool ConfigService::stateContains(std::string_view owner, std::string_view key) const {
+  return m_stateStore.contains(owner, key);
+}
+
+std::optional<std::vector<std::string>>
+ConfigService::stateStringArray(std::string_view owner, std::string_view key) const {
+  return m_stateStore.stringArrayValue(owner, key);
+}
+
+bool ConfigService::setStateStringArray(
+    std::string_view owner, std::string_view key, const std::vector<std::string>& value
+) {
+  return m_stateStore.setStringArray(owner, key, value);
+}
+
 std::optional<std::string> ConfigService::stateString(std::string_view owner, std::string_view key) const {
   return m_stateStore.stringValue(owner, key);
 }
@@ -947,6 +964,8 @@ BarConfig ConfigService::resolveForOutput(const BarConfig& base, const WaylandOu
       resolved.enabled = *ovr.enabled;
     if (ovr.autoHide)
       resolved.autoHide = *ovr.autoHide;
+    if (ovr.autoHideDelayMs)
+      resolved.autoHideDelayMs = *ovr.autoHideDelayMs;
     if (ovr.smartAutoHide)
       resolved.smartAutoHide = *ovr.smartAutoHide;
     if (ovr.showOnWorkspaceSwitch)

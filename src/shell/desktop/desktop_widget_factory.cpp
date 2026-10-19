@@ -213,6 +213,7 @@ std::unique_ptr<DesktopWidget> DesktopWidgetFactory::create(
         .color = getColorSpecSetting(settings, "color", colorSpecFromRole(ColorRole::OnSurface)),
         .shadow = getBoolSetting(settings, "shadow", true),
         .showCircle = getBoolSetting(settings, "circle", true),
+        .showSeconds = getBoolSetting(settings, "show_seconds", true),
         .centerText = getBoolSetting(settings, "center_text", true),
         .timezone = getStringSetting(settings, "timezone", ""),
     });
@@ -233,6 +234,7 @@ std::unique_ptr<DesktopWidget> DesktopWidgetFactory::create(
             .mirrored = getBoolSetting(settings, "mirrored", true),
             .reversed = getBoolSetting(settings, "reversed", false),
             .centered = getBoolSetting(settings, "centered", true),
+            .wave = getBoolSetting(settings, "show_wave", false),
             .showWhenIdle = getBoolSetting(settings, "show_when_idle", true),
             .color1 = getColorSpecSetting(settings, "color_1", colorSpecFromRole(ColorRole::Primary)),
             .color2 = getColorSpecSetting(settings, "color_2", colorSpecFromRole(ColorRole::Primary)),

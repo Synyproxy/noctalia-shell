@@ -275,6 +275,7 @@
         "connected": "Connected",
         "paired": "Paired"
       },
+      "trust-and-allow": "Trust and allow",
       "unavailable": "Bluetooth service unavailable",
       "unknown-device": "Unknown device",
       "visible": "Discoverable by nearby devices"
@@ -631,9 +632,12 @@
         "show-login-button": "Login Button",
         "show-media": "Media",
         "show-password-hint": "Password Hint",
+        "show-password-reveal": "Password Reveal",
+        "show-seconds": "Second Hand",
         "show-session-buttons": "Session Buttons",
         "show-unlock-hint": "Unlock Hint",
         "show-vpn-label": "Show VPN Label",
+        "show-wave": "Show Wave",
         "show-weather": "Weather",
         "show-week-numbers": "Show Week Numbers",
         "show-when-idle": "Show When Idle",
@@ -719,6 +723,34 @@
     }
   },
   "launcher": {
+    "browser": {
+      "actions": {
+        "power": "Power",
+        "settings": "Settings"
+      },
+      "navigation": {
+        "all": "All",
+        "all-apps": "All Apps",
+        "categories": "Categories",
+        "pinned": "Pinned",
+        "providers": "Providers",
+        "recent": "Recent"
+      },
+      "options": {
+        "show-grid": "Show Grid View",
+        "show-list": "Show List View",
+        "sort-by-frequency": "Prioritize Frequent Results",
+        "use-default-order": "Use Default Ordering"
+      },
+      "sections": {
+        "all-apps": "All Apps",
+        "other-apps": "Other Apps",
+        "pinned": "Pinned",
+        "providers": "Providers",
+        "recent": "Recent",
+        "search-results": "Search Results"
+      }
+    },
     "categories": {
       "all": "All",
       "applications": {
@@ -1002,6 +1034,7 @@
       "lock-and-suspend": "Lock & Suspend",
       "logout": "Log Out",
       "reboot": "Reboot",
+      "reboot-uefi": "Reboot to UEFI",
       "shutdown": "Shut Down",
       "suspend": "Suspend"
     },
@@ -1511,10 +1544,15 @@
       },
       "lockscreen": {
         "transition": {
+          "diamond": "Diamond",
           "disc": "Disc",
           "fade": "Fade",
+          "golden": "Golden",
           "honeycomb": "Honeycomb",
+          "melt": "Melt",
+          "pixel": "Pixel",
           "stripes": "Stripes",
+          "vortex": "Vortex",
           "wipe": "Wipe",
           "zoom": "Zoom"
         }
@@ -1553,7 +1591,30 @@
         "top-left": "Top Left",
         "top-right": "Top Right"
       },
+      "screenshot": {
+        "region-modifier": {
+          "alt": "Alt",
+          "ctrl": "Ctrl",
+          "none": "None",
+          "shift": "Shift",
+          "super": "Super"
+        }
+      },
       "shell": {
+        "launcher-default-view": {
+          "all": "All",
+          "categories": "Categories",
+          "pinned": "Pinned",
+          "recent": "Recent"
+        },
+        "launcher-layout": {
+          "full": "Full",
+          "simple": "Simple"
+        },
+        "launcher-search-position": {
+          "bottom": "Bottom",
+          "top": "Top"
+        },
         "panel-placement": {
           "attached": "Attached",
           "floating": "Floating"
@@ -1616,10 +1677,15 @@
           "random": "Random"
         },
         "transition": {
+          "diamond": "Diamond",
           "disc": "Disc",
           "fade": "Fade",
+          "golden": "Golden",
           "honeycomb": "Honeycomb",
+          "melt": "Melt",
+          "pixel": "Pixel",
           "stripes": "Stripes",
+          "vortex": "Vortex",
           "wipe": "Wipe",
           "zoom": "Zoom"
         }
@@ -1630,6 +1696,21 @@
           "metric": "Metric"
         }
       }
+    },
+    "palette-inspector": {
+      "copied": "Copied {value}",
+      "copy-failed": "Could not copy the color to the clipboard.",
+      "copy-hex": "Copy hex value",
+      "copy-name": "Copy color name",
+      "description": "Template colors in {mode} mode.",
+      "empty": "No matching colors.",
+      "filter-all": "All Colors",
+      "filter-palette": "Palette",
+      "filter-terminal": "Terminal",
+      "missing": "Unavailable",
+      "search-placeholder": "Search color names or hex values...",
+      "terminal-number": "{number} · ANSI {index}",
+      "title": "Palette Inspector"
     },
     "plugins": {
       "browse-store": "Browse Plugins",
@@ -1715,14 +1796,27 @@
         "installed": "Installed",
         "loading": "Loading catalog…",
         "no-readme": "No description available.",
+        "not-listed": "Not listed",
         "open-page": "Open plugin page on noctalia.dev",
         "open-source": "Open plugin source repository",
+        "recommend": "Recommend",
+        "recommendation-error": "The change was not confirmed. Your previous recommendation is unchanged. Retry the same change to reconcile it.",
+        "recommendation-not-recommendable": "This plugin cannot accept this recommendation.",
+        "recommendation-pending": "Sending recommendation…",
+        "recommendation-protocol-error": "The service returned an unexpected response. Your previous recommendation is unchanged.",
+        "recommendation-rate-limited": "Too many requests. Wait before retrying this change.",
+        "recommendation-retry": "Retry recommendation change",
+        "recommendation-state-error": "Recommendation state could not be read or saved. Check state.toml before retrying.",
+        "recommendation-unavailable": "Recommendations are temporarily unavailable. Your previous recommendation is unchanged. You can retry shortly.",
+        "remove-recommendation": "Remove recommendation",
         "results-count": "{count} plugins",
         "search-placeholder": "Search plugins…",
         "sort-added-at-asc": "Sort by date added (oldest first)",
         "sort-added-at-desc": "Sort by date added (newest first)",
+        "sort-most-recommended": "Most recommended",
         "sort-name-asc": "Sort by name (A-Z)",
         "sort-name-desc": "Sort by name (Z-A)",
+        "sort-trending": "Trending",
         "sort-updated-at-asc": "Sort by date updated (oldest first)",
         "sort-updated-at-desc": "Sort by date updated (newest first)",
         "source-all": "All sources",
@@ -1802,6 +1896,11 @@
           "description": "Override automatic locale detection",
           "label": "Language"
         },
+        "palette-inspector": {
+          "button": "Inspect Colors",
+          "description": "View template color names, swatches, and hex values for the active palette",
+          "label": "Palette Inspector"
+        },
         "palette-source": {
           "description": "Where to derive the color palette from",
           "label": "Palette Source"
@@ -1821,6 +1920,14 @@
         "shell-theme-mode": {
           "description": "Pin Noctalia's own light or dark mode; Follow keeps it in sync with Theme Mode",
           "label": "Shell Theme Mode"
+        },
+        "show-close-buttons": {
+          "description": "Show close buttons on panels, notification toasts, popups, dialogs, and the settings window",
+          "label": "Show Close Buttons"
+        },
+        "sync-color-scheme": {
+          "description": "Set the system dark/light preference read by browsers and other apps to follow Theme Mode",
+          "label": "Sync App Color Scheme"
         },
         "theme-mode": {
           "description": "Choose Dark, Light, or Auto based on time of day; also applies to apps through templates",
@@ -1851,6 +1958,10 @@
       "bar": {
         "auto-hide": {
           "description": "Off keeps the bar visible; On hides it until you move the pointer to the screen edge; Smart shows the bar on an empty workspace and hides it when windows are open"
+        },
+        "auto-hide-delay": {
+          "description": "Wait this many milliseconds after the pointer leaves before hiding the bar; 0 hides immediately (On mode only)",
+          "label": "Auto-Hide Delay"
         },
         "background-opacity": {
           "description": "Background opacity of the bar"
@@ -2500,10 +2611,6 @@
         }
       },
       "panels": {
-        "borders": {
-          "description": "Draw an outline on floating panels",
-          "label": "Borders"
-        },
         "border-color": {
           "description": "Outline color for floating panels; a theme role name follows the active theme, or pick a custom color",
           "label": "Border Color"
@@ -2511,6 +2618,10 @@
         "border-width": {
           "description": "Outline width for floating panels in pixels, 0 hides the stroke",
           "label": "Border Width"
+        },
+        "borders": {
+          "description": "Draw an outline on floating panels",
+          "label": "Borders"
         },
         "control-center-sidebar": {
           "description": "Choose how to display the sidebar",
@@ -2552,10 +2663,6 @@
           "description": "Show application action entries alongside applications in results",
           "label": "Show App Actions"
         },
-        "launcher-app-grid": {
-          "description": "Show a grid of application icons with labels underneath when results are apps only",
-          "label": "App Grid View"
-        },
         "launcher-app-origin-indicator": {
           "description": "Show package origin indicators on application results",
           "label": "Show App Origin Indicators"
@@ -2565,8 +2672,12 @@
           "label": "Auto-Paste"
         },
         "launcher-categories": {
-          "description": "Display category filters in the launcher; reveal with F6, then cycle with F6 and Shift+F6",
+          "description": "Show the All, Recently Used, and category chips under the search field",
           "label": "Show Categories"
+        },
+        "launcher-category-icons-only": {
+          "description": "Show only icons for app categories, with full names in hover tooltips",
+          "label": "Category Icons Only"
         },
         "launcher-compact": {
           "description": "Use smaller icons and tighter result rows",
@@ -2575,6 +2686,10 @@
         "launcher-currency-exchange": {
           "description": "Fetch rates from third party online sources",
           "label": "Currency Exchange Conversion"
+        },
+        "launcher-default-view": {
+          "description": "Choose the view shown when the launcher opens without a search",
+          "label": "Default View"
         },
         "launcher-global-calculator": {
           "description": "Also show calculator results in unprefixed search",
@@ -2600,12 +2715,20 @@
           "description": "Also show open windows in unprefixed search",
           "label": "Windows in Global Search"
         },
+        "launcher-grid": {
+          "description": "Show results and the provider overview as an icon grid instead of rows",
+          "label": "Grid View"
+        },
         "launcher-ignored-panels": {
           "description": "Panels the panel provider never lists (e.g. authentication prompts, the setup wizard)",
           "label": "Panels Ignored"
         },
+        "launcher-layout": {
+          "description": "Full adds view tabs and a toolbar with your profile and shortcuts; Simple shows a search field, optional category chips, and results",
+          "label": "Layout"
+        },
         "launcher-pinned-apps": {
-          "description": "Desktop entry IDs of apps pinned to the launcher; they appear first when the launcher opens",
+          "description": "Desktop entry IDs shown in manual order in the Pinned view",
           "label": "Pinned Apps"
         },
         "launcher-prefix-calculator": {
@@ -2638,8 +2761,12 @@
         },
         "launcher-reset-usage": {
           "button": "Reset",
-          "description": "Clear launch counts and recently used history used for launcher sorting",
+          "description": "Clear launcher history used by Recent and usage-based sorting",
           "label": "Reset Usage Data"
+        },
+        "launcher-search-position": {
+          "description": "Place the launcher toolbar at the top or bottom",
+          "label": "Toolbar Position"
         },
         "launcher-session-search": {
           "description": "Include session actions (lock, suspend, reboot, shutdown, logout) in general launcher searches, not only behind the /session prefix",
@@ -2649,9 +2776,25 @@
           "description": "Show application icons in launcher results",
           "label": "Show App Icons"
         },
+        "launcher-show-session-button": {
+          "description": "Show a shortcut to the configured session actions",
+          "label": "Show Session Button"
+        },
+        "launcher-show-settings-button": {
+          "description": "Show a shortcut to Noctalia Settings",
+          "label": "Show Settings Button"
+        },
         "launcher-sort-by-usage": {
-          "description": "Boost frequently used apps toward the top and show a Recently Used category filter",
+          "description": "Prioritize frequently used results in normal browsing and search",
           "label": "Sort by Usage"
+        },
+        "launcher-track-usage": {
+          "description": "Record launcher history for Recent and usage-based sorting",
+          "label": "Track Usage"
+        },
+        "launcher-width": {
+          "description": "Set the launcher panel width",
+          "label": "Launcher Width"
         },
         "list-item-background": {
           "description": "Draw a rounded background behind each launcher and clipboard list item",
@@ -3341,6 +3484,10 @@
           "description": "Send the captured PNG to a shell command on stdin",
           "label": "Pipe to Command"
         },
+        "screenshot-region-modifier": {
+          "description": "Modifier to move or resize a selected region: left-drag to move, right-drag to resize from the outer thirds (corners resize both axes). None (default) keeps the plain drag-to-adjust behavior",
+          "label": "Move/Resize Modifier"
+        },
         "screenshot-remember-last-region": {
           "description": "Pre-select the last region (including after cancel) on the next region screenshot",
           "label": "Remember Last Region"
@@ -3381,6 +3528,10 @@
         "time-format": {
           "description": "Default time format for shell UI without its own setting",
           "label": "Time Format"
+        },
+        "umbriel-audio-provider": {
+          "description": "Share the audio spectrum with Umbriel effects, even without a visualizer widget",
+          "label": "Provide Audio to Umbriel"
         },
         "umbriel-overview-type-to-launch": {
           "description": "Open the launcher when typing in umbriel overview; uses a tiny keyboard-focus surface while overview is open",
@@ -4338,13 +4489,13 @@
           "description": "Tray item IDs to hide",
           "label": "Hidden Items"
         },
-        "hide-album-art": {
-          "description": "Hide the album artwork",
-          "label": "Hide Album Art"
-        },
         "hidden-workspaces": {
           "description": "Workspace names whose windows are left out of the taskbar unless that workspace is active",
           "label": "Hidden Workspaces"
+        },
+        "hide-album-art": {
+          "description": "Hide the album artwork",
+          "label": "Hide Album Art"
         },
         "hide-artist": {
           "description": "Hide the artist name and only show the track title",
@@ -4630,6 +4781,10 @@
           "description": "Fill the widget background to show playback progress",
           "label": "Show Playback Progress"
         },
+        "show-running": {
+          "description": "Show running windows that are not in the pinned list",
+          "label": "Show Running"
+        },
         "show-scroll-lock": {
           "description": "Show Scroll Lock state",
           "label": "Show Scroll Lock"
@@ -4653,6 +4808,10 @@
         "show-vpn-label": {
           "description": "Replaces network label with VPN label in Replace mode; adds VPN label next to VPN icon in Both mode",
           "label": "Show VPN Label"
+        },
+        "show-wave": {
+          "description": "Display as a filled-area wave instead of discrete bars",
+          "label": "Show Wave"
         },
         "show-when-idle": {
           "description": "Keep the visualizer visible even when no media is playing",

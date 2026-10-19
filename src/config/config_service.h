@@ -67,6 +67,12 @@ public:
   );
   [[nodiscard]] bool shouldRunSetupWizard() const;
   [[nodiscard]] std::optional<bool> stateBool(std::string_view owner, std::string_view key) const;
+  [[nodiscard]] bool stateOwnerValid(std::string_view owner) const;
+  [[nodiscard]] bool stateContains(std::string_view owner, std::string_view key) const;
+  [[nodiscard]] const std::string& stateParseError() const noexcept { return m_stateStore.parseError(); }
+  [[nodiscard]] std::optional<std::vector<std::string>>
+  stateStringArray(std::string_view owner, std::string_view key) const;
+  bool setStateStringArray(std::string_view owner, std::string_view key, const std::vector<std::string>& value);
   [[nodiscard]] std::optional<std::string> stateString(std::string_view owner, std::string_view key) const;
   [[nodiscard]] const noctalia::config::LegacyConfigIssues& legacyConfigIssues() const noexcept {
     return m_legacyConfigIssues;

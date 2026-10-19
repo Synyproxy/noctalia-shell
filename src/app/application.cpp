@@ -2,6 +2,7 @@
 
 #include "app/main_loop.h"
 #include "compositors/compositor_detect.h"
+#include "compositors/umbriel/umbriel_audio_provider.h"
 #include "config/config_types.h"
 #include "core/build_info.h"
 #include "core/deferred_call.h"
@@ -181,6 +182,9 @@ Application::Application()
 }
 
 Application::~Application() {
+  m_compositorPlatform.setOutputPowerChangeCallback({});
+  ++m_outputPowerRequestGeneration;
+  m_lockScreen.cancelOutputPowerOff();
   ColorPickerDialog::setPresenter(nullptr);
   GlyphPickerDialog::setPresenter(nullptr);
   FileDialog::setPresenter(nullptr);

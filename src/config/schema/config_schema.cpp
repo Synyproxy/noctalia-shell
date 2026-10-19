@@ -1292,6 +1292,7 @@ namespace noctalia::config::schema {
         enumField(&ThemeConfig::mode, "mode", kThemeModes),
         enumField(&ThemeConfig::shellMode, "shell_mode", kShellThemeModes),
         field(&ThemeConfig::pureBlackDark, "pure_black_dark"),
+        field(&ThemeConfig::syncColorScheme, "sync_color_scheme"),
         subTable(&ThemeConfig::templates, "templates", templatesSchema()),
     };
     return s;
@@ -1436,12 +1437,22 @@ namespace noctalia::config::schema {
 
     const Schema<ShellConfig::LauncherConfig>& shellLauncherSchema() {
       static const Schema<ShellConfig::LauncherConfig> s = {
+          enumField(&ShellConfig::LauncherConfig::layout, "layout", ShellConfig::kLauncherLayouts),
+          field(&ShellConfig::LauncherConfig::width, "width", noctalia::config::schema::kLauncherWidthRange),
+          enumField(
+              &ShellConfig::LauncherConfig::searchPosition, "search_position", ShellConfig::kLauncherSearchPositions
+          ),
+          enumField(&ShellConfig::LauncherConfig::defaultView, "default_view", ShellConfig::kLauncherDefaultViews),
           field(&ShellConfig::LauncherConfig::categories, "categories"),
+          field(&ShellConfig::LauncherConfig::categoryIconsOnly, "category_icons_only"),
+          field(&ShellConfig::LauncherConfig::showSettingsButton, "show_settings_button"),
+          field(&ShellConfig::LauncherConfig::showSessionButton, "show_session_button"),
           field(&ShellConfig::LauncherConfig::showIcons, "show_icons"),
           field(&ShellConfig::LauncherConfig::showAppOriginIndicator, "show_app_origin_indicator"),
           field(&ShellConfig::LauncherConfig::compact, "compact"),
           field(&ShellConfig::LauncherConfig::appGrid, "app_grid"),
           field(&ShellConfig::LauncherConfig::showAppActions, "show_app_actions"),
+          field(&ShellConfig::LauncherConfig::trackUsage, "track_usage"),
           field(&ShellConfig::LauncherConfig::sortByUsage, "sort_by_usage"),
           field(&ShellConfig::LauncherConfig::pinned, "pinned"),
           field(&ShellConfig::LauncherConfig::fetchExchangeRates, "fetch_exchange_rates"),
@@ -1504,6 +1515,7 @@ namespace noctalia::config::schema {
           field(&ShellConfig::ScreenshotConfig::freezeScreen, "freeze_screen"),
           field(&ShellConfig::ScreenshotConfig::confirmRegion, "confirm_region"),
           field(&ShellConfig::ScreenshotConfig::rememberLastRegion, "remember_last_region"),
+          enumField(&ShellConfig::ScreenshotConfig::regionModifier, "region_modifier", kScreenshotRegionModifiers),
           field(&ShellConfig::ScreenshotConfig::showCursor, "show_cursor"),
           field(&ShellConfig::ScreenshotConfig::annotate, "annotate"),
           field(&ShellConfig::ScreenshotConfig::skipAnnotateOnCopySave, "skip_annotate_on_copy_save"),
@@ -1625,6 +1637,7 @@ namespace noctalia::config::schema {
         field(&ShellConfig::popupBorders, "popup_borders"),
         field(&ShellConfig::popupShadows, "popup_shadows"),
         field(&ShellConfig::cardBorders, "card_borders"),
+        field(&ShellConfig::showCloseButtons, "show_close_buttons"),
         // font_family is trimmed; empty falls back to sans-serif.
         custom<ShellConfig>(
             "font_family",
@@ -1648,6 +1661,7 @@ namespace noctalia::config::schema {
         field(&ShellConfig::setupWizardEnabled, "setup_wizard_enabled"),
         field(&ShellConfig::niriOverviewTypeToLaunchEnabled, "niri_overview_type_to_launch_enabled"),
         field(&ShellConfig::umbrielOverviewTypeToLaunchEnabled, "umbriel_overview_type_to_launch_enabled"),
+        field(&ShellConfig::umbrielAudioProviderEnabled, "umbriel_audio_provider_enabled"),
         field(&ShellConfig::polkitAgent, "polkit_agent"),
         enumField(&ShellConfig::passwordMaskStyle, "password_style", kPasswordMaskStyles),
         field(&ShellConfig::readlineShortcuts, "readline_shortcuts"),
@@ -2355,6 +2369,7 @@ namespace noctalia::config::schema {
     static const Schema<BarConfig> s = {
         field(&BarConfig::enabled, "enabled"),
         field(&BarConfig::autoHide, "auto_hide"),
+        field(&BarConfig::autoHideDelayMs, "auto_hide_delay_ms", kBarAutoHideDelayMsRange),
         field(&BarConfig::smartAutoHide, "smart_auto_hide"),
         field(&BarConfig::showOnWorkspaceSwitch, "show_on_workspace_switch"),
         field(&BarConfig::reserveSpace, "reserve_space"),
@@ -2414,6 +2429,7 @@ namespace noctalia::config::schema {
         field(&BarMonitorOverride::position, "position"),
         optionalBoolField(&BarMonitorOverride::enabled, "enabled"),
         optionalBoolField(&BarMonitorOverride::autoHide, "auto_hide"),
+        optionalIntField(&BarMonitorOverride::autoHideDelayMs, "auto_hide_delay_ms", kBarAutoHideDelayMsRange),
         optionalBoolField(&BarMonitorOverride::smartAutoHide, "smart_auto_hide"),
         optionalBoolField(&BarMonitorOverride::showOnWorkspaceSwitch, "show_on_workspace_switch"),
         optionalBoolField(&BarMonitorOverride::reserveSpace, "reserve_space"),

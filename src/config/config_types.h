@@ -68,6 +68,7 @@ struct BarMonitorOverride {
   std::optional<std::string> position;
   std::optional<bool> enabled;
   std::optional<bool> autoHide;
+  std::optional<std::int32_t> autoHideDelayMs;
   std::optional<bool> smartAutoHide;
   std::optional<bool> showOnWorkspaceSwitch;
   std::optional<bool> reserveSpace;
@@ -137,6 +138,7 @@ struct BarConfig {
   std::string position = "top";
   bool enabled = true;
   bool autoHide = false;             // slide out when the pointer leaves; reveal on edge approach
+  std::int32_t autoHideDelayMs = 0;  // wait after pointer leaves before hiding; 0 hides immediately
   bool smartAutoHide = false;        // hide while the active workspace has windows; show when it is empty
   bool showOnWorkspaceSwitch = true; // with auto_hide: briefly reveal when the active workspace changes
 
@@ -225,7 +227,7 @@ enum class SessionActionButtonVariant : std::uint8_t {
 };
 
 struct SessionPanelActionConfig {
-  // "lock" | "logout" | "suspend" | "lock_and_suspend" | "reboot" | "shutdown" | "command"
+  // "lock" | "logout" | "suspend" | "lock_and_suspend" | "reboot" | "reboot_uefi" | "shutdown" | "command"
   std::string action;
   bool enabled = true;
   // When set, runs via `process::runAsync` (shell string) instead of the built-in handler.
@@ -491,6 +493,11 @@ enum class WallpaperTransition : std::uint8_t {
   Stripes = 3,
   Zoom = 4,
   Honeycomb = 5,
+  Vortex = 6,
+  Pixel = 7,
+  Diamond = 8,
+  Golden = 9,
+  Melt = 10,
 };
 
 enum class LockscreenTransition : std::uint8_t {
@@ -500,6 +507,11 @@ enum class LockscreenTransition : std::uint8_t {
   Stripes = 3,
   Zoom = 4,
   Honeycomb = 5,
+  Vortex = 6,
+  Pixel = 7,
+  Diamond = 8,
+  Golden = 9,
+  Melt = 10,
 };
 
 struct WallpaperMonitorOverride {
@@ -531,9 +543,12 @@ struct WallpaperConfig {
   bool enabled = true;
   WallpaperFillMode fillMode = WallpaperFillMode::Crop;
   std::optional<ColorSpec> fillColor;
-  std::vector<WallpaperTransition> transitions = {WallpaperTransition::Fade, WallpaperTransition::Wipe,
-                                                  WallpaperTransition::Disc, WallpaperTransition::Stripes,
-                                                  WallpaperTransition::Zoom, WallpaperTransition::Honeycomb};
+  std::vector<WallpaperTransition> transitions = {WallpaperTransition::Fade,    WallpaperTransition::Wipe,
+                                                  WallpaperTransition::Disc,    WallpaperTransition::Stripes,
+                                                  WallpaperTransition::Zoom,    WallpaperTransition::Honeycomb,
+                                                  WallpaperTransition::Vortex,  WallpaperTransition::Pixel,
+                                                  WallpaperTransition::Diamond, WallpaperTransition::Golden,
+                                                  WallpaperTransition::Melt};
   float transitionDurationMs = 1500.0F;
   float edgeSmoothness = 0.3F;
   bool transitionOnStartup = false;
@@ -569,9 +584,12 @@ struct LockscreenConfig {
   bool fingerprint = true;
   bool allowEmptyPassword = false;
   bool blurredDesktop = false;
-  std::vector<LockscreenTransition> transitions = {LockscreenTransition::Fade, LockscreenTransition::Wipe,
-                                                   LockscreenTransition::Disc, LockscreenTransition::Stripes,
-                                                   LockscreenTransition::Zoom, LockscreenTransition::Honeycomb};
+  std::vector<LockscreenTransition> transitions = {LockscreenTransition::Fade,    LockscreenTransition::Wipe,
+                                                   LockscreenTransition::Disc,    LockscreenTransition::Stripes,
+                                                   LockscreenTransition::Zoom,    LockscreenTransition::Honeycomb,
+                                                   LockscreenTransition::Vortex,  LockscreenTransition::Pixel,
+                                                   LockscreenTransition::Diamond, LockscreenTransition::Golden,
+                                                   LockscreenTransition::Melt};
   float transitionDurationMs = 1500.0F;
   float edgeSmoothness = 0.3F;
   float blurIntensity = 0.5F;
@@ -996,19 +1014,29 @@ constexpr EnumOption<WallpaperAutomationConfig::Order> kWallpaperAutomationOrder
 };
 
 constexpr EnumOption<WallpaperTransition> kWallpaperTransitions[] = {
+    {WallpaperTransition::Diamond, "diamond", "settings.options.wallpaper.transition.diamond"},
     {WallpaperTransition::Disc, "disc", "settings.options.wallpaper.transition.disc"},
     {WallpaperTransition::Fade, "fade", "settings.options.wallpaper.transition.fade"},
+    {WallpaperTransition::Golden, "golden", "settings.options.wallpaper.transition.golden"},
     {WallpaperTransition::Honeycomb, "honeycomb", "settings.options.wallpaper.transition.honeycomb"},
+    {WallpaperTransition::Melt, "melt", "settings.options.wallpaper.transition.melt"},
+    {WallpaperTransition::Pixel, "pixel", "settings.options.wallpaper.transition.pixel"},
     {WallpaperTransition::Stripes, "stripes", "settings.options.wallpaper.transition.stripes"},
+    {WallpaperTransition::Vortex, "vortex", "settings.options.wallpaper.transition.vortex"},
     {WallpaperTransition::Wipe, "wipe", "settings.options.wallpaper.transition.wipe"},
     {WallpaperTransition::Zoom, "zoom", "settings.options.wallpaper.transition.zoom"},
 };
 
 constexpr EnumOption<LockscreenTransition> kLockscreenTransitions[] = {
+    {LockscreenTransition::Diamond, "diamond", "settings.options.lockscreen.transition.diamond"},
     {LockscreenTransition::Disc, "disc", "settings.options.lockscreen.transition.disc"},
     {LockscreenTransition::Fade, "fade", "settings.options.lockscreen.transition.fade"},
+    {LockscreenTransition::Golden, "golden", "settings.options.lockscreen.transition.golden"},
     {LockscreenTransition::Honeycomb, "honeycomb", "settings.options.lockscreen.transition.honeycomb"},
+    {LockscreenTransition::Melt, "melt", "settings.options.lockscreen.transition.melt"},
+    {LockscreenTransition::Pixel, "pixel", "settings.options.lockscreen.transition.pixel"},
     {LockscreenTransition::Stripes, "stripes", "settings.options.lockscreen.transition.stripes"},
+    {LockscreenTransition::Vortex, "vortex", "settings.options.lockscreen.transition.vortex"},
     {LockscreenTransition::Wipe, "wipe", "settings.options.lockscreen.transition.wipe"},
     {LockscreenTransition::Zoom, "zoom", "settings.options.lockscreen.transition.zoom"},
 };
@@ -1044,6 +1072,23 @@ struct LauncherProviderConfig {
   std::optional<bool> global;
 
   bool operator==(const LauncherProviderConfig&) const = default;
+};
+
+// Modifier that must be held to move/resize an already selected capture region.
+enum class ScreenshotRegionModifier : std::uint8_t {
+  None = 0,
+  Super = 1,
+  Ctrl = 2,
+  Alt = 3,
+  Shift = 4,
+};
+
+constexpr EnumOption<ScreenshotRegionModifier> kScreenshotRegionModifiers[] = {
+    {ScreenshotRegionModifier::None, "none", "settings.options.screenshot.region-modifier.none"},
+    {ScreenshotRegionModifier::Super, "super", "settings.options.screenshot.region-modifier.super"},
+    {ScreenshotRegionModifier::Ctrl, "ctrl", "settings.options.screenshot.region-modifier.ctrl"},
+    {ScreenshotRegionModifier::Alt, "alt", "settings.options.screenshot.region-modifier.alt"},
+    {ScreenshotRegionModifier::Shift, "shift", "settings.options.screenshot.region-modifier.shift"},
 };
 
 struct ShellConfig {
@@ -1097,15 +1142,60 @@ struct ShellConfig {
   // Launcher behavior/appearance. Panel placement for the launcher surface stays
   // under [shell.panel] (launcher_placement/position/open_near_click_launcher),
   // parallel to every other surface.
+  enum class LauncherSearchPosition : std::uint8_t {
+    Top = 0,
+    Bottom = 1,
+  };
+
+  static constexpr EnumOption<LauncherSearchPosition> kLauncherSearchPositions[] = {
+      {LauncherSearchPosition::Top, "top", "settings.options.shell.launcher-search-position.top"},
+      {LauncherSearchPosition::Bottom, "bottom", "settings.options.shell.launcher-search-position.bottom"},
+  };
+
+  enum class LauncherLayout : std::uint8_t {
+    Full = 0,
+    Simple = 1,
+  };
+
+  static constexpr EnumOption<LauncherLayout> kLauncherLayouts[] = {
+      {LauncherLayout::Full, "full", "settings.options.shell.launcher-layout.full"},
+      {LauncherLayout::Simple, "simple", "settings.options.shell.launcher-layout.simple"},
+  };
+
+  enum class LauncherDefaultView : std::uint8_t {
+    Recent = 0,
+    Pinned = 1,
+    All = 2,
+    Categories = 3,
+  };
+
+  static constexpr EnumOption<LauncherDefaultView> kLauncherDefaultViews[] = {
+      {LauncherDefaultView::Recent, "recent", "settings.options.shell.launcher-default-view.recent"},
+      {LauncherDefaultView::Pinned, "pinned", "settings.options.shell.launcher-default-view.pinned"},
+      {LauncherDefaultView::All, "all", "settings.options.shell.launcher-default-view.all"},
+      {LauncherDefaultView::Categories, "categories", "settings.options.shell.launcher-default-view.categories"},
+  };
+
   struct LauncherConfig {
+    static constexpr std::int32_t kDefaultWidth = 760;
+
+    LauncherLayout layout = LauncherLayout::Full;
+    std::int32_t width = kDefaultWidth;
+    LauncherSearchPosition searchPosition = LauncherSearchPosition::Bottom;
+    LauncherDefaultView defaultView = LauncherDefaultView::Recent;
+    // Simple layout only: show the category chip row under the search field.
     bool categories = true;
+    bool categoryIconsOnly = false;
+    bool showSettingsButton = true;
+    bool showSessionButton = true;
     bool showIcons = true;
     bool showAppOriginIndicator = true;
     bool compact = false;
     bool appGrid = false;
     bool showAppActions = false;
+    bool trackUsage = true;
     bool sortByUsage = true;
-    // Desktop entry IDs shown first in the launcher when it opens without a query.
+    // Desktop entry IDs shown in manual order in the Pinned view.
     std::vector<std::string> pinned;
     /// When true, refresh currency exchange rates from libqalculate's online sources.
     bool fetchExchangeRates = true;
@@ -1166,6 +1256,7 @@ struct ShellConfig {
     std::string pipeCommand;
     std::string directory;       // empty = XDG Pictures directory
     std::string filenamePattern; // empty = screenshot_%Y%m%d_%H%M%S
+    ScreenshotRegionModifier regionModifier = ScreenshotRegionModifier::None;
 
     bool operator==(const ScreenshotConfig&) const = default;
   };
@@ -1206,6 +1297,7 @@ struct ShellConfig {
   bool popupBorders = true;
   bool popupShadows = true;
   bool cardBorders = true;
+  bool showCloseButtons = true;
   std::string fontFamily = "sans-serif";
   std::string lang; // empty = auto-detect from $LC_ALL/$LC_MESSAGES/$LANG
   std::string timeFormat = "{:%H:%M}";
@@ -1220,6 +1312,7 @@ struct ShellConfig {
   bool setupWizardEnabled = true;
   bool niriOverviewTypeToLaunchEnabled = false;
   bool umbrielOverviewTypeToLaunchEnabled = false;
+  bool umbrielAudioProviderEnabled = false;
   bool polkitAgent = false;
   PasswordMaskStyle passwordMaskStyle = PasswordMaskStyle::CircleFilled;
   /// Readline-style editing shortcuts in every text input (Ctrl+A moves to the start instead of selecting all).
@@ -1702,6 +1795,7 @@ struct ThemeConfig {
   ThemeMode mode = ThemeMode::Dark;
   ShellThemeMode shellMode = ShellThemeMode::Follow;
   bool pureBlackDark = false;
+  bool syncColorScheme = true;
   TemplatesConfig templates;
 
   bool operator==(const ThemeConfig&) const = default;

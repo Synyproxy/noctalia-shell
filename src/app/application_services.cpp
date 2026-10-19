@@ -2,6 +2,7 @@
 #include "application.h"
 #include "application_internal.h"
 #include "compositors/compositor_detect.h"
+#include "compositors/umbriel/umbriel_audio_provider.h"
 #include "config/config_export.h"
 #include "config/config_types.h"
 #include "core/build_info.h"
@@ -121,6 +122,24 @@ namespace {
     if (signum == SIGTERM || signum == SIGINT) {
       scripting::ScriptRuntime::setShutdownSignal(signum);
       Application::s_shutdownRequested = true;
+    }
+  }
+
+  void syncGSettingsColorScheme(std::string_view mode) {
+    if (mode.empty()) {
+      return;
+    }
+    const std::string pref = mode == "light" ? "prefer-light" : "prefer-dark";
+    if (process::commandExists("gsettings")) {
+      std::string cmd = "gsettings set org.gnome.desktop.interface color-scheme \"";
+      cmd += pref;
+      cmd += "\"";
+      (void)process::runAsync(cmd);
+    } else if (process::commandExists("dconf")) {
+      std::string cmd = "dconf write /org/gnome/desktop/interface/color-scheme \"'";
+      cmd += pref;
+      cmd += "'\"";
+      (void)process::runAsync(cmd);
     }
   }
 } // namespace
@@ -546,6 +565,7 @@ void Application::initStyleThemeAndWayland() {
     Style::setPopupBordersEnabled(m_configService.config().shell.popupBorders);
     Style::setPopupShadowsEnabled(m_configService.config().shell.popupShadows);
     Style::setCardBordersEnabled(m_configService.config().shell.cardBorders);
+    Style::setCloseButtonsEnabled(m_configService.config().shell.showCloseButtons);
     lastCornerRadiusScale = corner;
     if (cornerChanged) {
       m_notificationToast.requestLayout();
@@ -700,7 +720,16 @@ void Application::initStyleThemeAndWayland() {
     }
   });
 
-  m_templateApplyService.setPaletteChangedCallback([this]() { m_hookManager.fire(HookKind::ColorsChanged); });
+  // Runs once per applied generation: the gsettings color-scheme write has to land after the
+  // gtk-theme templates, and colors_changed only concerns a palette that actually changed.
+  m_templateApplyService.setAfterApplyCallback([this](std::string_view appliedMode, bool paletteChanged) {
+    if (m_configService.config().theme.syncColorScheme) {
+      syncGSettingsColorScheme(appliedMode);
+    }
+    if (paletteChanged) {
+      m_hookManager.fire(HookKind::ColorsChanged);
+    }
+  });
 
   m_themeService.setResolvedCallback([this, lastResolvedThemeMode = std::optional<std::string>{},
                                       lastGeneratedPalette = std::optional<noctalia::theme::GeneratedPalette>{},
@@ -715,6 +744,7 @@ void Application::initStyleThemeAndWayland() {
     lastResolvedThemeMode = resolvedMode;
     const bool colorsChanged = !lastGeneratedPalette.has_value() || *lastGeneratedPalette != generated;
     lastGeneratedPalette = generated;
+    m_settingsWindow.setResolvedPalette(generated, mode);
     m_templateApplyService.apply(generated, mode, /*force=*/false, /*paletteChanged=*/colorsChanged);
     if (previousMode.has_value() && *previousMode != resolvedMode) {
       m_hookManager.fire(
@@ -726,6 +756,24 @@ void Application::initStyleThemeAndWayland() {
     }
   });
   m_themeService.apply();
+  {
+    // Enabling the key alone leaves the template inputs unchanged, so no application would
+    // carry the write; sync the current mode directly.
+    static bool lastSyncColorScheme = m_configService.config().theme.syncColorScheme;
+    m_configService.addReloadCallback(
+        [this]() {
+          const bool current = m_configService.config().theme.syncColorScheme;
+          if (current == lastSyncColorScheme) {
+            return;
+          }
+          lastSyncColorScheme = current;
+          if (current) {
+            syncGSettingsColorScheme(m_themeService.resolvedMode());
+          }
+        },
+        "theme-color-scheme-sync"
+    );
+  }
   syncScriptApiWallpaperDirectory();
   syncScriptApiShellTimeFormats();
   m_configService.addReloadCallback([this]() { m_themeService.onConfigReload(); }, "theme");
@@ -751,7 +799,7 @@ void Application::initStyleThemeAndWayland() {
     throw std::runtime_error("failed to connect to Wayland display");
   }
   m_compositorPlatform.initialize();
-  m_screenTimeService.initialize(&m_wayland);
+  m_screenTimeService.initialize(&m_compositorPlatform);
   syncScreenTimeService();
   m_screenTimeService.setChangeCallback([this]() {
     if (m_panelManager.isOpenPanel("control-center") && m_panelManager.isActivePanelContext("screen-time")) {
@@ -1067,8 +1115,7 @@ void Application::initSystemBusServices() {
             m_lockScreen.resetGracePeriod();
             // Screen time must not accumulate across suspend even when lock-before-suspend is off.
             m_screenTimeService.setSuspendPaused(true);
-            // Delay inhibit (when lock_before_suspend is on) holds sleep until we lock.
-            // Do not use runAfterSessionLocked here: that slot belongs to lock-and-suspend.
+            // The readiness hook releases the delay inhibit after the revealed lock frames are acknowledged.
             if (m_skipLockOnNextSleep) {
               // Noctalia-initiated suspend: skip lock-before-sleep (plain Suspend or already locked).
               m_skipLockOnNextSleep = false;
@@ -1085,7 +1132,7 @@ void Application::initSystemBusServices() {
               }
               return;
             }
-            if (m_lockScreen.isSessionLocked()) {
+            if (m_lockScreen.isReadyForSleep()) {
               m_releaseSleepDelayWhenLocked = false;
               if (m_logindService != nullptr) {
                 m_logindService->releaseSleepDelayInhibit();
@@ -1094,6 +1141,7 @@ void Application::initSystemBusServices() {
             }
             m_releaseSleepDelayWhenLocked = true;
             if (m_lockScreen.isActive()) {
+              m_lockScreen.prepareForSleep();
               return;
             }
             if (!m_lockScreen.lock()) {
@@ -1105,7 +1153,7 @@ void Application::initSystemBusServices() {
             }
             // Deferred lock (no outputs yet) never reaches SessionLocked; do not block sleep.
             // lock() re-armed grace above; a sleep-bound lock must never offer it.
-            m_lockScreen.resetGracePeriod();
+            m_lockScreen.prepareForSleep();
             if (!m_lockScreen.isActive()) {
               m_releaseSleepDelayWhenLocked = false;
               if (m_logindService != nullptr) {
@@ -1427,6 +1475,35 @@ void Application::initBrightnessAndPipewire() {
     m_easyEffectsService->refreshProfiles();
     m_easyEffectsService->refreshActiveEffectsProfiles();
     m_pipewireSpectrum = std::make_unique<PipeWireSpectrum>(*m_pipewireService);
+    m_umbrielAudioProvider =
+        std::make_unique<compositors::umbriel::UmbrielAudioProvider>(m_compositorPlatform.umbrielRuntime(), [this]() {
+          compositors::umbriel::UmbrielAudioProvider::Bands bands{};
+          const auto& values = m_pipewireSpectrum->values(m_umbrielAudioListener);
+          if (values.size() == bands.size()) {
+            std::ranges::copy(values, bands.begin());
+          }
+          return bands;
+        });
+    auto applyUmbrielAudioConfig = [this]() {
+      const bool enabled = compositors::isUmbriel() && m_configService.config().shell.umbrielAudioProviderEnabled;
+      m_umbrielAudioProvider->setEnabled(enabled);
+      if (enabled && m_umbrielAudioListener == 0) {
+        m_umbrielAudioListener =
+            m_pipewireSpectrum->addChangeListener(64, [this]() { m_umbrielAudioProvider->notifyChanged(); });
+      } else if (!enabled && m_umbrielAudioListener != 0) {
+        m_pipewireSpectrum->removeChangeListener(m_umbrielAudioListener);
+        m_umbrielAudioListener = 0;
+      }
+    };
+    applyUmbrielAudioConfig();
+    m_configService.addReloadCallback(
+        [this, applyUmbrielAudioConfig]() {
+          if (m_umbrielAudioProvider != nullptr) {
+            applyUmbrielAudioConfig();
+          }
+        },
+        "umbriel-audio"
+    );
     m_soundPlayer = std::make_shared<SoundPlayer>(m_pipewireService->loop());
 
     auto applySoundConfig = [this]() {
@@ -1456,6 +1533,8 @@ void Application::initBrightnessAndPipewire() {
   } catch (const std::exception& e) {
     kLog.warn("pipewire disabled: {}", e.what());
     m_soundPlayer.reset();
+    m_umbrielAudioProvider.reset();
+    m_umbrielAudioListener = 0;
     m_pipewireSpectrum.reset();
     m_easyEffectsService.reset();
     m_pipewireService.reset();

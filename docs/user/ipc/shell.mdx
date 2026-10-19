@@ -32,6 +32,7 @@ Alt+Tab-style overlay with two presentations selected by `[shell.window_switcher
 |--------|---------|-------------|
 | Open | <IpcCommand command="window-switcher" /> | Show the switcher on the preferred monitor (pointer, keyboard focus, or first output). |
 | Open from a held-modifier keybind | <IpcCommand command="window-switcher hold" /> | Same as Open, for Alt+Tab-style keybinds. If the shortcut modifier is already released when the overlay gains keyboard focus (a quick tap), the previous window is activated and the overlay closes. |
+| Open with a fixed scope | <IpcCommand command="window-switcher current" /> | Open the switcher listing only the windows of a given scope for this session, instead of the `show_all_outputs` / `current_workspace_only` settings: `all` (every window), `output` (the monitor showing the switcher), `workspace` (the workspace shown on each monitor), or `current` (the workspace shown on that monitor). Scope and action words can be combined in any order, e.g. `window-switcher hold current`. The scope applies until the overlay closes or another `window-switcher` invocation replaces it (an invocation without a scope returns to the settings); the settings are never modified. |
 | Close | <IpcCommand command="window-switcher close" /> | Hide the overlay without changing focus. `hide` is an alias. |
 
 Example Hyprland bind (use `hold` so a quick tap switches to the previous window):
@@ -49,6 +50,7 @@ While the overlay is open it takes exclusive keyboard focus on its layer surface
 - **Escape** - close without switching
 - **Quick tap** - with `window-switcher hold`, releasing the shortcut modifier before the overlay has keyboard focus counts as the release: the previous window is activated and the overlay closes. Without `hold` (terminals, scripts, gestures), the overlay stays open until Enter, Escape, or a click
 - **Pointer** - click a card to switch; click the selected card's close control to close that window
+- **Scroll** - the mouse wheel over the overlay cycles selection: wheel down or right selects the next window, wheel up or left the previous one
 
 Modifier releases generated while an input method hands keyboard focus to the switcher are ignored until the physical shortcut modifier is actually released.
 
@@ -63,6 +65,7 @@ Snapshots are intentionally frozen for each switcher session rather than streame
 | Lock session | <IpcCommand command="session lock" /> | Lock the current session. `loginctl lock-session` uses the same path when Noctalia is running. |
 | Suspend system | <IpcCommand command="session suspend" /> | Suspend without locking first. |
 | Lock and suspend | <IpcCommand command="session lock-and-suspend" /> | Lock the session, then suspend once the lock is active. |
-| Log out | <IpcCommand command="session logout" /> | End the graphical session (compositor-native when available). |
+| Log out | <IpcCommand command="session logout" /> | End the graphical session through UWSM when active, otherwise compositor-native when available. |
 | Reboot | <IpcCommand command="session reboot" /> | Reboot the system. |
+| Reboot to UEFI | <IpcCommand command="session reboot-uefi" /> | Reboot into the UEFI firmware setup (requires systemd and a UEFI boot). |
 | Shut down | <IpcCommand command="session shutdown" /> | Shut down the system. |

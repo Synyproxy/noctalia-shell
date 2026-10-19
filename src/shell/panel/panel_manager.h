@@ -37,6 +37,7 @@ struct KeyboardEvent;
 struct PointerEvent;
 struct wl_output;
 struct wl_surface;
+struct wl_callback;
 
 struct PanelOpenRequest {
   wl_output* output = nullptr;
@@ -103,6 +104,8 @@ public:
 
   void openPanel(const std::string& panelId, PanelOpenRequest request = {});
   void closePanel(bool animateClose = true);
+  // Call outside input dispatch to clear the displayed buffer before closing and running the action.
+  void closePanelForCapture(std::function<void()> afterClose);
   void togglePanel(const std::string& panelId, PanelOpenRequest request);
   // IPC-friendly overload: asks CompositorPlatform for preferred interactive output.
   void togglePanel(const std::string& panelId);
@@ -185,6 +188,7 @@ private:
   void prepareFrame(bool needsUpdate, bool needsLayout);
   void applyPendingPanelFocus();
   void destroyPanel();
+  static void handleCaptureCloseFrame(void* data, wl_callback* callback, std::uint32_t time);
   // Called before the panel surface commits so outside-click dismissal is ready
   // for its first frame. The panel rect is excluded separately because
   // same-layer stacking order is compositor-defined.
@@ -249,6 +253,8 @@ private:
   InputDispatcher m_inputDispatcher;
 
   std::unordered_map<std::string, std::unique_ptr<Panel>> m_panels;
+  // Active panel unregistered while its surface was initializing; destroyed once the open finishes.
+  std::unique_ptr<Panel> m_retiredActivePanel;
   Panel* m_activePanel = nullptr;
   std::string m_activePanelId;
   std::string m_pendingOpenContext;
@@ -275,6 +281,9 @@ private:
   AttachedRevealDirection m_attachedRevealDirection = AttachedRevealDirection::Down;
   AttachedRevealDirection m_detachedRevealDirection = AttachedRevealDirection::Down;
   Timer m_keyboardRelaxTimer;
+  Timer m_captureCloseTimer;
+  wl_callback* m_captureCloseFrame = nullptr;
+  std::function<void()> m_afterCaptureClose;
   std::string m_attachedBarPosition; // "top" / "bottom" / "left" / "right" while attached, empty otherwise
   std::string m_sourceBarName;       // name of the bar that opened the current panel
   std::optional<AttachedPanelGeometry> m_attachedPanelGeometry;
